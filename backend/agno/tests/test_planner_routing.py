@@ -52,6 +52,19 @@ class UnusedTools:
     pass
 
 
+class WorkloadTools:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def technician_workload(self, period: object) -> Evidence:
+        del period
+        self.calls += 1
+        return Evidence(
+            {"totalJobs": 3, "teamAverageJobs": 1.5, "technicians": []},
+            (),
+        )
+
+
 def actor() -> ActorContext:
     return ActorContext(uuid4(), Role.MANAGER, uuid4(), "Farah", uuid4())
 
@@ -109,6 +122,24 @@ async def test_echoed_workforce_count_retries_once_and_executes_authorized_query
     assert outcome == "query_operational_data"
     assert evidence.data["rows"] == [{"technician_count": 4}]
     assert query_skill.questions == ["How many technicians do we have?"]
+
+
+@pytest.mark.asyncio
+async def test_workload_plan_routes_to_workload_tool() -> None:
+    generator, planner = generator_with(
+        ToolPlan(intent="operational", tool="compare_technician_workload", response=""),
+    )
+    tools = WorkloadTools()
+    _, evidence, outcome = await ChatOrchestrator(
+        actor(),
+        tools,  # type: ignore[arg-type]
+        tool_planner=generator,
+    ).answer("Which technician might be overloaded this week?")
+    assert len(planner.prompts) == 1
+    assert outcome == "compare_technician_workload"
+    assert evidence.data["totalJobs"] == 3
+    assert evidence.data["teamAverageJobs"] == 1.5
+    assert tools.calls == 1
 
 
 @pytest.mark.asyncio

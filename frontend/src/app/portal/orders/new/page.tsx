@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
@@ -9,10 +9,39 @@ import { composeAddress, orderSchema } from "@/lib/validation";
 import type { ServiceOrder } from "@/lib/domain";
 import { money } from "@/lib/utils";
 import { OrderFields } from "@/features/orders";
+import {
+  AiExtractButton,
+  AiExtractUploadStrip,
+  useDocumentExtraction,
+} from "@/components/ai-extract-button";
+import {
+  applyOrderDraftToForm,
+  extractionToOrderDraft,
+} from "@/lib/document-draft";
 export default function NewOrderPage() {
   const { user, users, createOrder } = useDemo();
   const [result, setResult] = useState<ServiceOrder>();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [draft, setDraft] = useState<Record<string, string>>();
+  const [extractOpen, setExtractOpen] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const {
+    busy: extractBusy,
+    upload: extractUpload,
+    done: extractDone,
+  } = useDocumentExtraction(fillFromExtraction);
+  useEffect(() => {
+    const raw = window.sessionStorage.getItem("sejuk-order-draft");
+    if (!raw) return;
+    window.sessionStorage.removeItem("sejuk-order-draft");
+    try {
+      const parsed = JSON.parse(raw) as Record<string, string>;
+      if (parsed && typeof parsed === "object")
+        void Promise.resolve().then(() => setDraft(parsed));
+    } catch {
+      // Ignore malformed drafts; the form starts empty.
+    }
+  }, []);
   if (user?.role !== "admin")
     return <p className="card p-6">Admin access required.</p>;
   async function submit(formData: FormData) {
@@ -42,6 +71,10 @@ export default function NewOrderPage() {
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not create order");
     }
+  }
+  function fillFromExtraction(fields: Record<string, string>) {
+    const form = formRef.current;
+    if (form) applyOrderDraftToForm(form, extractionToOrderDraft(fields));
   }
   if (result)
     return (
@@ -92,15 +125,31 @@ export default function NewOrderPage() {
       <PageHeader
         title="Create service order"
         description="Capture the customer issue, quote, and field assignment."
+        action={
+          <AiExtractButton
+            open={extractOpen}
+            onOpenChange={setExtractOpen}
+            busy={extractBusy}
+            done={extractDone}
+          />
+        }
       />
+      {extractOpen && (
+        <AiExtractUploadStrip
+          busy={extractBusy}
+          done={extractDone}
+          onFile={(file) => void extractUpload(file)}
+        />
+      )}
       <form
+        ref={formRef}
         onSubmit={(event) => {
           event.preventDefault();
           submit(new FormData(event.currentTarget));
         }}
         className="card max-w-4xl p-5 sm:p-7"
       >
-        <OrderFields users={users} errors={errors} />
+        <OrderFields users={users} errors={errors} defaults={draft} />
         <div className="mt-7 flex justify-end gap-3">
           <Link href="/portal/orders" className="btn-secondary">
             Cancel

@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select extensions.plan(10);
+select extensions.plan(12);
 
 select extensions.ok(
   has_column_privilege('authenticated','public.notifications','read_at','UPDATE'),
@@ -33,9 +33,19 @@ select public.record_whatsapp_feedback_opened('30000000-0000-0000-0000-000000000
 select extensions.ok(exists(select 1 from public.audit_events where order_id='30000000-0000-0000-0000-000000000002' and action='whatsapp.feedback_opened' and after_values->>'delivery_confirmed'='false'),'WhatsApp open is audited without claiming delivery');
 
 select set_config('request.jwt.claim.sub','20000000-0000-0000-0000-000000000001',true);
-select public.record_payment('30000000-0000-0000-0000-000000000002',(select version from public.orders where id='30000000-0000-0000-0000-000000000002'),100,'Cash','Balance due next month');
+insert into public.job_evidence(order_id,storage_path,file_name,mime_type,media_kind,size_bytes,uploader_id,committed)
+values('30000000-0000-0000-0000-000000000002','receipt-test/source.pdf','receipt.pdf','application/pdf','receipt',100,'20000000-0000-0000-0000-000000000001',true);
+select public.record_payment('30000000-0000-0000-0000-000000000002',(select version from public.orders where id='30000000-0000-0000-0000-000000000002'),100,'Cash','Balance due next month',(select id from public.job_evidence where storage_path='receipt-test/source.pdf'));
 select extensions.is((select sum(amount)::numeric from public.payments where order_id='30000000-0000-0000-0000-000000000002'),100::numeric,'admin payment persists');
 select extensions.is((select notes from public.payments where order_id='30000000-0000-0000-0000-000000000002' order by received_at desc limit 1),'Balance due next month','payment notes persist');
+select extensions.ok(exists(
+  select 1 from public.payments
+  where order_id='30000000-0000-0000-0000-000000000002'
+    and receipt_evidence_id=(select id from public.job_evidence where storage_path='receipt-test/source.pdf')
+),'payment records the attached receipt evidence');
+select extensions.throws_ok($$
+  select public.record_payment('30000000-0000-0000-0000-000000000002',(select version from public.orders where id='30000000-0000-0000-0000-000000000002'),50,'Cash',null,'00000000-0000-0000-0000-000000000000')
+$$,'Receipt evidence is not attached to this order','payment rejects receipt evidence from another order');
 
 update public.notifications set read_at=now() where order_id='30000000-0000-0000-0000-000000000002' and recipient_role='manager';
 select extensions.ok(exists(select 1 from public.notifications where order_id='30000000-0000-0000-0000-000000000002' and recipient_role='manager' and read_at is not null),'notification read state persists');

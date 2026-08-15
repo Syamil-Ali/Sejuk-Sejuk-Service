@@ -5,13 +5,21 @@ import { navigationLinks, portalNavigation } from "./portal-navigation";
 import { PortalSidebar } from "./portal-sidebar";
 
 const expectedLinks: Record<Role, string[]> = {
-  admin: ["Orders", "Payments", "Messages", "Ops assistant", "Notifications"],
+  admin: [
+    "Orders",
+    "Payments",
+    "Messages",
+    "Ops assistant",
+    "Notifications",
+    "How it works",
+  ],
   manager: [
     "Dashboard",
     "Reviews",
     "Messages",
     "Ops assistant",
     "Notifications",
+    "How it works",
   ],
   technician: [
     "Dashboard",
@@ -19,6 +27,7 @@ const expectedLinks: Record<Role, string[]> = {
     "Messages",
     "Ops assistant",
     "Notifications",
+    "How it works",
   ],
 };
 
@@ -29,7 +38,7 @@ describe("portal navigation", () => {
       expect(navigationLinks(role).map((link) => link.label)).toEqual(labels);
       expect(
         portalNavigation[role].map((section) => section.label),
-      ).toHaveLength(2);
+      ).toHaveLength(3);
     },
   );
 

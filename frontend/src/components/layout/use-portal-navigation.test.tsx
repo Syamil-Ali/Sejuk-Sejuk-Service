@@ -18,6 +18,7 @@ describe("portal navigation", () => {
       "/portal/messages",
       "/portal/assistant",
       "/portal/notifications",
+      "/portal/about",
     ]);
     expect(portalDestinations("technician")).not.toContain("/portal/payments");
   });

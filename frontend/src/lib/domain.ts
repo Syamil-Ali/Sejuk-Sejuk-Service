@@ -60,6 +60,7 @@ export interface PaymentRecord {
   recordedBy: string;
   source: "field" | "admin";
   notes?: string;
+  receipt?: Evidence;
 }
 
 export interface Review {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowRight,
+  BookOpen,
   BriefcaseBusiness,
   MapPin,
   ShieldCheck,
@@ -165,6 +166,17 @@ export default function LoginPage() {
                 </Link>
               );
             })}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <a
+              href="/project-guide.html"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#cfe0f5] bg-white px-4 py-2.5 text-sm font-medium text-[#1d4ed8] transition-colors hover:bg-[#eff6ff]"
+            >
+              <BookOpen className="size-4" />
+              Read the full project guide
+            </a>
           </div>
         </div>
       </section>

@@ -1,8 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 import { EvidenceUploader } from "@/components/evidence-uploader";
+import {
+  AiExtractButton,
+  AiExtractUploadStrip,
+  useDocumentExtraction,
+} from "@/components/ai-extract-button";
+import { stageReceiptEvidence } from "@/lib/evidence";
 import type { ServiceOrder } from "@/lib/domain";
 import { money } from "@/lib/utils";
 
@@ -12,6 +19,7 @@ export type CompletionDraft = {
   remarks?: string;
   paymentAmount?: number;
   paymentMethod?: string;
+  receiptEvidenceId?: string;
 };
 
 export function TechnicianActions({
@@ -31,6 +39,46 @@ export function TechnicianActions({
 }) {
   const [mode, setMode] = useState<"none" | "reschedule" | "complete">("none");
   const [extraCharges, setExtraCharges] = useState("0");
+  const [extractOpen, setExtractOpen] = useState(false);
+  const [receiptEvidenceId, setReceiptEvidenceId] = useState<string>();
+  const formRef = useRef<HTMLFormElement>(null);
+  const { busy: extractBusy, upload: extractUpload, done: extractDone } =
+    useDocumentExtraction(
+      applyPaymentExtraction,
+      "/api/documents/extract-payment-upload",
+    );
+  async function applyPaymentExtraction(
+    fields: Record<string, string>,
+    _confidence: number,
+    file?: File,
+  ) {
+    const form = formRef.current;
+    if (!form) return;
+    const amount = form.elements.namedItem("paymentAmount");
+    if (fields.paymentAmount && amount instanceof HTMLInputElement)
+      amount.value = fields.paymentAmount;
+    const method = form.elements.namedItem("paymentMethod");
+    if (
+      fields.paymentMethod &&
+      ["Cash", "Card", "Bank Transfer", "E-Wallet"].includes(
+        fields.paymentMethod,
+      ) &&
+      method instanceof HTMLSelectElement
+    )
+      method.value = fields.paymentMethod;
+    if (file) {
+      try {
+        const evidenceId = await stageReceiptEvidence(order.id, file);
+        setReceiptEvidenceId(evidenceId);
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Receipt was extracted but could not be attached to the payment.",
+        );
+      }
+    }
+  }
   if (order.status === "Assigned")
     return (
       <section className="card p-5">
@@ -75,6 +123,7 @@ export function TechnicianActions({
         <RescheduleForm submit={reschedule} />
       ) : (
         <form
+          ref={formRef}
           className="mt-5 grid gap-4"
           onSubmit={(event) => {
             event.preventDefault();
@@ -87,6 +136,7 @@ export function TechnicianActions({
               paymentAmount: payment ? Number(payment) : undefined,
               paymentMethod:
                 String(data.get("paymentMethod") || "") || undefined,
+              receiptEvidenceId,
             });
           }}
         >
@@ -154,6 +204,22 @@ export function TechnicianActions({
             <legend className="px-2 text-xs font-semibold uppercase tracking-wider text-[#60738f]">
               Payment received (optional)
             </legend>
+            <div className="mb-3 flex justify-end">
+              <AiExtractButton
+                open={extractOpen}
+                onOpenChange={setExtractOpen}
+                busy={extractBusy}
+                done={extractDone}
+                label="Extract from receipt"
+              />
+            </div>
+            {extractOpen && (
+              <AiExtractUploadStrip
+                busy={extractBusy}
+                done={extractDone}
+                onFile={(file) => void extractUpload(file)}
+              />
+            )}
             <div className="grid gap-4 sm:grid-cols-2">
               <label>
                 <span className="mb-2 block text-sm font-bold">Amount</span>

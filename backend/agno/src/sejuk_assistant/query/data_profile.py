@@ -76,9 +76,7 @@ def _profile_sql(
     for index, column in enumerate(_visible_columns(relation, role)):
         base = f"c{index}"
         aliases[column.name] = {"missing": f"{base}_missing"}
-        expressions.append(
-            f'COUNT(*) FILTER (WHERE "{column.name}" IS NULL) AS {base}_missing'
-        )
+        expressions.append(f'COUNT(*) FILTER (WHERE "{column.name}" IS NULL) AS {base}_missing')
         semantic_type = _semantic_type(column)
         if not _is_sensitive(column) and semantic_type != "text":
             aliases[column.name]["unique"] = f"{base}_unique"
@@ -101,7 +99,7 @@ def _profile_sql(
             aliases[column.name][f"value:{value}"] = alias
             literal = value.replace("'", "''")
             expressions.append(
-                f'COUNT(*) FILTER (WHERE "{column.name}" = \'{literal}\') AS {alias}'
+                f"COUNT(*) FILTER (WHERE \"{column.name}\" = '{literal}') AS {alias}"
             )
     return f"SELECT {', '.join(expressions)} FROM {relation.name}", aliases
 

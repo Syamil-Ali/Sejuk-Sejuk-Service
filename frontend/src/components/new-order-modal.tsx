@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, X } from "lucide-react";
 import { toast } from "sonner";
 import { useDemo } from "@/components/demo-provider";
@@ -9,6 +9,15 @@ import { composeAddress, orderSchema } from "@/lib/validation";
 import type { ServiceOrder } from "@/lib/domain";
 import { money } from "@/lib/utils";
 import { OrderFields } from "@/features/orders";
+import {
+  AiExtractButton,
+  AiExtractUploadStrip,
+  useDocumentExtraction,
+} from "@/components/ai-extract-button";
+import {
+  applyOrderDraftToForm,
+  extractionToOrderDraft,
+} from "@/lib/document-draft";
 
 export function NewOrderModal({
   open,
@@ -20,6 +29,13 @@ export function NewOrderModal({
   const { users, createOrder } = useDemo();
   const [result, setResult] = useState<ServiceOrder>();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [extractOpen, setExtractOpen] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const {
+    busy: extractBusy,
+    upload: extractUpload,
+    done: extractDone,
+  } = useDocumentExtraction(fillFromExtraction);
   useEffect(() => {
     if (!open) return;
     const previous = document.body.style.overflow;
@@ -72,6 +88,10 @@ export function NewOrderModal({
       );
     }
   }
+  function fillFromExtraction(fields: Record<string, string>) {
+    const form = formRef.current;
+    if (form) applyOrderDraftToForm(form, extractionToOrderDraft(fields));
+  }
   return (
     <div
       className="fixed inset-0 z-50 grid place-items-center bg-gray-900/70 p-3 sm:p-6"
@@ -86,26 +106,45 @@ export function NewOrderModal({
         aria-labelledby="new-order-title"
         className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-lg bg-white sm:max-h-[calc(100vh-3rem)]"
       >
-        <header className="flex shrink-0 items-start justify-between border-b border-[#dce7e3] px-5 py-4 sm:px-7">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[.2em] text-teal-700"></p>
-            <h2 id="new-order-title" className="mt-1 text-2xl font-black">
-              {result ? "Order created" : "Create service order"}
-            </h2>
-            <p className="mt-1 text-sm text-[#60716e]">
-              {result
-                ? "The request is now visible in the service queue."
-                : "Capture the customer issue, quote, and field assignment."}
-            </p>
+        <header className="flex shrink-0 flex-col gap-3 border-b border-[#dce7e3] px-5 py-4 sm:px-7">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[.2em] text-teal-700"></p>
+              <h2 id="new-order-title" className="mt-1 text-2xl font-black">
+                {result ? "Order created" : "Create service order"}
+              </h2>
+              <p className="mt-1 text-sm text-[#60716e]">
+                {result
+                  ? "The request is now visible in the service queue."
+                  : "Capture the customer issue, quote, and field assignment."}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              {!result && (
+                <AiExtractButton
+                  open={extractOpen}
+                  onOpenChange={setExtractOpen}
+                  busy={extractBusy}
+                  done={extractDone}
+                />
+              )}
+              <button
+                type="button"
+                aria-label="Close new order"
+                onClick={dismiss}
+                className="grid size-11 shrink-0 place-items-center rounded-xl text-[#60716e] hover:bg-slate-100 hover:text-[#102925]"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
           </div>
-          <button
-            type="button"
-            aria-label="Close new order"
-            onClick={dismiss}
-            className="grid size-11 shrink-0 place-items-center rounded-xl text-[#60716e] hover:bg-slate-100 hover:text-[#102925]"
-          >
-            <X className="size-5" />
-          </button>
+          {!result && extractOpen && (
+            <AiExtractUploadStrip
+              busy={extractBusy}
+              done={extractDone}
+              onFile={(file) => void extractUpload(file)}
+            />
+          )}
         </header>
         {result ? (
           <div className="overflow-y-auto p-5 sm:p-7">
@@ -152,6 +191,7 @@ export function NewOrderModal({
           </div>
         ) : (
           <form
+            ref={formRef}
             onSubmit={(event) => {
               event.preventDefault();
               submit(new FormData(event.currentTarget));

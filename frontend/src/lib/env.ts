@@ -27,6 +27,11 @@ const serverSchema = publicSchema.extend({
     .min(1_000)
     .max(120_000)
     .default(30_000),
+  WHATSAPP_PROVIDER: z.enum(["none", "console", "meta"]).default("none"),
+  WHATSAPP_ACCESS_TOKEN: optionalSecret,
+  WHATSAPP_PHONE_NUMBER_ID: optionalSecret,
+  WHATSAPP_VERIFY_TOKEN: optionalSecret,
+  WHATSAPP_API_VERSION: z.string().default("v21.0"),
 });
 
 export function getPublicEnv() {
@@ -53,6 +58,11 @@ export function getServerEnv() {
     AGNO_ASSISTANT_URL: process.env.AGNO_ASSISTANT_URL,
     AGNO_ASSISTANT_ENABLED: process.env.AGNO_ASSISTANT_ENABLED,
     AGNO_ASSISTANT_TIMEOUT_MS: process.env.AGNO_ASSISTANT_TIMEOUT_MS,
+    WHATSAPP_PROVIDER: process.env.WHATSAPP_PROVIDER,
+    WHATSAPP_ACCESS_TOKEN: process.env.WHATSAPP_ACCESS_TOKEN,
+    WHATSAPP_PHONE_NUMBER_ID: process.env.WHATSAPP_PHONE_NUMBER_ID,
+    WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN,
+    WHATSAPP_API_VERSION: process.env.WHATSAPP_API_VERSION,
   });
 }
 

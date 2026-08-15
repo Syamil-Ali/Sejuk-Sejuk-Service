@@ -18,6 +18,9 @@ SUPPORTED_TYPES = {
     "text/plain": ".txt",
     "text/markdown": ".md",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
 }
 
 
@@ -75,7 +78,7 @@ class SupabaseDocumentIntakeStore:
                     "checksum_sha256": manifest.checksum_sha256,
                     "status": manifest.status,
                     "visibility": "restricted",
-                    "visible_roles": [],
+                    "visible_roles": ["admin", "manager"],
                     "created_by": str(actor.user_id),
                 },
             )
@@ -90,8 +93,8 @@ class SupabaseDocumentIntakeStore:
 async def prepare_document(
     actor: ActorContext, upload: UploadFile, title: str, store: DocumentIntakeStore
 ) -> DocumentManifest:
-    if actor.role is not Role.ADMIN:
-        raise PermissionError("Administrator access required.")
+    if actor.role not in {Role.ADMIN, Role.TECHNICIAN}:
+        raise PermissionError("Administrator or technician access required.")
     mime_type = upload.content_type or ""
     expected_extension = SUPPORTED_TYPES.get(mime_type)
     suffix = PurePosixPath(upload.filename or "").suffix.casefold()

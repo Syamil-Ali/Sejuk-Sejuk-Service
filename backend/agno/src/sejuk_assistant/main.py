@@ -21,6 +21,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     application.state.settings = resolved
     application.state.document_intake_store = None
+    application.state.document_extractor = None
     application.state.request_limiter = RequestLimiter(
         resolved.requests_per_minute, resolved.max_concurrent_requests
     )

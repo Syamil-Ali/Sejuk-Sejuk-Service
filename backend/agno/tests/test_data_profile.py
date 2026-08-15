@@ -44,14 +44,10 @@ async def test_runtime_profile_is_role_scoped_and_contains_no_raw_samples() -> N
         if relation["name"] == "assistant_analytics_orders"
     )
     assert orders["row_count"] == 3
-    customer = next(
-        column
-        for column in orders["columns"]
-        if column["name"] == "customer_name"
-    )
+    customer = next(column for column in orders["columns"] if column["name"] == "customer_name")
     assert customer["sensitivity"] == "restricted"
     assert "unique" not in customer
-    assert all("COUNT(DISTINCT \"customer_name\")" not in sql for sql in repository.sql)
+    assert all('COUNT(DISTINCT "customer_name")' not in sql for sql in repository.sql)
 
 
 @pytest.mark.asyncio

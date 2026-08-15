@@ -95,6 +95,14 @@ export function CompletionReport({ order }: { order: ServiceOrder }) {
                     Note: {record.notes}
                   </p>
                 )}
+                {record.receipt && (
+                  <div className="mt-2">
+                    <PrivateEvidenceLink
+                      name={record.receipt.name}
+                      storagePath={record.receipt.storagePath}
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>

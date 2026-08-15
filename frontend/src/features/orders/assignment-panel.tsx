@@ -6,6 +6,7 @@ import {
   feedbackMessage,
   whatsappLink,
 } from "@/lib/whatsapp";
+import { WhatsAppDeliveryStatus } from "@/components/whatsapp-delivery-status";
 
 export function AssignmentPanel({
   order,
@@ -65,24 +66,27 @@ export function AssignmentPanel({
               ))}
           </select>
           {technician && (
-            <a
-              target="_blank"
-              rel="noreferrer"
-              className="btn-whatsapp mt-3 w-full"
-              href={whatsappLink(
-                technician.phone!,
-                assignmentMessage(
-                  order.orderNo,
-                  order.serviceType,
-                  order.address,
-                  order.scheduledAt
-                    ? localDateTime.format(new Date(order.scheduledAt))
-                    : undefined,
-                ),
-              )}
-            >
-              WhatsApp technician <ExternalLink className="size-4" />
-            </a>
+            <>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className="btn-whatsapp mt-3 w-full"
+                href={whatsappLink(
+                  technician.phone!,
+                  assignmentMessage(
+                    order.orderNo,
+                    order.serviceType,
+                    order.address,
+                    order.scheduledAt
+                      ? localDateTime.format(new Date(order.scheduledAt))
+                      : undefined,
+                  ),
+                )}
+              >
+                WhatsApp technician <ExternalLink className="size-4" />
+              </a>
+              <WhatsAppDeliveryStatus orderId={order.id} />
+            </>
           )}
         </div>
       )}

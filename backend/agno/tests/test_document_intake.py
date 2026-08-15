@@ -16,7 +16,7 @@ class FakeStore:
         self.content = b""
 
     async def stage(self, actor: ActorContext, manifest: DocumentManifest, content: bytes) -> None:
-        assert actor.role is Role.ADMIN
+        assert actor.role in {Role.ADMIN, Role.TECHNICIAN}
         self.manifest = manifest
         self.content = content
 
@@ -44,10 +44,10 @@ async def test_admin_intake_hashes_and_stages_private_path() -> None:
 
 
 @pytest.mark.asyncio
-async def test_non_admin_cannot_ingest() -> None:
+async def test_manager_cannot_ingest() -> None:
     with pytest.raises(PermissionError):
         await prepare_document(
-            actor(Role.TECHNICIAN),
+            actor(Role.MANAGER),
             upload("manual.pdf", "application/pdf", b"x"),
             "Manual",
             FakeStore(),
@@ -64,3 +64,24 @@ async def test_type_extension_and_size_are_validated() -> None:
         await prepare_document(
             actor(Role.ADMIN), upload("empty.pdf", "application/pdf", b""), "Manual", FakeStore()
         )
+
+
+@pytest.mark.asyncio
+async def test_image_documents_are_supported() -> None:
+    store = FakeStore()
+    result = await prepare_document(
+        actor(Role.ADMIN), upload("invoice.png", "image/png", b"png-bytes"), "Invoice", store
+    )
+    assert result.mime_type == "image/png"
+    assert result.storage_path.endswith("source.png")
+    assert store.content == b"png-bytes"
+
+
+@pytest.mark.asyncio
+async def test_technician_can_ingest_receipt() -> None:
+    store = FakeStore()
+    result = await prepare_document(
+        actor(Role.TECHNICIAN), upload("receipt.png", "image/png", b"png"), "Receipt", store
+    )
+    assert result.mime_type == "image/png"
+    assert store.content == b"png"

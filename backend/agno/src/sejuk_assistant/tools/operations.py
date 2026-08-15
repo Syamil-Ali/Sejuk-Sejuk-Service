@@ -205,6 +205,61 @@ class OperationsTools:
         )
         return Evidence(data, citations, len(rows) > self.MAX_ROWS)
 
+    async def technician_workload(self, date_range: DateRange) -> Evidence:
+        """Per-technician completed jobs and service value in a period, with the
+        team average so the assistant can surface overload comparisons."""
+        self._require(Capability.PERFORMANCE_ORGANIZATION)
+        rows = await self.repository.get(
+            "service_completions",
+            {
+                "select": (
+                    "id,final_amount,completed_at,technician_id,"
+                    "orders!inner(id,order_no),profiles!inner(display_name)"
+                ),
+                "completed_at": f"gte.{date_range.start.isoformat()}",
+                "and": f"(completed_at.lt.{date_range.end.isoformat()})",
+                "limit": str(self.MAX_ROWS + 1),
+            },
+        )
+        visible = rows[: self.MAX_ROWS]
+        team: dict[str, dict[str, int | float | str]] = {}
+        for row in visible:
+            technician_id = row.get("technician_id")
+            if not technician_id:
+                continue
+            key = str(technician_id)
+            entry = team.setdefault(
+                key,
+                {
+                    "technicianId": key,
+                    "name": row.get("profiles", {}).get("display_name", "Technician"),
+                    "jobs": 0,
+                    "serviceValue": 0.0,
+                },
+            )
+            entry["jobs"] = int(entry["jobs"]) + 1
+            entry["serviceValue"] = float(entry["serviceValue"]) + float(
+                row.get("final_amount") or 0
+            )
+        ranked = sorted(team.values(), key=lambda item: int(item["jobs"]), reverse=True)
+        total_jobs = sum(int(item["jobs"]) for item in ranked)
+        average = round(total_jobs / max(len(ranked), 1), 2)
+        now = datetime.now(timezone.utc)
+        citations = tuple(
+            Citation("performance", row["id"], row["orders"]["order_no"], now) for row in visible
+        )
+        return Evidence(
+            {
+                "from": date_range.start.isoformat(),
+                "to": date_range.end.isoformat(),
+                "totalJobs": total_jobs,
+                "teamAverageJobs": average,
+                "technicians": ranked,
+            },
+            citations,
+            len(rows) > self.MAX_ROWS,
+        )
+
     async def search_accessible_messages(self, query: str, limit: int = 20) -> Evidence:
         self._require(Capability.COMMUNICATIONS_ACCESSIBLE)
         safe = query.strip().replace("%", "")[:100]

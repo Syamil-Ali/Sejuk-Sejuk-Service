@@ -5,6 +5,7 @@ import {
   ClipboardList,
   CircleDollarSign,
   Gauge,
+  Info,
   MessageSquare,
   Wrench,
 } from "lucide-react";
@@ -38,6 +39,12 @@ const communicationLinks: PortalNavItem[] = [
   },
 ];
 
+const helpLink: PortalNavItem = {
+  href: "/portal/about",
+  label: "How it works",
+  icon: Info,
+};
+
 export const portalNavigation: Record<Role, PortalNavSection[]> = {
   admin: [
     {
@@ -48,6 +55,7 @@ export const portalNavigation: Record<Role, PortalNavSection[]> = {
       ],
     },
     { label: "Communication", links: communicationLinks },
+    { label: "Help", links: [helpLink] },
   ],
   technician: [
     {
@@ -62,6 +70,7 @@ export const portalNavigation: Record<Role, PortalNavSection[]> = {
       ],
     },
     { label: "Communication", links: communicationLinks },
+    { label: "Help", links: [helpLink] },
   ],
   manager: [
     {
@@ -72,6 +81,7 @@ export const portalNavigation: Record<Role, PortalNavSection[]> = {
       ],
     },
     { label: "Communication", links: communicationLinks },
+    { label: "Help", links: [helpLink] },
   ],
 };
 

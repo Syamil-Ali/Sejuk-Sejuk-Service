@@ -52,6 +52,7 @@ interface CompleteInput {
   evidence: Evidence[];
   paymentAmount?: number;
   paymentMethod?: string;
+  receiptEvidenceId?: string;
 }
 
 interface DemoContextValue {
@@ -80,6 +81,7 @@ interface DemoContextValue {
     amount: number,
     method: string,
     notes?: string,
+    receiptEvidenceId?: string,
   ) => Promise<void>;
   reviewOrder: (
     orderId: string,
@@ -620,8 +622,14 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   );
 
   const recordPayment = useCallback(
-    async (id: string, amount: number, method: string, notes?: string) => {
-      if(operationsRepository){const order=orders.find(o=>o.id===id);if(!order)throw new Error("Order not found.");await commitOperation(()=>operationsRepository.recordPayment(order,amount,method,notes));return;}
+    async (
+      id: string,
+      amount: number,
+      method: string,
+      notes?: string,
+      receiptEvidenceId?: string,
+    ) => {
+      if(operationsRepository){const order=orders.find(o=>o.id===id);if(!order)throw new Error("Order not found.");await commitOperation(()=>operationsRepository.recordPayment(order,amount,method,notes,receiptEvidenceId));return;}
       const actor = requireUser();
       if (actor.role !== "admin") throw new Error("Admin access required.");
       update(id, (order) => {

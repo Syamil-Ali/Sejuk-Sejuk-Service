@@ -49,18 +49,20 @@ export async function refreshSupabaseSession(request: NextRequest) {
   ];
   const allowed =
     role === "admin"
-      ? ["/portal/orders", "/portal/payments", ...shared]
+      ? ["/portal/orders", "/portal/payments", "/portal/about", ...shared]
       : role === "technician"
         ? [
             "/portal/technician-dashboard",
             "/portal/jobs",
             "/portal/orders/",
+            "/portal/about",
             ...shared,
           ]
         : [
             "/portal/dashboard",
             "/portal/reviews",
             "/portal/orders/",
+            "/portal/about",
             ...shared,
           ];
   const path = request.nextUrl.pathname;

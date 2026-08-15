@@ -22,6 +22,7 @@ TOOLS: tuple[ToolDefinition, ...] = (
     ToolDefinition("summarize_own_job_payments", Capability.PAYMENTS_OWN_JOBS),
     ToolDefinition("compare_technician_performance", Capability.PERFORMANCE_ORGANIZATION),
     ToolDefinition("summarize_own_performance", Capability.PERFORMANCE_OWN),
+    ToolDefinition("compare_technician_workload", Capability.PERFORMANCE_ORGANIZATION),
     ToolDefinition("search_reviews", Capability.REVIEWS_ORGANIZATION),
     ToolDefinition("search_audit_history", Capability.AUDITS_ORGANIZATION),
     ToolDefinition("search_own_corrections", Capability.CORRECTIONS_OWN_JOBS),

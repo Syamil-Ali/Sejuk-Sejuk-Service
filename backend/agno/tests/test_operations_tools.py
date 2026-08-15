@@ -72,6 +72,65 @@ async def test_technician_performance_ignores_requested_other_identity() -> None
         await repo.close()
 
 
+@pytest.mark.asyncio
+async def test_technician_workload_returns_team_counts_and_average() -> None:
+    manager = actor(Role.MANAGER)
+    period = date_range()
+    rows = [
+        {
+            "id": "c1",
+            "final_amount": 260,
+            "completed_at": "2026-08-15T00:00:00Z",
+            "technician_id": "tech-1",
+            "orders": {"id": "o1", "order_no": "ORDER1"},
+            "profiles": {"display_name": "Ali"},
+        },
+        {
+            "id": "c2",
+            "final_amount": 180,
+            "completed_at": "2026-08-15T00:00:00Z",
+            "technician_id": "tech-1",
+            "orders": {"id": "o2", "order_no": "ORDER2"},
+            "profiles": {"display_name": "Ali"},
+        },
+        {
+            "id": "c3",
+            "final_amount": 220,
+            "completed_at": "2026-08-15T00:00:00Z",
+            "technician_id": "tech-2",
+            "orders": {"id": "o3", "order_no": "ORDER3"},
+            "profiles": {"display_name": "Bala"},
+        },
+    ]
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.params["completed_at"] == f"gte.{period.start.isoformat()}"
+        return httpx.Response(200, json=rows)
+
+    repo = repository(handler, manager)
+    try:
+        result = await OperationsTools(manager, repo).technician_workload(period)
+        assert result.data["totalJobs"] == 3
+        assert result.data["teamAverageJobs"] == 1.5
+        assert result.data["technicians"][0]["name"] == "Ali"
+        assert result.data["technicians"][0]["jobs"] == 2
+        assert result.data["technicians"][1]["jobs"] == 1
+        assert len(result.citations) == 3
+    finally:
+        await repo.close()
+
+
+@pytest.mark.asyncio
+async def test_technician_workload_denied_for_technicians() -> None:
+    technician = actor(Role.TECHNICIAN)
+    repo = repository(lambda request: httpx.Response(200, json=[]), technician)
+    try:
+        with pytest.raises(AuthorizationDenied):
+            await OperationsTools(technician, repo).technician_workload(date_range())
+    finally:
+        await repo.close()
+
+
 def test_invalid_or_oversized_ranges_are_rejected() -> None:
     now = datetime.now(timezone.utc)
     with pytest.raises(ValueError):

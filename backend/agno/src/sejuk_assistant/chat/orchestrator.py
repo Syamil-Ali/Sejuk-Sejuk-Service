@@ -59,6 +59,8 @@ class ChatOrchestrator:
             "summarize_own_performance",
         }:
             return await self.tools.technician_performance(None, period), plan.tool
+        if plan.tool == "compare_technician_workload":
+            return await self.tools.technician_workload(period), plan.tool
         if plan.tool in {
             "postponement_summary",
             "summarize_postponements",
@@ -120,6 +122,7 @@ class ChatOrchestrator:
             if self.query_skill:
                 active = {
                     "query_operational_data",
+                    "compare_technician_workload",
                     "search_reviews",
                     "search_audit_history",
                     "search_own_corrections",

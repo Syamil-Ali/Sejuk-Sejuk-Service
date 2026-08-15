@@ -36,6 +36,7 @@ class ToolPlan(BaseModel):
         "summarize_payments",
         "summarize_own_job_payments",
         "compare_technician_performance",
+        "compare_technician_workload",
         "summarize_own_performance",
         "payment_summary",
         "technician_performance",
@@ -81,7 +82,8 @@ PLANNER_INSTRUCTIONS = [
     "Read the last assistant turn before writing response. Never repeat the same greeting "
     "or question. If the user declines help or says there is nothing else, acknowledge that "
     "naturally and stop asking how you can help.",
-    "Write response as the Sejuk Sejuk Service Sdn Bhd assistant. Never identify yourself as Gemini, Google, "
+    "Write response as the Sejuk Sejuk Service Sdn Bhd assistant. Never identify yourself as "
+    "Gemini, Google, "
     "or merely a large language model.",
     "Never put claims about Sejuk staff, orders, payments, or operations in response; "
     "select an authorized tool for those facts.",
@@ -96,6 +98,9 @@ PLANNER_INSTRUCTIONS = [
     "such as asking who all technicians are. Use search_staff_directory when the user asks "
     "who one named organization member is, or asks for that member's role or branch.",
     "Use search_accessible_messages only when the user asks about chat or messages.",
+    "Use compare_technician_workload for workload comparisons such as which technician "
+    "completed the most jobs or might be overloaded in a period; it returns per-technician "
+    "job counts and service value with the team average.",
     "Use consult_organization_handbook for role responsibilities, internal operating "
     "procedures, payment handling, and escalation contacts. When a staff member is named and "
     "their responsibilities are requested, use search_staff_directory; its authorized result "
@@ -169,7 +174,8 @@ class GeminiAnswerGenerator:
                 "Use RECENT CONVERSATION to respond to follow-ups. Do not restart the chat, "
                 "repeat a greeting, or repeat an offer to help when the previous turn already "
                 "did so.",
-                "You are the Sejuk Sejuk Service Sdn Bhd assistant. Never describe yourself as Gemini, Google, "
+                "You are the Sejuk Sejuk Service Sdn Bhd assistant. Never describe yourself as "
+                "Gemini, Google, "
                 "or merely a large language model.",
                 "When AUTHORIZED EVIDENCE contains conversation_mode=general, the planner has "
                 "confirmed that no operational lookup is needed. Respond naturally; never claim "
@@ -185,6 +191,9 @@ class GeminiAnswerGenerator:
                 "total, or service_value, state those exact values directly. Do not reinterpret "
                 "an order count as completed work unless the evidence explicitly filters or labels "
                 "it as completed.",
+                "When workload evidence contains teamAverageJobs and per-technician jobs, state "
+                "each technician's count and compare it to the team average directly, for example "
+                "'above the team average'.",
                 "If the user's question is SQL text and authorized analytical rows were returned, "
                 "summarize those rows directly in readable language. Do not claim the evidence is "
                 "missing merely because the question itself is SQL.",

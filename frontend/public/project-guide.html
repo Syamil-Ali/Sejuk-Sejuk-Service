@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sejuk Service Operations — Project Guide</title>
+  <meta name="description" content="A detailed guide to the Sejuk Sejuk Service Sdn Bhd operations platform: workflow, roles, features, architecture, security, AI, and testing." />
+  <style>
+    :root {
+      --navy: #0f2746;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --teal: #0f766e;
+      --ink: #0f1f38;
+      --muted: #526b88;
+      --faint: #7c8ba1;
+      --line: #e3e8ef;
+      --soft: #f6f8fb;
+      --card: #ffffff;
+      --amber-bg: #fffbeb;
+      --amber-text: #7c4a03;
+      --shadow: 0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.05);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); }
+
+    /* Top bar */
+    .topbar {
+      position: sticky; top: 0; z-index: 60;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+    .topbar .brand { font-weight: 800; color: var(--navy); font-size: 15px; letter-spacing: -0.01em; }
+    .topbar .brand small { display: block; font-size: 10px; font-weight: 600; color: var(--faint); letter-spacing: .08em; text-transform: uppercase; }
+    .topbar .actions { display: flex; align-items: center; gap: 8px; }
+    .topbar .link { font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; }
+    .topbar .link:hover { color: var(--blue); background: var(--blue-soft); }
+    .topbar .app-link {
+      color: #fff; background: var(--blue); text-decoration: none;
+      padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 700;
+      box-shadow: 0 4px 12px rgba(37,99,235,.25);
+    }
+    .topbar .app-link:hover { background: #1d4ed8; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      background:
+        radial-gradient(900px 300px at 15% -20%, rgba(255,255,255,.18), transparent 60%),
+        linear-gradient(135deg, #0f2746 0%, #1d4ed8 100%);
+      color: #fff; padding: 64px 24px 56px; text-align: center; overflow: hidden;
+    }
+    .hero h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); line-height: 1.1; letter-spacing: -0.03em; }
+    .hero p.sub { max-width: 720px; margin: 16px auto 0; color: #d7e3ff; font-size: 16px; }
+    .hero .chips { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .hero .chip {
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
+      padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #eaf1ff;
+    }
+
+    /* Layout */
+    .layout { max-width: 1120px; margin: 0 auto; padding: 32px 20px 80px; display: grid; gap: 28px; grid-template-columns: 230px minmax(0,1fr); align-items: start; }
+    .sidenav {
+      position: sticky; top: 84px;
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 14px 10px; box-shadow: var(--shadow);
+    }
+    .sidenav .nav-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--faint); padding: 4px 10px 8px; }
+    .sidenav a {
+      display: flex; align-items: baseline; gap: 8px;
+      padding: 7px 10px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--muted);
+      text-decoration: none;
+    }
+    .sidenav a .n { font-size: 10px; font-weight: 800; color: var(--faint); min-width: 14px; }
+    .sidenav a:hover { background: var(--blue-soft); color: var(--blue); }
+    .sidenav a:hover .n { color: var(--blue); }
+
+    main { min-width: 0; }
+    section { margin: 0 0 34px; scroll-margin-top: 84px; }
+    .section-title {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 22px; color: var(--navy); margin: 0 0 6px; letter-spacing: -0.02em;
+    }
+    .section-title .num {
+      display: inline-grid; place-items: center; width: 30px; height: 30px; flex: none;
+      border-radius: 9px; background: var(--navy); color: #fff; font-size: 13px; font-weight: 800;
+    }
+    .section-lead { margin: 0 0 18px; color: var(--muted); font-size: 15px; max-width: 720px; }
+
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 22px 24px; box-shadow: var(--shadow);
+    }
+    .card + .card, .card { margin: 0 0 14px; }
+    h3 { color: var(--navy); margin: 0 0 8px; font-size: 16px; }
+    p { margin: 0 0 10px; color: #334155; }
+    ul, ol { margin: 0 0 12px; padding-left: 20px; color: #334155; }
+    li { margin: 5px 0; }
+
+    /* Workflow stepper */
+    .stepper {
+      position: relative;
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;
+      padding-top: 30px; margin: 8px 0 20px;
+    }
+    .stepper::before {
+      content: ""; position: absolute; top: 44px; left: 6%; right: 6%; height: 2px;
+      background: repeating-linear-gradient(90deg, #c3cede 0 8px, transparent 8px 16px);
+    }
+    .step {
+      position: relative; background: var(--card); border: 1px solid var(--line);
+      border-radius: 14px; padding: 14px; text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .step .num {
+      position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+      display: grid; place-items: center; width: 34px; height: 34px;
+      border-radius: 999px; background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: #fff; font-weight: 800; font-size: 13px;
+      border: 3px solid var(--soft); box-shadow: 0 0 0 1px var(--line);
+    }
+    .step h4 { margin: 6px 0 3px; font-size: 14px; color: var(--ink); }
+    .step .who {
+      display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--blue); background: var(--blue-soft);
+      border-radius: 999px; padding: 2px 8px;
+    }
+    .step p { margin: 8px 0 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .step .arrow {
+      position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
+      color: var(--faint); font-size: 12px;
+    }
+    .note {
+      border: 1px solid #f3d896; background: var(--amber-bg); border-radius: 12px;
+      padding: 12px 16px; font-size: 13px; color: var(--amber-text); margin: 14px 0;
+    }
+
+    /* Grids */
+    .grid { display: grid; gap: 14px; }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid.three { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+
+    /* Mermaid */
+    .diagram {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 18px; margin: 0 0 16px; overflow-x: auto; box-shadow: var(--shadow);
+    }
+    .diagram pre.mermaid { margin: 0; background: transparent; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:nth-child(even) { background: #fafbfd; }
+    tbody tr:last-child td { border-bottom: none; }
+    th { background: var(--soft); color: var(--navy); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .badge.ok { background: #dcfce7; color: #15803d; }
+    .badge.part { background: #fef3c7; color: #b45309; }
+
+    /* Code */
+    code { background: #eef2f7; border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; font-size: .9em; }
+    pre.code {
+      background: #0f172a; color: #e2e8f0; border-radius: 14px; padding: 18px 20px;
+      overflow-x: auto; font-size: 13px; line-height: 1.65; margin: 0 0 16px; box-shadow: var(--shadow);
+    }
+
+    /* Architecture layers */
+    .arch { display: grid; gap: 10px; margin: 8px 0 0; }
+    .arch .layer {
+      border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+      background: var(--card); box-shadow: var(--shadow);
+      border-left: 4px solid var(--blue);
+    }
+    .arch .layer:nth-child(2) { border-left-color: #0f766e; }
+    .arch .layer:nth-child(3) { border-left-color: #7c3aed; }
+    .arch .layer:nth-child(4) { border-left-color: #d97706; }
+    .arch .layer:nth-child(5) { border-left-color: #0f766e; }
+    .arch .layer .name { font-weight: 700; color: var(--navy); font-size: 14px; }
+    .arch .layer p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+
+    /* FAQ */
+    details.faq { border: 1px solid var(--line); border-radius: 12px; background: var(--card); margin: 0 0 10px; box-shadow: var(--shadow); overflow: hidden; }
+    details.faq summary {
+      cursor: pointer; padding: 14px 18px; font-weight: 600; color: var(--navy);
+      list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    details.faq summary::-webkit-details-marker { display: none; }
+    details.faq summary::after { content: "+"; font-size: 18px; color: var(--faint); transition: transform .15s ease; }
+    details.faq[open] summary::after { transform: rotate(45deg); }
+    details.faq .body { padding: 0 18px 14px; color: #334155; font-size: 14px; }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 20px 44px; text-align: center; color: var(--faint); font-size: 13px; }
+
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidenav { display: none; }
+      .stepper { grid-template-columns: repeat(2, 1fr); }
+      .stepper::before { display: none; }
+      .step .num { position: static; transform: none; margin: 0 auto 8px; }
+      .step .arrow { display: none; }
+    }
+    @media (max-width: 520px) {
+      .stepper { grid-template-columns: 1fr; }
+      .topbar .link { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">Sejuk Sejuk Service Sdn Bhd<small>Operations platform · project guide</small></span>
+    <div class="actions">
+      <a class="link" href="#overview">Guide</a>
+      <a class="app-link" href="/login">Open the app</a>
+    </div>
+  </div>
+
+  <header class="hero">
+    <h1>Sejuk Service Operations — Project Guide</h1>
+    <p class="sub">
+      A complete field-service operations platform for an air-conditioning company:
+      order intake, technician field work, manager review, payments, notifications, analytics,
+      and a permission-scoped AI assistant. This guide explains it all in detail.
+    </p>
+    <div class="chips">
+      <span class="chip">Next.js 16</span>
+      <span class="chip">React 19</span>
+      <span class="chip">Tailwind CSS</span>
+      <span class="chip">Supabase</span>
+      <span class="chip">FastAPI + Agno</span>
+      <span class="chip">Gemini</span>
+      <span class="chip">PostgreSQL + RLS</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidenav" aria-label="Contents">
+      <div class="nav-title">Contents</div>
+      <a href="#overview"><span class="n">1</span> Overview</a>
+      <a href="#workflow"><span class="n">2</span> Workflow</a>
+      <a href="#roles"><span class="n">3</span> Roles</a>
+      <a href="#features"><span class="n">4</span> Features</a>
+      <a href="#ai"><span class="n">5</span> AI features</a>
+      <a href="#architecture"><span class="n">6</span> Architecture</a>
+      <a href="#data"><span class="n">7</span> Data model</a>
+      <a href="#security"><span class="n">8</span> Security</a>
+      <a href="#testing"><span class="n">9</span> Testing</a>
+      <a href="#local"><span class="n">10</span> Local setup</a>
+      <a href="#deployment"><span class="n">11</span> Deployment</a>
+      <a href="#assessment"><span class="n">12</span> Assessment</a>
+      <a href="#limitations"><span class="n">13</span> Limitations</a>
+      <a href="#faq"><span class="n">14</span> FAQ</a>
+    </aside>
+
+    <main>
+      <section id="overview">
+        <h2 class="section-title"><span class="num">1</span>What this project is</h2>
+        <p class="section-lead">An internal operations system digitising the full service lifecycle for Sejuk Sejuk Service Sdn Bhd.</p>
+        <div class="card">
+          <p>
+            This is an internal operations system for <strong>Sejuk Sejuk Service Sdn Bhd</strong>
+            (a fictional air-conditioning installation, servicing, and repair company). It digitises the
+            full service lifecycle — from the moment a customer request arrives to the moment an order is
+            closed and reflected on the KPI dashboard.
+          </p>
+          <p>
+            The system covers every module the assessment asks for: the <strong>Admin portal</strong> (order
+            submission), the <strong>Technician portal</strong> (field service jobs), the
+            <strong>WhatsApp notification trigger</strong>, a <strong>KPI dashboard</strong>, and an
+            <strong>AI operations assistant</strong> — plus production-grade extras like audit history,
+            private evidence storage, payments with receipts, notifications, internal messaging, and
+            structured addresses.
+          </p>
+          <p><strong>One-line summary:</strong> an admin creates an order, a technician is assigned and completes
+            the field work with checklist proof, the manager reviews and closes it, the dashboard updates — and an AI
+            assistant can answer questions about all of it using only the data each user is allowed to see.</p>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <h2 class="section-title"><span class="num">2</span>The project workflow</h2>
+        <p class="section-lead">Orders move through a six-state lifecycle, enforced in the database, not just in the UI.</p>
+
+        <div class="stepper">
+          <div class="step">
+            <span class="num">1</span>
+            <h4>New</h4>
+            <span class="who">Admin</span>
+            <p>Order intake with customer, structured address, service type, quote, notes. Optionally pre-filled by AI.</p>
+          </div>
+          <div class="step">
+            <span class="num">2</span>
+            <h4>Assigned</h4>
+            <span class="who">Admin</span>
+            <p>Technician assigned, notified, and a WhatsApp handoff link becomes available.</p>
+          </div>
+          <div class="step">
+            <span class="num">3</span>
+            <h4>In Progress</h4>
+            <span class="who">Technician</span>
+            <p>Start work, tick checklist items with notes and photo proof, upload evidence.</p>
+          </div>
+          <div class="step">
+            <span class="num">4</span>
+            <h4>Job Done</h4>
+            <span class="who">Technician</span>
+            <p>Completion report with auto final amount, optional payment + receipt; manager notified.</p>
+          </div>
+          <div class="step">
+            <span class="num">5</span>
+            <h4>Reviewed</h4>
+            <span class="who">Manager</span>
+            <p>Review completion, checklist proof, payments, warnings. Accept or return for correction.</p>
+          </div>
+          <div class="step">
+            <span class="num">6</span>
+            <h4>Closed</h4>
+            <span class="who">Manager</span>
+            <p>Order archived; the KPI dashboard reflects the completed work.</p>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>Correction loop:</strong> when a manager returns a job, selected checklist items are reopened,
+          the technician is notified, and the order returns to <em>In Progress</em> until reworked and re-submitted.
+        </div>
+
+        <div class="diagram">
+          <pre class="mermaid">
+stateDiagram-v2
+  [*] --> New: Admin creates order
+  New --> Assigned: Admin assigns (notification)
+  Assigned --> InProgress: Technician starts
+  InProgress --> JobDone: Technician completes (manager notified)
+  JobDone --> Reviewed: Manager accepts
+  Reviewed --> Closed: Manager closes
+  JobDone --> InProgress: Manager returns (reopen items)
+  InProgress --> InProgress: Technician reworks
+  Closed --> [*]
+          </pre>
+        </div>
+
+        <div class="card">
+          <p>
+            Every transition is a <strong>versioned, role-checked RPC</strong> that also writes an audit event
+            with before/after values, so the entire history of an order is traceable and concurrent edits cannot
+            silently overwrite each other.
+          </p>
+        </div>
+      </section>
+
+      <section id="roles">
+        <h2 class="section-title"><span class="num">3</span>Roles &amp; workspaces</h2>
+        <p class="section-lead">Three roles, each with its own pages and capabilities — enforced server-side.</p>
+        <div class="grid three">
+          <div class="card">
+            <h3>Admin</h3>
+            <p><strong>Pages:</strong> Orders, Payments, How it works</p>
+            <ul>
+              <li>Create orders with auto-generated numbers and structured addresses</li>
+              <li>Assign technicians and customize checklists</li>
+              <li>Re-edit service details; open addresses in Google Maps</li>
+              <li>Collect outstanding payments with notes and attached receipts</li>
+              <li>Inspect the audit history of any order</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Technician</h3>
+            <p><strong>Pages:</strong> Dashboard, My jobs</p>
+            <ul>
+              <li>Mobile-first job queue scoped to their own assignments</li>
+              <li>Start / reschedule work; save checklist items with photo proof</li>
+              <li>Upload up to six private evidence files</li>
+              <li>Complete jobs with auto final amount and optional payment + receipt</li>
+              <li>Open a pre-filled WhatsApp feedback message for the customer</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Manager</h3>
+            <p><strong>Pages:</strong> Dashboard, Reviews</p>
+            <ul>
+              <li>Review completed jobs with deterministic warnings</li>
+              <li>Accept or return work (reopening selected items)</li>
+              <li>Close reviewed orders</li>
+              <li>Track KPIs: completed jobs, service value, payments, postponements</li>
+              <li>Ask the AI assistant about operations and workload</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <h2 class="section-title"><span class="num">4</span>Features in detail</h2>
+        <div class="grid two">
+          <div class="card"><h3>Order intake</h3><p>Auto-generated order numbers, customer name/phone, a structured address form (building, address lines, postcode, city, state), service type, quoted price, optional technician and schedule, admin notes, and checklist customization before work begins.</p></div>
+          <div class="card"><h3>Structured addresses &amp; maps</h3><p>Address parts are stored as separate columns for editing and filtering, then composed into a display string. The service address in the order detail opens in Google Maps.</p></div>
+          <div class="card"><h3>Audit history</h3><p>Every tracked action is recorded with actor, timestamp, and before/after values, rendered as a readable diff. Technicians see only their own orders' history.</p></div>
+          <div class="card"><h3>Checklist proof &amp; evidence</h3><p>Technicians attach photos to checklist items (persisted and committed to storage) and upload up to six private evidence files per job. Files open through short-lived signed URLs — never public.</p></div>
+          <div class="card"><h3>Payments &amp; receipts</h3><p>Field payments at completion and admin collections with notes. Receipts can be extracted by AI and are attached to the payment record, viewable by managers.</p></div>
+          <div class="card"><h3>Notifications &amp; messaging</h3><p>Assignment, completion, correction, and payment notifications with unread state and realtime sync. Internal direct and order conversations with mentions and attachments.</p></div>
+          <div class="card"><h3>KPI dashboard</h3><p>Date-scoped metrics: completed jobs, service value, payments/outstanding, postponements, technician charts, and a leaderboard.</p></div>
+          <div class="card"><h3>WhatsApp handoffs</h3><p>User-activated <code>wa.me</code> deep links for assignment and feedback, audited with <code>delivery_confirmed=false</code>. A plug-and-play provider template exists for real delivery receipts.</p></div>
+        </div>
+      </section>
+
+      <section id="ai">
+        <h2 class="section-title"><span class="num">5</span>AI features</h2>
+        <p class="section-lead">AI runs entirely server-side; the browser never holds model keys, and every AI read is scoped by the signed-in user's own permissions.</p>
+
+        <div class="diagram">
+          <pre class="mermaid">
+sequenceDiagram
+  participant U as User
+  participant N as Next.js BFF
+  participant A as Agno service
+  participant G as Gemini
+  participant D as Supabase (RLS)
+  U->>N: question + JWT
+  N->>A: forward JWT
+  A->>G: plan one role-allowed tool
+  G-->>A: tool plan
+  A->>D: retrieve authorized rows (caller JWT)
+  D-->>A: evidence
+  A->>G: summarize evidence
+  G-->>A: answer
+  A-->>U: streamed answer + citations
+          </pre>
+        </div>
+
+        <div class="grid three">
+          <div class="card"><h3>Ops assistant</h3><p>Ask operational questions in plain language — orders, payments, performance, workload, staff, messages, reviews, or analytical questions. Gemini plans exactly one role-allowed, read-only tool; the tool retrieves authorized rows; Gemini formats the answer with citations. Write-style or unsupported requests are declined.</p></div>
+          <div class="card"><h3>Extract with AI (orders)</h3><p>In the New Order dialog, upload a quotation, invoice, or client form (PDF, DOCX, TXT, Markdown, or photo) and Gemini returns a strict JSON schema — customer, phone, address parts, service, details, amount, date. Values are deterministically normalized and pre-filled for review.</p></div>
+          <div class="card"><h3>Extract from receipt (payments)</h3><p>Admins and technicians upload a receipt; the AI extracts amount, method, date, and receipt number, pre-fills the payment fields, and attaches the receipt to the payment record.</p></div>
+        </div>
+
+        <div class="card"><h3>Guarded analytical SQL</h3><p>Analytical questions generate SQL that <code>sqlglot</code> validates: no writes or DDL, no system catalogs, only reviewed <code>assistant_analytics_*</code> views, bounded joins/nesting/limits/date ranges. Execution runs through a capped, timed RPC with the caller's JWT, so row-level security still applies to every result.</p></div>
+        <div class="card"><h3>Workload insight</h3><p>A dedicated read-only tool returns per-technician completed jobs and service value with the team average, so the assistant can answer questions like <em>"which technician might be overloaded this week?"</em> by comparing real counts against the average.</p></div>
+        <div class="note"><strong>Design rule:</strong> AI is <strong>prefill-only for money and orders</strong> — it fills forms for human review but never commits anything itself. Every AI run is audited with a correlation id and safe metadata only.</div>
+      </section>
+
+      <section id="architecture">
+        <h2 class="section-title"><span class="num">6</span>Architecture</h2>
+        <div class="diagram">
+          <pre class="mermaid">
+flowchart TB
+  U["Browser · Next.js 16 / React 19"]
+  BFF["Next.js BFF routes"]
+  SB[("Supabase · PostgreSQL")]
+  AG["Agno AI service"]
+  GM["Gemini"]
+  ST["Private Storage"]
+  WA["WhatsApp / provider APIs"]
+  U -->|"session JWT"| BFF
+  BFF -->|"user JWT (RLS)"| SB
+  BFF -->|"user JWT"| AG
+  AG -->|"caller JWT reads"| SB
+  AG -->|"plan + answer"| GM
+  BFF -->|"signed URLs"| ST
+  U -.->|"signed URL"| ST
+  BFF -->|"provider API"| WA
+  WA -.->|"webhook · service role"| SB
+  style AG fill:#eff6ff,stroke:#2563eb,color:#0f1f38
+  style GM fill:#eff6ff,stroke:#2563eb,color:#0f1f38
+          </pre>
+        </div>
+        <p class="section-lead">The same architecture in a layered view:</p>
+        <div class="arch">
+          <div class="layer"><div class="name">Browser (Next.js 16 + React 19)</div><p>Authenticated Supabase client + Backend-for-Frontend routes. Never receives the service-role key or AI model keys.</p></div>
+          <div class="layer"><div class="name">Next.js BFF routes</div><p>Forward the user's JWT to the AI service and provider APIs; issue short-lived signed URLs for private files.</p></div>
+          <div class="layer"><div class="name">Supabase (PostgreSQL)</div><p>RLS is the security boundary. Every write goes through versioned, role-checked RPCs with optimistic concurrency and atomic audit events. Realtime events are debounced into authoritative snapshot refreshes. Private storage buckets hold evidence, receipts, and documents.</p></div>
+          <div class="layer"><div class="name">Agno AI service (FastAPI)</div><p>Reads data through the caller's JWT (RLS applies), runs Gemini tool planning and response formatting, validates analytical SQL, and audits every run. The service-role key is confined to document intake and webhook callbacks.</p></div>
+          <div class="layer"><div class="name">Google Gemini</div><p>Plans one role-allowed read-only tool per question, extracts structured fields with JSON schemas, and summarizes authorized evidence.</p></div>
+        </div>
+        <div class="card">
+          <h3>Why these decisions?</h3>
+          <ul>
+            <li><strong>RLS as the single boundary</strong> — the UI and the AI go through the same authorization, so there is no second security model to get wrong.</li>
+            <li><strong>Versioned RPCs for all writes</strong> — workflow rules and auditability live in the database, not just in components.</li>
+            <li><strong>Read-only, evidence-bound AI</strong> — satisfies the assessment's "controlled queries, not unrestricted database access" requirement.</li>
+            <li><strong>Private storage + signed URLs</strong> — evidence is never publicly readable.</li>
+            <li><strong>Pluggable providers</strong> — WhatsApp delivery tracking can be added without touching callers.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="data">
+        <h2 class="section-title"><span class="num">7</span>Data model</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Table</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>profiles</code></td><td>Users and roles (admin, manager, technician), branches, active status.</td></tr>
+              <tr><td><code>orders</code></td><td>The order with state machine, structured address parts, version for optimistic concurrency.</td></tr>
+              <tr><td><code>order_checklist_items</code></td><td>Per-order checklist with required flag, completion actor/time, notes.</td></tr>
+              <tr><td><code>job_evidence</code></td><td>Private file metadata linked to an order or a checklist item; committed flag.</td></tr>
+              <tr><td><code>service_completions</code></td><td>Work done, extra charges, final amount, remarks, technician, timestamp.</td></tr>
+              <tr><td><code>payments</code></td><td>Amount, method, notes, source (field/admin), optional attached receipt evidence.</td></tr>
+              <tr><td><code>reviews</code></td><td>Manager review outcome and notes.</td></tr>
+              <tr><td><code>schedule_events</code></td><td>Reschedule history.</td></tr>
+              <tr><td><code>notifications</code></td><td>Role/user-scoped notifications with read state.</td></tr>
+              <tr><td><code>audit_events</code></td><td>Immutable before/after audit trail for tracked actions.</td></tr>
+              <tr><td><code>conversations / messages</code></td><td>Internal order/direct conversations and announcements.</td></tr>
+              <tr><td><code>assistant_*</code></td><td>Threads, messages, documents, versions, and audit events for the AI service.</td></tr>
+              <tr><td><code>whatsapp_deliveries</code></td><td>Optional delivery status tracking for WhatsApp providers.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="security">
+        <h2 class="section-title"><span class="num">8</span>Security &amp; authorization</h2>
+        <div class="card">
+          <ul>
+            <li><strong>Row-level security</strong> on every table scopes reads by role, assignment, and ownership.</li>
+            <li><strong>Versioned RPCs</strong> re-verify role, assignment, state, and optimistic version on every write.</li>
+            <li><strong>Service-role confinement</strong> — the privileged key is only used for document intake and provider webhooks.</li>
+            <li><strong>BFF pattern</strong> keeps secrets server-side.</li>
+            <li><strong>Private files</strong> open only through short-lived signed URLs.</li>
+            <li><strong>AI read-only</strong> — cannot create, edit, or delete records; refused write/unsupported requests.</li>
+            <li><strong>Webhook verification</strong> (WhatsApp) uses token challenge + provider parsing.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="testing">
+        <h2 class="section-title"><span class="num">9</span>Testing &amp; quality</h2>
+        <div class="card">
+          <ul>
+            <li><strong>Database (pgTAP):</strong> role scope, lifecycle transitions, manager correction, payments, notifications, RLS behavior.</li>
+            <li><strong>Frontend (Vitest + Testing Library):</strong> repository hydration, mutations, conflicts, subscriptions, UI behavior.</li>
+            <li><strong>E2E (Playwright):</strong> role-based workflows and quality checks.</li>
+            <li><strong>Python (pytest + ruff + mypy):</strong> tool authorization, guards, extraction normalizers.</li>
+            <li><strong>CI:</strong> GitHub Actions runs the full verification suite on every push.</li>
+          </ul>
+        </div>
+        <pre class="code">npx supabase db reset --workdir backend
+npx supabase test db --workdir backend
+npm run lint --workspace @sejuk/frontend
+npm run typecheck --workspace @sejuk/frontend
+npm run test --workspace @sejuk/frontend
+npm run build --workspace @sejuk/frontend
+cd backend/agno && python -m pytest</pre>
+      </section>
+
+      <section id="local">
+        <h2 class="section-title"><span class="num">10</span>Running locally</h2>
+        <pre class="code">npm install
+npx supabase start --workdir backend
+npx supabase db reset --workdir backend
+Copy-Item frontend/.env.example frontend/.env.local
+npm run dev --workspace @sejuk/frontend
+
+# AI service
+cd backend/agno
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+Copy-Item .env.example .env
+uvicorn sejuk_assistant.main:app --reload --port 8000</pre>
+        <div class="card">
+          <p>Seed identities: Nadia (Admin), Farah (Manager), and technicians Ali, John, Bala, Yusoff.
+          The shared demo password is <code>SejukDemo2026!</code> (assessment-only).</p>
+        </div>
+      </section>
+
+      <section id="deployment">
+        <h2 class="section-title"><span class="num">11</span>Deployment</h2>
+        <div class="card">
+          <p>Apply the checked-in migrations to hosted Supabase, create production Auth/profile records, configure
+          private Storage and redirect URLs, and set the public Supabase URL/key. Deploy the Next.js frontend and
+          the Agno service separately, point <code>AGNO_ASSISTANT_URL</code> to the private service, and keep
+          <code>NEXT_PUBLIC_DEMO_MODE=false</code>.</p>
+        </div>
+      </section>
+
+      <section id="assessment">
+        <h2 class="section-title"><span class="num">12</span>Assessment coverage</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Assessment area</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Module 1 — Admin order submission</td><td><span class="badge ok">Complete</span></td></tr>
+              <tr><td>Module 2 — Technician service job</td><td><span class="badge ok">Complete</span></td></tr>
+              <tr><td>Module 3 — WhatsApp notification trigger</td><td><span class="badge ok">Complete (deep link)</span></td></tr>
+              <tr><td>Bonus — KPI dashboard</td><td><span class="badge ok">Complete</span></td></tr>
+              <tr><td>AI — Operations query window</td><td><span class="badge ok">Complete</span></td></tr>
+              <tr><td>Optional — AI document understanding</td><td><span class="badge ok">Complete</span></td></tr>
+              <tr><td>Optional — AI operational insight (workload)</td><td><span class="badge ok">Complete</span></td></tr>
+              <tr><td>Optional — AI workflow supervisor</td><td><span class="badge part">Deterministic flags</span></td></tr>
+              <tr><td>WhatsApp delivery receipts</td><td><span class="badge part">Template ready, not configured</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="limitations">
+        <h2 class="section-title"><span class="num">13</span>Known limitations</h2>
+        <div class="card">
+          <ul>
+            <li><code>wa.me</code> deep links confirm only that a handoff was opened; delivery tracking is a ready-but-unconfigured template.</li>
+            <li>No offline field drafts; weak connectivity needs encrypted local drafts and conflict-aware retry.</li>
+            <li>Local seeded credentials; production should use SSO/MFA and a profile-derived directory.</li>
+            <li>Evidence needs production retention, malware scanning, and lifecycle policies.</li>
+            <li>AI quality depends on Gemini availability and document legibility; it is read-only by design.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="faq">
+        <h2 class="section-title"><span class="num">14</span>FAQ</h2>
+        <details class="faq"><summary>What can the AI do?</summary><div class="body">Answer operational questions from authorized data, extract order and receipt fields into prefillable forms, run guarded analytical SQL, and compare technician workload against the team average. It cannot write data.</div></details>
+        <details class="faq"><summary>Is the AI allowed to create or change orders?</summary><div class="body">No. AI fills forms for review; orders and payments are still created through the same validated, versioned RPCs.</div></details>
+        <details class="faq"><summary>Does the app confirm WhatsApp delivery?</summary><div class="body">Not yet — the assessment permits a deep link. Real delivery status is supported by a plug-and-play provider template once Meta credentials are configured.</div></details>
+        <details class="faq"><summary>Who can see audit history?</summary><div class="body">Admins and managers see all audit events; technicians see audit history only for orders assigned to them.</div></details>
+        <details class="faq"><summary>Where do evidence photos live?</summary><div class="body">In a private Supabase Storage bucket, opened via short-lived signed URLs.</div></details>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    Sejuk Sejuk Service Sdn Bhd — Operations Platform · Built for the Programmer Assessment ·
+    <a href="/login">app</a> · <a href="/portal/about">in-app guide</a> · repository README
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: "strict",
+        theme: "base",
+        themeVariables: {
+          fontFamily: "ui-sans-serif, system-ui, sans-serif",
+          fontSize: "14px",
+          primaryColor: "#eff6ff",
+          primaryTextColor: "#0f1f38",
+          primaryBorderColor: "#2563eb",
+          lineColor: "#94a3b8",
+          secondaryColor: "#ffffff",
+          tertiaryColor: "#f1f5f9",
+          edgeLabelBackground: "#ffffff",
+        },
+        flowchart: { curve: "basis", padding: 10, nodeSpacing: 40, rankSpacing: 50 },
+        sequence: { actorMargin: 40, messageMargin: 32, mirrorActors: false },
+      });
+    }
+  </script>
+</body>
+</html>

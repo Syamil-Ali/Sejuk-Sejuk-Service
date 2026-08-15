@@ -14,10 +14,12 @@ export function OrderFields({
   users,
   errors,
   autoFocus = false,
+  defaults,
 }: {
   users: DemoUser[];
   errors: Record<string, string>;
   autoFocus?: boolean;
+  defaults?: Record<string, string>;
 }) {
   return (
     <div className="grid gap-5 sm:grid-cols-2">
@@ -28,6 +30,7 @@ export function OrderFields({
         placeholder="e.g. Ahmad Rahman"
         maxLength={120}
         autoFocus={autoFocus}
+        defaultValue={defaults?.customerName}
       />
       <TextField
         id="customerPhone"
@@ -36,6 +39,7 @@ export function OrderFields({
         placeholder="012-345 6789"
         inputMode="tel"
         maxLength={30}
+        defaultValue={defaults?.customerPhone}
       />
       <FormField
         id="building"
@@ -48,6 +52,7 @@ export function OrderFields({
           maxLength={80}
           className="field"
           placeholder="e.g. 12"
+          defaultValue={defaults?.building}
         />
       </FormField>
       <FormField
@@ -61,6 +66,7 @@ export function OrderFields({
           maxLength={200}
           className="field"
           placeholder="Street name and number"
+          defaultValue={defaults?.address1}
         />
       </FormField>
       <FormField
@@ -75,6 +81,7 @@ export function OrderFields({
           maxLength={200}
           className="field"
           placeholder="Unit, block or building name"
+          defaultValue={defaults?.address2}
         />
       </FormField>
       <FormField id="postcode" label="Postcode" hint="Optional">
@@ -84,10 +91,17 @@ export function OrderFields({
           maxLength={10}
           inputMode="numeric"
           className="field"
+          defaultValue={defaults?.postcode}
         />
       </FormField>
       <FormField id="city" label="City" hint="Optional">
-        <input id="city" name="city" maxLength={120} className="field" />
+        <input
+          id="city"
+          name="city"
+          maxLength={120}
+          className="field"
+          defaultValue={defaults?.city}
+        />
       </FormField>
       <FormField
         id="state"
@@ -95,7 +109,13 @@ export function OrderFields({
         hint="Optional"
         className="sm:col-span-2"
       >
-        <input id="state" name="state" maxLength={120} className="field" />
+        <input
+          id="state"
+          name="state"
+          maxLength={120}
+          className="field"
+          defaultValue={defaults?.state}
+        />
       </FormField>
       <FormField
         id="problemDescription"
@@ -110,10 +130,16 @@ export function OrderFields({
           maxLength={2_000}
           className="field"
           placeholder="What issue did the customer report?"
+          defaultValue={defaults?.problemDescription}
         />
       </FormField>
       <FormField id="serviceType" label="Service type">
-        <select id="serviceType" name="serviceType" className="field">
+        <select
+          id="serviceType"
+          name="serviceType"
+          className="field"
+          defaultValue={defaults?.serviceType}
+        >
           {services.map((service) => (
             <option key={service}>{service}</option>
           ))}
@@ -126,10 +152,15 @@ export function OrderFields({
         type="number"
         min="0"
         step="0.01"
-        defaultValue="0"
+        defaultValue={defaults?.quotedPrice ?? "0"}
       />
       <FormField id="technicianId" label="Assigned technician" hint="Optional">
-        <select id="technicianId" name="technicianId" className="field">
+        <select
+          id="technicianId"
+          name="technicianId"
+          className="field"
+          defaultValue={defaults?.technicianId || ""}
+        >
           <option value="">Leave unassigned</option>
           {users
             .filter((user) => user.role === "technician")
@@ -145,6 +176,7 @@ export function OrderFields({
         label="Scheduled time"
         error={errors.scheduledAt}
         type="datetime-local"
+        defaultValue={defaults?.scheduledAt}
       />
       <FormField
         id="adminNotes"
@@ -158,6 +190,7 @@ export function OrderFields({
           rows={2}
           maxLength={1_000}
           className="field"
+          defaultValue={defaults?.adminNotes}
         />
       </FormField>
     </div>

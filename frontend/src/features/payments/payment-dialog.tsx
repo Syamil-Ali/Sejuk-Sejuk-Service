@@ -5,7 +5,14 @@ import { X } from "lucide-react";
 import { toast } from "sonner";
 import { useDemo } from "@/components/demo-provider";
 import { FormField } from "@/components/ui";
+import { PrivateEvidenceLink } from "@/components/private-evidence-link";
+import {
+  AiExtractButton,
+  AiExtractUploadStrip,
+  useDocumentExtraction,
+} from "@/components/ai-extract-button";
 import type { ServiceOrder } from "@/lib/domain";
+import { stageReceiptEvidence } from "@/lib/evidence";
 import { orderPaymentSummary } from "@/lib/payments";
 import { localDateTime, money } from "@/lib/utils";
 
@@ -23,17 +30,59 @@ export function PaymentDialog({
   );
   const [method, setMethod] = useState("");
   const [notes, setNotes] = useState("");
+  const [extractOpen, setExtractOpen] = useState(false);
+  const [receiptEvidenceId, setReceiptEvidenceId] = useState<string>();
+  const { busy: extractBusy, upload: extractUpload, done: extractDone } =
+    useDocumentExtraction(
+      handleExtracted,
+      "/api/documents/extract-payment-upload",
+    );
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     try {
-      await recordPayment(order.id, Number(amount), method, notes);
+      await recordPayment(
+        order.id,
+        Number(amount),
+        method,
+        notes,
+        receiptEvidenceId,
+      );
       toast.success(`Payment recorded for ${order.orderNo}`);
       onClose();
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Could not record payment",
       );
+    }
+  }
+  async function handleExtracted(
+    fields: Record<string, string>,
+    _confidence: number,
+    file?: File,
+  ) {
+    if (fields.paymentAmount) setAmount(fields.paymentAmount);
+    const methods = ["Cash", "Card", "Bank Transfer", "E-Wallet"];
+    if (fields.paymentMethod && methods.includes(fields.paymentMethod))
+      setMethod(fields.paymentMethod);
+    const details: string[] = [];
+    if (fields.receiptNumber) details.push(`Receipt ${fields.receiptNumber}`);
+    if (fields.paymentDate) details.push(`Receipt date ${fields.paymentDate}`);
+    if (details.length)
+      setNotes((current) =>
+        current ? `${current} · ${details.join(" · ")}` : details.join(" · "),
+      );
+    if (file) {
+      try {
+        const evidenceId = await stageReceiptEvidence(order.id, file);
+        setReceiptEvidenceId(evidenceId);
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Receipt was extracted but could not be attached to the payment.",
+        );
+      }
     }
   }
 
@@ -79,9 +128,25 @@ export function PaymentDialog({
               onSubmit={submit}
               className="rounded-xl border border-[#cfe0f5] bg-[#f4f8fd] p-5"
             >
-              <h3 className="text-sm font-semibold text-[#0f1f38]">
-                Record customer payment
-              </h3>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h3 className="text-sm font-semibold text-[#0f1f38]">
+                  Record customer payment
+                </h3>
+                <AiExtractButton
+                  open={extractOpen}
+                  onOpenChange={setExtractOpen}
+                  busy={extractBusy}
+                  done={extractDone}
+                  label="Extract from receipt"
+                />
+              </div>
+              {extractOpen && (
+                <AiExtractUploadStrip
+                  busy={extractBusy}
+                  done={extractDone}
+                  onFile={(file) => void extractUpload(file)}
+                />
+              )}
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <FormField id="payment-amount" label="Amount (RM)" required>
                   <input
@@ -170,6 +235,14 @@ function PaymentHistory({
                   <p className="mt-2 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-xs leading-relaxed text-[#475569]">
                     {payment.notes}
                   </p>
+                )}
+                {payment.receipt && (
+                  <div className="mt-2">
+                    <PrivateEvidenceLink
+                      name={payment.receipt.name}
+                      storagePath={payment.receipt.storagePath}
+                    />
+                  </div>
                 )}
               </div>
               <span className="ml-auto text-xs capitalize text-[#8290a3]">

@@ -22,10 +22,10 @@ export interface OperationsRepository {
   ): Promise<void>;
   saveChecklist(order: ServiceOrder, itemId: string, completed: boolean, note?: string): Promise<void>;
   replaceChecklist(order: ServiceOrder, titles: string[]): Promise<void>;
-  complete(order: ServiceOrder, input: {workDone:string;extraCharges:number;remarks?:string;paymentAmount?:number;paymentMethod?:string}): Promise<void>;
+  complete(order: ServiceOrder, input: {workDone:string;extraCharges:number;remarks?:string;paymentAmount?:number;paymentMethod?:string;receiptEvidenceId?:string}): Promise<void>;
   review(order: ServiceOrder, outcome:"accepted"|"returned", notes?:string, reopenIds?:string[]): Promise<void>;
   close(order: ServiceOrder): Promise<void>;
-  recordPayment(order: ServiceOrder, amount:number, method:string, notes?:string): Promise<void>;
+  recordPayment(order: ServiceOrder, amount:number, method:string, notes?:string, receiptEvidenceId?:string): Promise<void>;
   markNotificationRead(id:string): Promise<void>;
   recordWhatsAppFeedbackOpened(orderId:string): Promise<void>;
   subscribe(refresh:()=>void): ()=>void;
