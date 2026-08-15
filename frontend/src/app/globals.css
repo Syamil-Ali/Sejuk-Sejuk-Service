@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #1c1b1f;
+  --muted: #49454f;
+  --line: #94a3b8;
+  --surface: #ffffff;
+  --canvas: #eef6ff;
+  --brand: #4f7cac;
+  --brand-dark: #3b638f;
+  --accent: #dceeff;
+  --secondary: #d9f2e5;
+  --tertiary: #7d5260;
+  --surface-container: #ffffff;
+  --surface-low: #f5f9fd;
+  --warning: #f6bd48;
+  --danger: #ba1a1a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[class~="font-black"] {
+  font-weight: 700 !important;
+}
+[class~="font-extrabold"] {
+  font-weight: 700 !important;
+}
+
+html {
+  background: var(--canvas);
+}
+
+body {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--canvas);
+  font-family:
+    var(--font-inter),
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Desktop density: match the visual proportions of 90% browser zoom while
+   preserving normal mobile sizing and a single shared scale across the app. */
+@media (min-width: 1024px) {
+  body {
+    zoom: 0.9;
+    min-height: calc(100vh / 0.9);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display {
+  font-family: var(--font-plus-jakarta), var(--font-inter), sans-serif;
+}
+
+.font-code {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(
+  button:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  summary,
+  label[for],
+  [role="button"]:not([aria-disabled="true"])
+) {
+  cursor: pointer;
+}
+
+:where(button, a[href], summary, [role="button"]) {
+  transition:
+    transform 180ms cubic-bezier(0.2, 0, 0, 1),
+    opacity 180ms cubic-bezier(0.2, 0, 0, 1),
+    color 180ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 180ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (hover: hover) {
+  :where(
+    button:not(:disabled),
+    [role="button"]:not([aria-disabled="true"])
+  ):hover {
+    transform: translateY(-1px);
+  }
+}
+
+:where(
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"])
+):active {
+  transform: scale(0.97);
+  opacity: 0.82;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.card {
+  border: 1px solid #d7e3ec;
+  border-radius: 1.5rem;
+  background: var(--surface-container);
+  box-shadow: none;
+  transition:
+    background 300ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 300ms cubic-bezier(0.2, 0, 0, 1),
+    transform 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+.card:hover {
+  border-color: #aec8dc;
+}
+
+.field {
+  width: 100%;
+  min-height: 2.8rem;
+  border: 0;
+  border-bottom: 2px solid var(--line);
+  border-radius: 0.75rem 0.75rem 0 0;
+  background: var(--surface-low);
+  padding: 0.7rem 0.9rem;
+  color: var(--ink);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.field:hover {
+  border-color: #94a3b8;
+  background-color: #ffffff;
+}
+.field:is(input, textarea, select):hover {
+  border-color: #94a3b8 !important;
+  background-color: #ffffff !important;
+}
+.field:focus {
+  border-color: #3b82f6;
+  border-width: 2px;
+  outline: none;
+  background: var(--surface);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-whatsapp,
+.btn-danger {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  box-shadow: none;
+  transition:
+    transform 300ms cubic-bezier(0.2, 0, 0, 1),
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-primary {
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--brand-dark);
+  transform: scale(1.03);
+}
+.btn-secondary {
+  border: 1px solid #c5d7e5;
+  background: var(--accent);
+  color: #1d192b;
+}
+.btn-secondary:hover {
+  background: #ded2ef;
+  transform: scale(1.02);
+}
+.btn-whatsapp {
+  border: 1px solid #25d366;
+  background: #25d366;
+  color: #fff;
+}
+.btn-whatsapp:hover {
+  background: #1eb657;
+  color: #fff;
+  transform: scale(1.02);
+}
+.btn-danger {
+  border: 1px solid #f5c2bd;
+  background: #fff4f2;
+  color: var(--danger);
+}
+.btn-danger:hover {
+  border-color: #e99891;
+  background: #ffe8e5;
+  transform: scale(1.02);
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none !important;
+}
+
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, a[href], summary, [role="button"]) {
+    transition-duration: 0.01ms !important;
+  }
+
+  :where(button, a[href], summary, [role="button"]):hover,
+  :where(button, a[href], summary, [role="button"]):active {
+    transform: none !important;
+  }
+}
+
+/* Material You normalization for legacy utility classes. */
+[class~="shadow-sm"],
+[class~="shadow-lg"],
+[class~="shadow-xl"],
+[class~="shadow-2xl"],
+[class*="shadow-["] {
+  box-shadow: none !important;
+}
+[class~="backdrop-blur-sm"],
+[class~="backdrop-blur-xl"] {
+  backdrop-filter: blur(16px) !important;
+}
+[class~="text-teal-700"],
+[class~="text-teal-800"],
+[class~="text-teal-900"] {
+  color: #4f7cac !important;
+}
+[class~="text-teal-300"] {
+  color: #dceeff !important;
+}
+[class~="text-teal-50"],
+[class~="text-teal-100"] {
+  color: #eef5fb !important;
+}
+[class*="bg-teal-50"] {
+  background-color: #eef5fb !important;
+}
+[class~="bg-teal-100"] {
+  background-color: #dceeff !important;
+}
+[class~="bg-teal-300"],
+[class~="bg-teal-400"] {
+  background-color: #8bb5df !important;
+}
+[class~="bg-teal-500"],
+[class~="bg-teal-700"] {
+  background-color: #4f7cac !important;
+}
+[class*="border-teal-"] {
+  border-color: #79747e !important;
+}
+path[fill="#087f68"] {
+  fill: #4f7cac !important;
+}
+[class~="hover\:bg-teal-700"]:hover {
+  background-color: #3b638f !important;
+}
+[class~="bg-blue-50"] {
+  background-color: #eef5fb !important;
+}
+[class~="bg-blue-100"] {
+  background-color: #dceeff !important;
+}
+[class~="bg-blue-500"],
+[class~="bg-blue-600"],
+[class~="bg-blue-700"] {
+  background-color: #4f7cac !important;
+}
+[class~="text-blue-500"],
+[class~="text-blue-600"],
+[class~="text-blue-700"] {
+  color: #4f7cac !important;
+}
+[class~="hover\:bg-blue-50"]:hover {
+  background-color: #eef5fb !important;
+}
+[class~="hover\:bg-blue-600"]:hover {
+  background-color: #3b638f !important;
+}

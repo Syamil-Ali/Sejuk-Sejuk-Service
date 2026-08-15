@@ -1,0 +1,52 @@
+name: verify
+on:
+  push:
+  pull_request:
+jobs:
+  assistant:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/agno
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/agno/requirements.lock
+      - run: pip install -r requirements.lock
+      - run: ruff format --check src tests
+      - run: ruff check src tests
+      - run: mypy src
+      - run: python -m sejuk_assistant.query.profile_generator --migrations ../supabase/migrations
+      - run: pytest
+  database-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector
+        working-directory: backend/supabase
+      - run: supabase db reset --local
+        working-directory: backend/supabase
+      - run: supabase test db
+        working-directory: backend/supabase
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Playwright tests
+        if: ${{ secrets.E2E_ENABLED == 'true' }}
+        run: npx playwright install --with-deps chromium && npm run test:e2e -- --project=chromium

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "source_digest": "01be29a8da3620a8bd5430bcaf13898b00eb64f30c53261ee40aee21ed92660e",
+  "enums": {
+    "order_status": ["New", "Assigned", "In Progress", "Job Done", "Reviewed", "Closed"],
+    "payment_method": ["Cash", "Card", "Bank Transfer", "E-Wallet"],
+    "review_outcome": ["accepted", "returned"],
+    "service_type": ["Cleaning", "Repair", "Installation", "Gas Refill", "Inspection", "Other"]
+  },
+  "relations": [
+    {
+      "name": "assistant_analytics_orders",
+      "purpose": "Authorized service orders with assignment, branch, scheduling, quotation, and lifecycle details.",
+      "grain": "One row per service order.",
+      "key": "order_id",
+      "columns": [
+        {"name":"order_id","data_type":"uuid","nullable":false,"meaning":"Internal service order identifier."},
+        {"name":"order_no","data_type":"text","nullable":false,"meaning":"Customer-facing immutable order reference."},
+        {"name":"customer_name","data_type":"text","nullable":false,"meaning":"Name of the customer requesting service."},
+        {"name":"service_type","data_type":"service_type","nullable":false,"meaning":"Category of air-conditioning service.","enum_name":"service_type"},
+        {"name":"status","data_type":"order_status","nullable":false,"meaning":"Exact lifecycle state of the service order.","enum_name":"order_status"},
+        {"name":"quoted_price","data_type":"numeric(12,2)","nullable":false,"meaning":"Initial service quotation before extra charges."},
+        {"name":"assigned_technician_id","data_type":"uuid","nullable":true,"meaning":"Internal identity of the assigned technician.","technician_visible":false},
+        {"name":"technician_name","data_type":"text","nullable":true,"meaning":"Display name of the assigned technician."},
+        {"name":"branch_name","data_type":"text","nullable":false,"meaning":"Operational branch responsible for the order."},
+        {"name":"scheduled_at","data_type":"timestamptz","nullable":true,"meaning":"Current planned customer visit time.","timestamp_semantics":"Use for scheduled workload and today/tomorrow task questions."},
+        {"name":"created_at","data_type":"timestamptz","nullable":false,"meaning":"Time the order was created.","timestamp_semantics":"Use for order intake trends."},
+        {"name":"updated_at","data_type":"timestamptz","nullable":false,"meaning":"Time the order was last changed.","timestamp_semantics":"Use only when lifecycle transition time has no dedicated relation."}
+      ]
+    },
+    {
+      "name":"assistant_analytics_completions","purpose":"Authorized field-service completion values and completion timestamps.","grain":"Zero or one completion row per service order.","key":"completion_id",
+      "columns":[
+        {"name":"completion_id","data_type":"uuid","nullable":false,"meaning":"Internal completion record identifier."},
+        {"name":"order_id","data_type":"uuid","nullable":false,"meaning":"Service order completed by this record."},
+        {"name":"order_no","data_type":"text","nullable":false,"meaning":"Customer-facing order reference."},
+        {"name":"technician_id","data_type":"uuid","nullable":false,"meaning":"Internal identity of technician completing work.","technician_visible":false},
+        {"name":"technician_name","data_type":"text","nullable":false,"meaning":"Display name of technician completing work."},
+        {"name":"extra_charges","data_type":"numeric(12,2)","nullable":false,"meaning":"Approved charges added during completion."},
+        {"name":"final_amount","data_type":"numeric(12,2)","nullable":false,"meaning":"Final service value equal to quote plus extra charges."},
+        {"name":"completed_at","data_type":"timestamptz","nullable":false,"meaning":"Time field service was marked done.","timestamp_semantics":"Use for completed-work and service-value periods."}
+      ]
+    },
+    {
+      "name":"assistant_analytics_payments","purpose":"Authorized customer payment transactions recorded against service orders.","grain":"One row per customer payment transaction.","key":"payment_id",
+      "columns":[
+        {"name":"payment_id","data_type":"uuid","nullable":false,"meaning":"Internal customer payment identifier."},
+        {"name":"order_id","data_type":"uuid","nullable":false,"meaning":"Service order receiving this payment."},
+        {"name":"order_no","data_type":"text","nullable":false,"meaning":"Customer-facing order reference."},
+        {"name":"assigned_technician_id","data_type":"uuid","nullable":true,"meaning":"Internal assigned technician identity.","technician_visible":false},
+        {"name":"amount","data_type":"numeric(12,2)","nullable":false,"meaning":"Amount received in this payment transaction."},
+        {"name":"method","data_type":"payment_method","nullable":false,"meaning":"Payment method used by the customer.","enum_name":"payment_method"},
+        {"name":"received_at","data_type":"timestamptz","nullable":false,"meaning":"Time payment was received.","timestamp_semantics":"Use for cash-collection periods."}
+      ]
+    },
+    {
+      "name":"assistant_analytics_schedule_events","purpose":"Authorized schedule-change history including reasons and previous/new visit times.","grain":"One row per reschedule event.","key":"event_id",
+      "columns":[
+        {"name":"event_id","data_type":"uuid","nullable":false,"meaning":"Internal schedule event identifier."},
+        {"name":"order_id","data_type":"uuid","nullable":false,"meaning":"Service order whose schedule changed."},
+        {"name":"order_no","data_type":"text","nullable":false,"meaning":"Customer-facing order reference."},
+        {"name":"assigned_technician_id","data_type":"uuid","nullable":true,"meaning":"Internal assigned technician identity.","technician_visible":false},
+        {"name":"previous_scheduled_at","data_type":"timestamptz","nullable":true,"meaning":"Visit time before this schedule change."},
+        {"name":"new_scheduled_at","data_type":"timestamptz","nullable":false,"meaning":"Visit time after this schedule change."},
+        {"name":"reason","data_type":"text","nullable":false,"meaning":"Operational reason supplied for rescheduling."},
+        {"name":"created_at","data_type":"timestamptz","nullable":false,"meaning":"Time the schedule event was recorded.","timestamp_semantics":"Use for postponement activity periods."}
+      ]
+    },
+    {
+      "name":"assistant_analytics_reviews","purpose":"Authorized manager review outcomes for completed service work.","grain":"One row per manager review attempt.","key":"review_id",
+      "columns":[
+        {"name":"review_id","data_type":"uuid","nullable":false,"meaning":"Internal manager review identifier."},
+        {"name":"order_id","data_type":"uuid","nullable":false,"meaning":"Service order reviewed."},
+        {"name":"order_no","data_type":"text","nullable":false,"meaning":"Customer-facing order reference."},
+        {"name":"outcome","data_type":"review_outcome","nullable":false,"meaning":"Accepted or returned manager decision.","enum_name":"review_outcome"},
+        {"name":"reviewed_at","data_type":"timestamptz","nullable":false,"meaning":"Time the manager recorded the review.","timestamp_semantics":"Use for review and correction periods."}
+      ]
+    },
+    {
+      "name":"assistant_analytics_checklist","purpose":"Authorized required and optional checklist completion state for service orders.","grain":"One row per order checklist item.","key":"item_id",
+      "columns":[
+        {"name":"item_id","data_type":"uuid","nullable":false,"meaning":"Internal checklist item identifier."},
+        {"name":"order_id","data_type":"uuid","nullable":false,"meaning":"Service order owning this checklist item."},
+        {"name":"order_no","data_type":"text","nullable":false,"meaning":"Customer-facing order reference."},
+        {"name":"required","data_type":"boolean","nullable":false,"meaning":"Whether completion is mandatory before job completion."},
+        {"name":"completed","data_type":"boolean","nullable":false,"meaning":"Whether the technician completed the item."},
+        {"name":"completed_at","data_type":"timestamptz","nullable":true,"meaning":"Time the item was completed, null while incomplete.","timestamp_semantics":"Use for checklist completion activity."}
+      ]
+    }
+  ],
+  "joins": [
+    {"left_relation":"assistant_analytics_orders","left_column":"order_id","right_relation":"assistant_analytics_completions","right_column":"order_id","cardinality":"one-to-one","meaning":"Connect an order to its optional completion."},
+    {"left_relation":"assistant_analytics_orders","left_column":"order_id","right_relation":"assistant_analytics_payments","right_column":"order_id","cardinality":"one-to-many","meaning":"Connect an order to all customer payments."},
+    {"left_relation":"assistant_analytics_orders","left_column":"order_id","right_relation":"assistant_analytics_schedule_events","right_column":"order_id","cardinality":"one-to-many","meaning":"Connect an order to schedule changes."},
+    {"left_relation":"assistant_analytics_orders","left_column":"order_id","right_relation":"assistant_analytics_reviews","right_column":"order_id","cardinality":"one-to-many","meaning":"Connect an order to manager reviews."},
+    {"left_relation":"assistant_analytics_orders","left_column":"order_id","right_relation":"assistant_analytics_checklist","right_column":"order_id","cardinality":"one-to-many","meaning":"Connect an order to checklist items."},
+    {"left_relation":"assistant_analytics_completions","left_column":"order_id","right_relation":"assistant_analytics_payments","right_column":"order_id","cardinality":"one-to-many","meaning":"Connect final service value to payment transactions by order."}
+  ]
+}

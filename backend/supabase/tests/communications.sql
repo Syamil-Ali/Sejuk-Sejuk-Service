@@ -1,0 +1,17 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select extensions.plan(12);
+select extensions.has_table('public','conversations','conversations exists');
+select extensions.has_table('public','conversation_members','members exists');
+select extensions.has_table('public','messages','messages exists');
+select extensions.has_table('public','message_attachments','attachments exists');
+select extensions.has_index('public','messages','messages_conversation_created_idx','message pagination index exists');
+select extensions.ok((select relrowsecurity from pg_class where oid='public.conversations'::regclass),'conversations has RLS');
+select extensions.ok((select relrowsecurity from pg_class where oid='public.conversation_members'::regclass),'members has RLS');
+select extensions.ok((select relrowsecurity from pg_class where oid='public.messages'::regclass),'messages has RLS');
+select extensions.ok((select relrowsecurity from pg_class where oid='public.message_attachments'::regclass),'attachments has RLS');
+select extensions.ok(exists(select 1 from pg_policies where schemaname='public' and tablename='messages' and policyname='messages_select'),'message select policy exists');
+select extensions.ok(exists(select 1 from pg_policies where schemaname='public' and tablename='messages' and policyname='messages_insert'),'message insert policy exists');
+select extensions.ok(exists(select 1 from pg_proc where proname='is_conversation_member'),'membership authorization helper exists');
+select * from extensions.finish();
+rollback;

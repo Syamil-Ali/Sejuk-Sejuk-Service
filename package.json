@@ -1,0 +1,19 @@
+{
+  "name": "sejuk-operations",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "start": "npm run start --workspace frontend",
+    "lint": "npm run lint --workspace frontend",
+    "typecheck": "npm run typecheck --workspace frontend",
+    "test": "npm run test --workspace frontend",
+    "test:watch": "npm run test:watch --workspace frontend",
+    "test:e2e": "npm run test:e2e --workspace frontend",
+    "verify": "npm run verify --workspace frontend"
+  }
+}
