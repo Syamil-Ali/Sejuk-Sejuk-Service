@@ -10,7 +10,7 @@ function DateField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label>
+    <label className="block min-w-0 flex-1">
       <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">
         {label}
       </span>
@@ -19,7 +19,7 @@ function DateField({
         type="date"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-sm text-[#1e293b] focus:border-[#3b82f6] focus:outline-none"
+        className="w-full min-w-0 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-sm text-[#1e293b] focus:border-[#3b82f6] focus:outline-none"
       />
     </label>
   );
@@ -41,16 +41,16 @@ export function DateRangeFilter({
   onThisMonth: () => void;
 }) {
   return (
-    <section className="mb-6 flex flex-wrap items-end gap-4 rounded-xl border border-[#e2e8f0] bg-white px-5 py-4 lg:mb-4 lg:shrink-0 lg:py-3">
-      <div className="flex items-center gap-3">
+    <section className="mb-6 flex flex-col gap-4 rounded-xl border border-[#e2e8f0] bg-white px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end lg:mb-4 lg:shrink-0 lg:py-3">
+      <div className="flex w-full items-end gap-2 sm:w-auto sm:gap-3">
         <DateField label="From" value={from} onChange={onFromChange} />
-        <span className="pt-5 text-[#cbd5e1]">→</span>
+        <span className="pb-2.5 text-[#cbd5e1]">→</span>
         <DateField label="To" value={to} onChange={onToChange} />
       </div>
-      <span className="flex items-center gap-1.5 pb-2 text-xs font-medium text-[#94a3b8]">
+      <span className="flex items-center gap-1.5 text-xs font-medium text-[#94a3b8] sm:pb-2">
         <Clock3 className="size-3" /> Asia/Kuala_Lumpur
       </span>
-      <div className="ml-auto flex gap-2">
+      <div className="flex gap-2 sm:ml-auto">
         <PresetButton onClick={onThisWeek}>This week</PresetButton>
         <PresetButton onClick={onThisMonth}>This month</PresetButton>
       </div>

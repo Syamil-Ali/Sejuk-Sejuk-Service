@@ -210,7 +210,7 @@ export default function AssistantPage() {
         }
       />
       <div className="grid min-h-0 gap-6 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_300px] xl:overflow-hidden">
-        <section className="card flex h-[600px] min-h-0 flex-col overflow-hidden xl:h-auto">
+        <section className="card flex h-[65dvh] min-h-[420px] flex-col overflow-hidden xl:h-auto">
           <div
             className="relative min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain p-5 sm:p-7"
             aria-live="polite"
