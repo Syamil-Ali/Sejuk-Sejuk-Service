@@ -14,6 +14,7 @@ import {
 import { useDemo } from "@/components/demo-provider";
 import { malaysiaWeek } from "@/lib/dates";
 import { localDateTime, money } from "@/lib/utils";
+import { encodeOrderId } from "@/lib/order-id";
 import {
   AnalyticsKpi,
   ChartCard,
@@ -160,7 +161,7 @@ export default function TechnicianDashboard() {
                     .map((order) => (
                       <Link
                         key={order.id}
-                        href={`/portal/orders/${order.id}`}
+              href={`/portal/orders/${encodeOrderId(order.id)}`}
                         className="group flex items-center gap-3 px-5 py-4 lg:py-3 hover:bg-[#f8fbff]"
                       >
                         <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#eff6ff] text-[#2563eb]">

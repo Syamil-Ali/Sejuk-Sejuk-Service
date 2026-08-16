@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalendarDays, MapPin, Wrench } from "lucide-react";
 import type { ServiceOrder } from "@/lib/domain";
+import { encodeOrderId } from "@/lib/order-id";
 import { localDateTime, money } from "@/lib/utils";
 import { StatusBadge } from "./status-badge";
 
@@ -13,7 +14,7 @@ export function OrderCard({
 }) {
   return (
     <Link
-      href={`/portal/orders/${order.id}`}
+      href={`/portal/orders/${encodeOrderId(order.id)}`}
       className="card group relative block overflow-hidden bg-white p-5 transition duration-200 hover:scale-[1.02] hover:bg-blue-50"
     >
       <div className="flex items-start justify-between gap-3">

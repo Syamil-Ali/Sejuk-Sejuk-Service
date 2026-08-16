@@ -1,4 +1,5 @@
 import type { AppNotification, DemoUser } from "@/lib/domain";
+import { encodeOrderId } from "@/lib/order-id";
 
 export function visibleNotifications(
   notifications: AppNotification[],
@@ -58,7 +59,7 @@ export function createManagerRescheduleNotifications({
       createdAt,
       category: "schedule",
       priority: "high",
-      href: `/portal/orders/${orderId}`,
+      href: `/portal/orders/${encodeOrderId(orderId)}`,
       dedupeKey: `postponed:${orderId}:${createdAt}:${manager.id}`,
     }));
 }

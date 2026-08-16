@@ -8,6 +8,7 @@ import { useDemo } from "@/components/demo-provider";
 import { composeAddress, orderSchema } from "@/lib/validation";
 import type { ServiceOrder } from "@/lib/domain";
 import { money } from "@/lib/utils";
+import { encodeOrderId } from "@/lib/order-id";
 import { OrderFields } from "@/features/orders";
 import {
   AiExtractButton,
@@ -107,7 +108,7 @@ export default function NewOrderPage() {
             ))}
           </dl>
           <div className="mt-7 flex flex-wrap gap-3">
-            <Link className="btn-primary" href={`/portal/orders/${result.id}`}>
+          <Link className="btn-primary" href={`/portal/orders/${encodeOrderId(result.id)}`}>
               Open order
             </Link>
             <button

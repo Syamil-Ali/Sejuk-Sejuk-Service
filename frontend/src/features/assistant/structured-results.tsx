@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CalendarDays } from "lucide-react";
+import { encodeOrderId } from "@/lib/order-id";
 
 export type ResultValue = string | number | boolean | null;
 export type StructuredResult = {
@@ -104,7 +105,7 @@ function OrderResults({ result }: { result: StructuredResult }) {
           {row.order_id && (
             <Link
               className="mt-3 inline-flex text-xs font-medium text-sky-700 hover:text-sky-900"
-              href={`/portal/orders/${row.order_id}`}
+              href={`/portal/orders/${row.order_id ? encodeOrderId(String(row.order_id)) : row.order_no}`}
             >
               Open job →
             </Link>

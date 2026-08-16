@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import base64
 from datetime import datetime, timezone
+from uuid import UUID as UuidType
 
 from sejuk_assistant.auth.context import ActorContext, Role
 from sejuk_assistant.auth.policy import Capability, decide
@@ -11,6 +13,15 @@ from sejuk_assistant.repositories.supabase import CallerSupabaseRepository
 
 class AuthorizationDenied(Exception):
     pass
+
+
+def encode_order_id(order_id: str) -> str:
+    """Compact URL-safe order identifier (base64url of the UUID)."""
+    try:
+        raw = UuidType(order_id)
+    except (ValueError, AttributeError, TypeError):
+        return order_id
+    return base64.urlsafe_b64encode(raw.bytes).decode("ascii").rstrip("=")
 
 
 class OperationsTools:
@@ -50,7 +61,13 @@ class OperationsTools:
         visible = rows[:bounded]
         now = datetime.now(timezone.utc)
         citations = tuple(
-            Citation("order", row["id"], row["order_no"], now, f"/portal/orders/{row['id']}")
+            Citation(
+                "order",
+                row["id"],
+                row["order_no"],
+                now,
+                f"/portal/orders/{encode_order_id(row['id'])}",
+            )
             for row in visible
         )
         return Evidence(visible, citations, len(rows) > bounded)
@@ -135,7 +152,13 @@ class OperationsTools:
         received = sum(float(payment["amount"]) for payment in payments)
         now = datetime.now(timezone.utc)
         citations = (
-            Citation("order", row["id"], row["order_no"], now, f"/portal/orders/{row['id']}"),
+            Citation(
+                "order",
+                row["id"],
+                row["order_no"],
+                now,
+                f"/portal/orders/{encode_order_id(row['id'])}",
+            ),
             *(Citation("payment", payment["id"], row["order_no"], now) for payment in payments),
         )
         return Evidence(
@@ -328,7 +351,11 @@ class OperationsTools:
             rows,
             tuple(
                 Citation(
-                    "audit", str(row["id"]), "Order history", now, f"/portal/orders/{order_id}"
+                    "audit",
+                    str(row["id"]),
+                    "Order history",
+                    now,
+                    f"/portal/orders/{encode_order_id(order_id)}",
                 )
                 for row in rows
             ),

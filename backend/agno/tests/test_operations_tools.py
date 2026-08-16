@@ -11,7 +11,11 @@ from sejuk_assistant.auth.policy import Capability
 from sejuk_assistant.repositories.models import DateRange
 from sejuk_assistant.repositories.supabase import CallerSupabaseRepository
 from sejuk_assistant.settings import Settings
-from sejuk_assistant.tools.operations import AuthorizationDenied, OperationsTools
+from sejuk_assistant.tools.operations import (
+    AuthorizationDenied,
+    OperationsTools,
+    encode_order_id,
+)
 
 
 def actor(role: Role) -> ActorContext:
@@ -222,3 +226,14 @@ async def test_postponements_are_actor_scoped_and_bounded() -> None:
         assert result.data == {"count": 0, "events": []}
     finally:
         await repo.close()
+
+
+def test_encode_order_id_returns_compact_url_safe_token() -> None:
+    token = encode_order_id("30000000-0000-0000-0000-000000000001")
+    assert len(token) == 22
+    assert "=" not in token
+    assert "+" not in token
+    assert "/" not in token
+    assert token.isalnum()
+    assert token != encode_order_id("30000000-0000-0000-0000-000000000002")
+    assert encode_order_id("not-a-uuid") == "not-a-uuid"

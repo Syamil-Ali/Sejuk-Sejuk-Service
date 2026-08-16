@@ -6,6 +6,7 @@ import { Bell, CheckCheck, CircleAlert, Filter } from "lucide-react";
 import { useDemo } from "@/components/demo-provider";
 import { localDateTime } from "@/lib/utils";
 import { visibleNotifications } from "@/lib/notifications";
+import { encodeOrderId } from "@/lib/order-id";
 import { EmptyState, SectionCard } from "@/components/data-display";
 import { toast } from "sonner";
 
@@ -90,7 +91,7 @@ export default function NotificationsPage() {
               const href =
                 notification.href ||
                 (notification.orderId
-                  ? `/portal/orders/${notification.orderId}`
+                  ? `/portal/orders/${encodeOrderId(notification.orderId)}`
                   : "/portal/notifications");
               return (
                 <div

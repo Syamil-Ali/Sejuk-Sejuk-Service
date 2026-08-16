@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { MessageSquare } from "lucide-react";
 import { useDemo } from "@/components/demo-provider";
 import type { AuditEvent, Evidence } from "@/lib/domain";
+import { decodeOrderId } from "@/lib/order-id";
 import { ServiceJobHeader } from "@/components/service-job-header";
 import { ServiceChecklist } from "@/features/checklist";
 import {
@@ -25,7 +26,9 @@ export default function OrderDetail() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const ctx = useDemo();
-  const order = ctx.orders.find((o) => o.id === id);
+  const order = ctx.orders.find(
+    (o) => o.id === (decodeOrderId(id) ?? id) || o.orderNo === id,
+  );
   const [files, setFiles] = useState<File[]>([]);
   const [pendingTechnicianId, setPendingTechnicianId] = useState<string>();
   const [selectedAudit, setSelectedAudit] = useState<AuditEvent>();
