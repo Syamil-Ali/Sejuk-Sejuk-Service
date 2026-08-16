@@ -75,6 +75,7 @@ export function getWhatsAppProvider(
       accessToken: env.WHATSAPP_ACCESS_TOKEN ?? "",
       phoneNumberId: env.WHATSAPP_PHONE_NUMBER_ID ?? "",
       verifyToken: env.WHATSAPP_VERIFY_TOKEN ?? "",
+      appSecret: env.WHATSAPP_APP_SECRET ?? "",
       apiVersion: env.WHATSAPP_API_VERSION ?? "v21.0",
     });
   }

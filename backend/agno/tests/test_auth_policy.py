@@ -50,7 +50,7 @@ def test_token_verification_checks_signature_issuer_audience_expiry_and_subject(
         verifier().verify(token_for(str(user_id), expires_in=-1))
     forged = jwt.encode(
         {"sub": str(user_id), "aud": "authenticated", "iss": ISSUER, "iat": 1, "exp": 9999999999},
-        "wrong-secret",
+        "wrong-secret-that-is-also-long-enough",
         algorithm="HS256",
     )
     with pytest.raises(AuthenticationError):

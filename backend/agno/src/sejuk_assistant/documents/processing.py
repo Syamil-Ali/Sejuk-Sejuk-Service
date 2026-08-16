@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import io
 import re
+import zipfile
 from dataclasses import dataclass
 from typing import Protocol
 
 from docx import Document
 from pypdf import PdfReader
+
+MAX_DOCX_ARCHIVE_BYTES = 25 * 1024 * 1024
+MAX_DOCX_ENTRY_BYTES = 25 * 1024 * 1024
+MAX_DOCX_TOTAL_UNCOMPRESSED_BYTES = 100 * 1024 * 1024
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,6 +33,23 @@ class Embedder(Protocol):
     async def embed(self, texts: list[str]) -> list[list[float]]: ...
 
 
+def _assert_safe_docx(content: bytes) -> None:
+    """Rejects zip-bomb DOCX files before python-docx decompresses them."""
+    if len(content) > MAX_DOCX_ARCHIVE_BYTES:
+        raise ValueError("Document exceeds the maximum allowed size.")
+    try:
+        with zipfile.ZipFile(io.BytesIO(content)) as archive:
+            total_uncompressed = 0
+            for info in archive.infolist():
+                if info.file_size > MAX_DOCX_ENTRY_BYTES:
+                    raise ValueError("Document contains an oversized component.")
+                total_uncompressed += info.file_size
+                if total_uncompressed > MAX_DOCX_TOTAL_UNCOMPRESSED_BYTES:
+                    raise ValueError("Document expands beyond the maximum allowed size.")
+    except zipfile.BadZipFile as error:
+        raise ValueError("Invalid DOCX archive.") from error
+
+
 def extract_sections(content: bytes, mime_type: str) -> list[ExtractedSection]:
     if mime_type == "application/pdf":
         reader = PdfReader(io.BytesIO(content))
@@ -38,6 +60,7 @@ def extract_sections(content: bytes, mime_type: str) -> list[ExtractedSection]:
                 pdf_sections.append(ExtractedSection(text, page=index + 1))
         return pdf_sections
     if mime_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        _assert_safe_docx(content)
         document = Document(io.BytesIO(content))
         sections: list[ExtractedSection] = []
         heading = "Document"

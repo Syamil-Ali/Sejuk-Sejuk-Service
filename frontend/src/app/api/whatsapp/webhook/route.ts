@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getWhatsAppProvider } from "@/lib/whatsapp/messaging";
+import { MetaWhatsAppProvider } from "@/lib/whatsapp/meta";
 import { createServiceClient } from "@/lib/supabase/service";
 
 /**
@@ -38,7 +39,25 @@ export async function POST(request: Request) {
       { status: 503 },
     );
   }
-  const payload = await request.json().catch(() => null);
+  // Read the exact raw bytes: Meta signs the raw request body, so the
+  // signature must be verified before any JSON parsing.
+  const rawBody = Buffer.from(await request.arrayBuffer());
+  if (provider instanceof MetaWhatsAppProvider) {
+    const signature = request.headers.get("x-hub-signature-256");
+    if (!provider.verifyWebhookSignature(rawBody, signature)) {
+      return NextResponse.json(
+        { error: "Invalid webhook signature." },
+        { status: 401 },
+      );
+    }
+  }
+  let payload: unknown = null;
+  try {
+    payload = JSON.parse(rawBody.toString("utf-8"));
+  } catch {
+    // Always acknowledge so the provider does not retry unrelated events.
+    return NextResponse.json({ ok: true });
+  }
   const update = provider.parseDeliveryUpdate(payload);
   // Always acknowledge so the provider does not retry unrelated events.
   if (!update) return NextResponse.json({ ok: true });

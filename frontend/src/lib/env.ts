@@ -31,6 +31,7 @@ const serverSchema = publicSchema.extend({
   WHATSAPP_ACCESS_TOKEN: optionalSecret,
   WHATSAPP_PHONE_NUMBER_ID: optionalSecret,
   WHATSAPP_VERIFY_TOKEN: optionalSecret,
+  WHATSAPP_APP_SECRET: optionalSecret,
   WHATSAPP_API_VERSION: z.string().default("v21.0"),
 });
 
@@ -62,6 +63,7 @@ export function getServerEnv() {
     WHATSAPP_ACCESS_TOKEN: process.env.WHATSAPP_ACCESS_TOKEN,
     WHATSAPP_PHONE_NUMBER_ID: process.env.WHATSAPP_PHONE_NUMBER_ID,
     WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN,
+    WHATSAPP_APP_SECRET: process.env.WHATSAPP_APP_SECRET,
     WHATSAPP_API_VERSION: process.env.WHATSAPP_API_VERSION,
   });
 }

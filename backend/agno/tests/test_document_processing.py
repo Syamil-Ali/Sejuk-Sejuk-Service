@@ -1,16 +1,23 @@
 from __future__ import annotations
 
+import io
+import zipfile
 from uuid import UUID, uuid4
 
 import httpx
 import pytest
 
+import sejuk_assistant.documents.processing as processing
 from sejuk_assistant.auth.context import ActorContext, Role
 from sejuk_assistant.documents.indexing import DocumentIndexer
 from sejuk_assistant.documents.processing import DocumentChunk, chunk_sections, extract_sections
 from sejuk_assistant.documents.retrieval import DocumentRetrieval
 from sejuk_assistant.repositories.supabase import CallerSupabaseRepository
 from sejuk_assistant.settings import Settings
+
+DOCX_MIME = (
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+)
 
 
 class FakeEmbedder:
@@ -118,3 +125,26 @@ async def test_retrieval_uses_authorized_rpc_and_structured_citation() -> None:
         assert "storage" not in (result.citations[0].href or "")
     finally:
         await repo.close()
+
+
+def test_docx_with_oversized_entry_is_rejected(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    xml = (
+        b'<?xml version="1.0"?>'
+        b'<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+        b"<w:body><w:p><w:r><w:t>"
+        + b"A" * 4096
+        + b"</w:t></w:r></w:p></w:body></w:document>"
+    )
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", xml)
+    monkeypatch.setattr(processing, "MAX_DOCX_ENTRY_BYTES", 1024)
+    with pytest.raises(ValueError, match="oversized component"):
+        extract_sections(buffer.getvalue(), DOCX_MIME)
+
+
+def test_docx_that_is_not_a_zip_is_rejected() -> None:
+    with pytest.raises(ValueError, match="Invalid DOCX archive"):
+        extract_sections(b"not a zip file at all", DOCX_MIME)

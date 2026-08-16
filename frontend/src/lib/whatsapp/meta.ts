@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from "node:crypto";
 import type {
   DeliveryUpdate,
   SentMessage,
@@ -17,6 +18,11 @@ export interface MetaWhatsAppConfig {
   accessToken: string;
   phoneNumberId: string;
   verifyToken: string;
+  /**
+   * Meta app secret used to verify `X-Hub-Signature-256` on webhook POSTs.
+   * Required for the webhook to accept delivery updates.
+   */
+  appSecret?: string;
   apiVersion?: string;
   baseUrl?: string;
 }
@@ -83,6 +89,27 @@ export class MetaWhatsAppProvider implements WhatsAppProvider {
       return query["hub.challenge"] ?? null;
     }
     return null;
+  }
+
+  /**
+   * Verifies Meta's `X-Hub-Signature-256` HMAC-SHA256 signature over the raw
+   * webhook body. Fails closed: requests without a signature or without an
+   * app secret configured are rejected.
+   */
+  verifyWebhookSignature(
+    rawBody: Uint8Array,
+    signature: string | null,
+  ): boolean {
+    if (!this.config.appSecret || !signature) return false;
+    const expected =
+      "sha256=" +
+      createHmac("sha256", this.config.appSecret)
+        .update(rawBody)
+        .digest("hex");
+    const provided = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expected);
+    if (provided.length !== expectedBuffer.length) return false;
+    return timingSafeEqual(provided, expectedBuffer);
   }
 
   parseDeliveryUpdate(payload: unknown): DeliveryUpdate | undefined {

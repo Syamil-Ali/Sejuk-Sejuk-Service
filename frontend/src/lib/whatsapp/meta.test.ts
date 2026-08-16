@@ -1,3 +1,4 @@
+import { createHmac } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
 import { MetaWhatsAppConfig, MetaWhatsAppProvider } from "./meta";
 
@@ -58,6 +59,31 @@ describe("MetaWhatsAppProvider", () => {
     });
     expect(p.parseDeliveryUpdate({ entry: [] })).toBeUndefined();
     expect(p.parseDeliveryUpdate({})).toBeUndefined();
+  });
+
+  it("verifies Meta webhook signatures over the raw body", () => {
+    const p = provider({ appSecret: "app-secret" });
+    const body = new TextEncoder().encode('{"entry":[]}');
+    const expected =
+      "sha256=" +
+      createHmac("sha256", "app-secret").update(body).digest("hex");
+    expect(p.verifyWebhookSignature(body, expected)).toBe(true);
+    expect(
+      p.verifyWebhookSignature(body, `sha256=${"0".repeat(64)}`),
+    ).toBe(false);
+  });
+
+  it("fails closed on missing or unconfigured signatures", () => {
+    const body = new TextEncoder().encode('{"entry":[]}');
+    const p = provider({ appSecret: "app-secret" });
+    expect(p.verifyWebhookSignature(body, null)).toBe(false);
+    expect(p.verifyWebhookSignature(body, "sha256=")).toBe(false);
+    expect(p.verifyWebhookSignature(body, "")).toBe(false);
+    const noSecret = provider();
+    const expected =
+      "sha256=" +
+      createHmac("sha256", "app-secret").update(body).digest("hex");
+    expect(noSecret.verifyWebhookSignature(body, expected)).toBe(false);
   });
 
   it("sends through the Graph API and returns the message id", async () => {
