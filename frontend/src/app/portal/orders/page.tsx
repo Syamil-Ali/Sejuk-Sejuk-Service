@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useDemo } from "@/components/demo-provider";
 import { NewOrderModal } from "@/components/new-order-modal";
-import { encodeOrderId } from "@/lib/order-id";
+import { orderUrl } from "@/lib/order-id";
 import { StatusBadge } from "@/components/status-badge";
 import {
   OrderQueue,
@@ -144,7 +144,7 @@ function OrderRow({
 }) {
   return (
     <Link
-        href={`/portal/orders/${encodeOrderId(order.id)}`}
+        href={orderUrl(order)}
       className="block bg-white px-5 py-5 hover:bg-[#f8fbff]"
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(170px,1.1fr)_140px_minmax(170px,1fr)_140px_minmax(210px,1.25fr)] lg:items-center">

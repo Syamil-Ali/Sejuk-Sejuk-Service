@@ -90,6 +90,8 @@ export interface ScheduleEvent {
 
 export interface ServiceOrder {
   id: string;
+  /** Compact URL-safe public identifier stored on the row (base64url of id). */
+  publicId?: string;
   orderNo: string;
   customerName: string;
   customerPhone: string;

@@ -14,7 +14,16 @@ do $$ declare item record; current_version integer:=2; begin
     perform public.update_checklist_item('30000000-0000-0000-0000-000000000002',item.id,current_version,true,'Integration verified');
     current_version:=current_version+1;
   end loop;
-  perform public.complete_order('30000000-0000-0000-0000-000000000002',current_version,'Repaired drain system',0,null,null,null);
+  perform public.complete_order(
+    '30000000-0000-0000-0000-000000000002'::uuid,
+    current_version::integer,
+    'Repaired drain system'::text,
+    0::numeric,
+    null::text,
+    null::numeric,
+    null::public.payment_method,
+    null::uuid
+  );
 end $$;
 select extensions.is((select status::text from public.orders where id='30000000-0000-0000-0000-000000000002'),'Job Done','technician completion persists for manager review');
 select extensions.ok(exists(select 1 from public.notifications where order_id='30000000-0000-0000-0000-000000000002' and recipient_role='manager' and kind='job_done'),'completion creates manager notification');
@@ -28,7 +37,16 @@ select extensions.ok(exists(select 1 from public.notifications where order_id='3
 
 select set_config('request.jwt.claim.sub','20000000-0000-0000-0000-000000000004',true);
 select public.update_checklist_item('30000000-0000-0000-0000-000000000002',(select id from public.order_checklist_items where order_id='30000000-0000-0000-0000-000000000002' and not completed),(select version from public.orders where id='30000000-0000-0000-0000-000000000002'),true,'Retested');
-select public.complete_order('30000000-0000-0000-0000-000000000002',(select version from public.orders where id='30000000-0000-0000-0000-000000000002'),'Retested drainage',0,null,null,null);
+select public.complete_order(
+  '30000000-0000-0000-0000-000000000002'::uuid,
+  (select version from public.orders where id='30000000-0000-0000-0000-000000000002')::integer,
+  'Retested drainage'::text,
+  0::numeric,
+  null::text,
+  null::numeric,
+  null::public.payment_method,
+  null::uuid
+);
 select public.record_whatsapp_feedback_opened('30000000-0000-0000-0000-000000000002');
 select extensions.ok(exists(select 1 from public.audit_events where order_id='30000000-0000-0000-0000-000000000002' and action='whatsapp.feedback_opened' and after_values->>'delivery_confirmed'='false'),'WhatsApp open is audited without claiming delivery');
 

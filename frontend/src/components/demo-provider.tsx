@@ -28,7 +28,7 @@ import type {
 } from "@/lib/domain";
 import { createChecklist } from "@/lib/checklists";
 import { createManagerRescheduleNotifications } from "@/lib/notifications";
-import { encodeOrderId } from "@/lib/order-id";
+import { orderUrl } from "@/lib/order-id";
 import {
   canAccessConversation,
   createSeedConversations,
@@ -330,7 +330,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
             createdAt: order.createdAt,
             category: "order",
             priority: "high",
-                href: `/portal/orders/${encodeOrderId(order.id)}`,
+                href: orderUrl(order),
             dedupeKey: `assignment:${order.id}:1:${input.technicianId}`,
           },
           ...all,
@@ -363,7 +363,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
             createdAt: now(),
             category: "order",
             priority: "high",
-                href: `/portal/orders/${encodeOrderId(o.id)}`,
+                href: orderUrl(o),
             dedupeKey: `assignment:${o.id}:${o.version + 1}:${tech.id}`,
           },
           ...all,
@@ -561,7 +561,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
             createdAt: completedAt,
             category: "order",
             priority: "high",
-                href: `/portal/orders/${encodeOrderId(o.id)}`,
+                href: orderUrl(o),
             dedupeKey: `completed:${o.id}:${o.version + 1}`,
           },
           ...all,
@@ -659,7 +659,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
               createdAt: receivedAt,
               category: "payment" as const,
               priority: "normal" as const,
-                href: `/portal/orders/${encodeOrderId(order.id)}`,
+                href: orderUrl(order),
               dedupeKey: `payment:${order.id}:${order.version + 1}:${manager.id}`,
             })),
           ...all,
@@ -719,7 +719,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
               createdAt: now(),
               category: "correction",
               priority: "high",
-                href: `/portal/orders/${encodeOrderId(o.id)}`,
+                href: orderUrl(o),
               dedupeKey: `correction:${o.id}:${o.version + 1}:${o.technicianId}`,
             },
             ...all,

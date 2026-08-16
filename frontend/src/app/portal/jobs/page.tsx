@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useDemo } from "@/components/demo-provider";
 import { StatusBadge } from "@/components/status-badge";
-import { encodeOrderId } from "@/lib/order-id";
+import { orderUrl } from "@/lib/order-id";
 import type { ServiceOrder } from "@/lib/domain";
 import { localDateTime, money } from "@/lib/utils";
 import {
@@ -178,7 +178,7 @@ function JobRow({ order }: { order: ServiceOrder }) {
   const action = technicianJobAction(order);
   return (
     <Link
-                href={`/portal/orders/${encodeOrderId(order.id)}`}
+                href={orderUrl(order)}
       className="group block px-5 py-4 transition-colors hover:bg-[#f8fbff]"
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(180px,1.1fr)_140px_minmax(180px,1fr)_150px_minmax(220px,1.2fr)_90px] lg:items-center">

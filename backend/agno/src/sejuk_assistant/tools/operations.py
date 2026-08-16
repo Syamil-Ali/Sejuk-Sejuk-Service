@@ -46,7 +46,7 @@ class OperationsTools:
         bounded = min(max(limit, 1), self.MAX_ROWS)
         params = {
             "select": (
-                "id,order_no,customer_name,service_type,status,quoted_price,"
+                "id,public_id,order_no,customer_name,service_type,status,quoted_price,"
                 "scheduled_at,assigned_technician_id,updated_at"
             ),
             "order": "updated_at.desc",
@@ -66,7 +66,7 @@ class OperationsTools:
                 row["id"],
                 row["order_no"],
                 now,
-                f"/portal/orders/{encode_order_id(row['id'])}",
+                f"/portal/orders/{row.get('public_id') or encode_order_id(row['id'])}",
             )
             for row in visible
         )
@@ -129,10 +129,10 @@ class OperationsTools:
         rows = await self.repository.get(
             "orders",
             {
-                "select": (
-                    "id,order_no,quoted_price,assigned_technician_id,"
-                    "service_completions(final_amount),payments(id,amount,method,received_at)"
-                ),
+            "select": (
+                "id,public_id,order_no,quoted_price,assigned_technician_id,"
+                "service_completions(final_amount),payments(id,amount,method,received_at)"
+            ),
                 "id": f"eq.{order_id}",
                 "limit": "1",
             },
@@ -157,7 +157,7 @@ class OperationsTools:
                 row["id"],
                 row["order_no"],
                 now,
-                f"/portal/orders/{encode_order_id(row['id'])}",
+                f"/portal/orders/{row.get('public_id') or encode_order_id(row['id'])}",
             ),
             *(Citation("payment", payment["id"], row["order_no"], now) for payment in payments),
         )

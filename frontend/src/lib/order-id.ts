@@ -39,3 +39,11 @@ export function decodeOrderId(token: string): string | null {
     return null;
   }
 }
+
+/**
+ * Builds the order detail URL from a hydrated order, preferring the stored
+ * random public id and falling back to the UUID-derived token (demo mode).
+ */
+export function orderUrl(order: { id: string; publicId?: string }): string {
+  return `/portal/orders/${order.publicId ?? encodeOrderId(order.id)}`;
+}

@@ -27,7 +27,10 @@ export default function OrderDetail() {
   const router = useRouter();
   const ctx = useDemo();
   const order = ctx.orders.find(
-    (o) => o.id === (decodeOrderId(id) ?? id) || o.orderNo === id,
+    (o) =>
+      o.id === (decodeOrderId(id) ?? id) ||
+      o.orderNo === id ||
+      o.publicId === id,
   );
   const [files, setFiles] = useState<File[]>([]);
   const [pendingTechnicianId, setPendingTechnicianId] = useState<string>();

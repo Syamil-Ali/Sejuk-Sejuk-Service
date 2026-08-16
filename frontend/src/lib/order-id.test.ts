@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decodeOrderId, encodeOrderId } from "./order-id";
+import { decodeOrderId, encodeOrderId, orderUrl } from "./order-id";
 
 const UUID = "30000000-0000-0000-0000-000000000001";
 
@@ -24,5 +24,12 @@ describe("order id tokens", () => {
   it("rejects malformed tokens", () => {
     expect(decodeOrderId("not-a-valid-token!!")).toBeNull();
     expect(decodeOrderId("")).toBeNull();
+  });
+
+  it("prefers the stored public id when building order urls", () => {
+    expect(orderUrl({ id: UUID, publicId: "randomtoken123456789012" })).toBe(
+      "/portal/orders/randomtoken123456789012",
+    );
+    expect(orderUrl({ id: UUID })).toBe(`/portal/orders/${encodeOrderId(UUID)}`);
   });
 });
