@@ -1,0 +1,7 @@
+# Development and quality-gate dependencies for the Sejuk Agno assistant
+# service. Installs the pinned runtime requirements plus dev tools.
+-r requirements.txt
+mypy==1.17.1
+pytest==9.0.3
+pytest-asyncio==1.4.0
+ruff==0.12.9

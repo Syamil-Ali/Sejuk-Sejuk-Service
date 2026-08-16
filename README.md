@@ -166,7 +166,16 @@ AI lives entirely server-side in a separate FastAPI + Agno service (`backend/agn
 
 ## WhatsApp delivery receipts (optional, plug-and-play)
 
-Delivery confirmation is a provider-based template, not hard-wired. `WHATSAPP_PROVIDER` selects the implementation: `none` (disabled), `console` (logs locally for demos), or `meta` (WhatsApp Business Cloud API). Providers implement a small `send`/`verifyWebhook`/`parseDeliveryUpdate` interface, so a Twilio or other provider can be added the same way. When enabled, sent messages are recorded in `whatsapp_deliveries` and provider webhook callbacks upsert `sent`/`delivered`/`read`/`failed` status; the assignment panel shows a small delivery chip once a record exists. The Meta provider needs `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` and `WHATSAPP_VERIFY_TOKEN` from a Meta Business account — until then it stays inert, and the `wa.me` deep link remains the active path.
+Delivery confirmation is a provider-based template, not hard-wired. `WHATSAPP_PROVIDER` selects the implementation: `none` (disabled), `console` (logs locally for demos), or `meta` (WhatsApp Business Cloud API). Providers implement a small `send`/`verifyWebhook`/`parseDeliveryUpdate` interface, so a Twilio or other provider can be added the same way. When enabled, sent messages are recorded in `whatsapp_deliveries` and provider webhook callbacks upsert `sent`/`delivered`/`read`/`failed` status; the assignment panel shows a small delivery chip once a record exists. The Meta provider needs `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_VERIFY_TOKEN` and `WHATSAPP_APP_SECRET` from a Meta Business account — until then it stays inert, and the `wa.me` deep link remains the active path. Webhook POSTs are protected: the endpoint verifies Meta's `X-Hub-Signature-256` HMAC over the raw request body and rejects unsigned or tampered callbacks with `401`.
+
+## Security posture
+
+- **Dependencies are pinned and audited.** Python runtime pins live in `backend/agno/requirements.txt` (dev tools in `requirements-dev.txt`), mirroring `pyproject.toml`; the frontend is pinned via `package-lock.json`. `pip-audit` shows no exploitable runtime advisories.
+- **Webhook signatures verified.** The WhatsApp webhook requires a valid `X-Hub-Signature-256` (HMAC-SHA256 with `WHATSAPP_APP_SECRET`, compared in constant time) and fails closed.
+- **Security headers on every response.** Content-Security-Policy (scoped to the Supabase origin), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`, and HSTS in production.
+- **Upload parsing is bounded.** Documents are capped at 25 MB at intake, and DOCX archives are checked for oversized/expanded entries before any decompression (zip-bomb guard).
+- **Secrets stay server-side.** Service-role and model keys exist only in server environment variables; `.env.*` files are gitignored except the committed `.env.example` templates.
+- **Reproducible builds.** `uv.lock` and `requirements*.txt` keep the Agno environment reproducible; CI installs the pinned dev requirements and the package itself.
 ## Local setup
 
 Requirements: Node.js 20.19+, npm, Docker Desktop, Python 3.10+, and the Supabase CLI (the commands below can use `npx`).
@@ -197,6 +206,9 @@ cd backend/agno
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
+# or, for pinned installs without editable package metadata:
+# python -m pip install -r requirements-dev.txt
+# python -m pip install -e .
 Copy-Item .env.example .env
 uvicorn sejuk_assistant.main:app --reload --port 8000
 ```

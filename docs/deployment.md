@@ -16,6 +16,10 @@
 4. Set `NEXT_PUBLIC_DEMO_MODE=false` only after all portal repositories/actions use Supabase in the target environment.
 5. Promote the verified preview. Roll back the application by selecting the previous Vercel deployment; correct database changes with a new migration.
 
+## WhatsApp webhook
+
+If `WHATSAPP_PROVIDER=meta`, configure the Meta app's webhook to call `POST /api/whatsapp/webhook` (same host as the frontend deployment) and subscribe to message status updates. Set `WHATSAPP_APP_SECRET` (the Meta app secret) in addition to `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID` and `WHATSAPP_VERIFY_TOKEN`; mark it sensitive. The endpoint verifies Meta's `X-Hub-Signature-256` HMAC over the raw body before accepting any delivery status, and returns `401` for unsigned or tampered requests, so the secret must match the Meta app exactly. The `GET` challenge handshake (`hub.challenge`) remains available for subscription verification.
+
 ## Post-deploy smoke test
 
 - Sign in as every demo role and confirm role-specific navigation.
@@ -27,3 +31,4 @@
 - Confirm the dashboard default week and a custom inclusive range in Malaysian time.
 - Ask all four supported assistant questions, an unsupported question, and a SQL-like request; verify the model receives no unrestricted database access.
 - Open both WhatsApp deep links and verify recipient/message encoding while the UI avoids delivery claims.
+- Verify the webhook rejects unsigned and tampered POSTs with `401`, and accepts a correctly signed delivery-status payload.

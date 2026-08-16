@@ -12,7 +12,7 @@ Validated against `Programmer Assessment.docx` on 14 August 2026.
 | AI operations window | Complete | Gemini/Agno tool planning, caller JWT, controlled tools, guarded read-only analytical SQL, structured chat results, empty/error handling |
 | AI operational insight | Complete | compare_technician_workload tool returns per-technician completed jobs and service value with the team average; the assistant states counts and compares to the average (e.g. "above the team average") |
 | AI document understanding | Complete | Upload PDF/DOCX/TXT/MD/images; Gemini extracts order fields (customer/phone/service/details/amount/date/address) into the New Order form, and payment receipt fields (amount/method/date/receipt no) into payment recording; admins and assigned technicians; results saved to the document version and audited, prefill-only |
-| Traceability/security | Complete | Versioned transactional RPCs, audit events, RLS, private storage rules, role-scoped notifications and realtime state |
+| Traceability/security | Complete | Versioned transactional RPCs, audit events, RLS, private storage rules, role-scoped notifications and realtime state; webhook signature verification (HMAC, fails closed), security headers (CSP, frame/type/referrer/permissions, HSTS), dependency pinning/audit, and bounded upload parsing |
 
 ## Optional limitations
 
