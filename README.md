@@ -276,8 +276,14 @@ Apply the same checked-in migrations to hosted Supabase, create production Auth/
 - Evidence is private and signed, but production needs retention, malware scanning, and lifecycle policies.
 - AI quality depends on Gemini availability and the reviewed semantic profile. It cannot answer outside authorized evidence and intentionally cannot write data.
 
-## Assessment reflection
+## Self-assessment
 
-Order intake was the most direct module. The difficult work was keeping mobile field actions, payments, evidence, review corrections, realtime sessions, auditability, and AI queries consistent under one authorization model. AI tools helped structure requirements and implementation, while application AI remains deliberately read-only and evidence-bound.
+**Which module was easiest?** Order intake. It is a straight line: capture the order, validate it, insert through a versioned role-checked RPC, and notify the technician. Once the authorization and audit pattern was in place, adding "create order" was mechanical, and AI extraction simply pre-fills the same form the admin would fill by hand.
+
+**Which module was hardest?** Keeping one authorization model consistent across everything — field actions, payments, evidence, corrections, realtime, audit, and AI. Every surface had to enforce the same role rules, and the AI had to go through the same RLS boundary as the UI rather than around it. That is what drove the architecture: RLS as the boundary, every write through versioned RPCs, and read-only evidence-bound AI.
+
+**What would you improve in a real production system?** The "Limitations and production improvements" section above is the roadmap: workforce SSO/MFA instead of shared demo credentials, offline-capable field drafts with conflict-aware sync, malware scanning and retention policies for evidence, and real WhatsApp Business delivery receipts once Meta approval lands. I would also add per-branch analytics and automated invoice generation.
+
+**How did you use AI tools while building this project?** AI tools helped structure the requirements and implementation plan, pressure-test architecture decisions, and debug issues during development. The application itself also ships AI features — deliberately as a read-only, evidence-bound assistant, so the product never relies on the model for authorization or writes.
 
 See [docs/assessment-status.md](docs/assessment-status.md) and [docs/deployment.md](docs/deployment.md).
