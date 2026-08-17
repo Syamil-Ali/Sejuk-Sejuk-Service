@@ -52,13 +52,13 @@ export function PaymentAccountList({
       title="Payment accounts"
       description="Service status and payment status are tracked separately."
       action={
-        <span className="text-xs text-[#60738f]">
+        <span className="text-xs text-body">
           {filtered.length} result{filtered.length === 1 ? "" : "s"}
         </span>
       }
       contentClassName="!p-0"
     >
-      <div className="grid gap-3 border-b border-[#e5e9ef] p-3 sm:grid-cols-[1fr_180px] sm:px-6">
+      <div className="grid gap-3 border-b border-line p-3 sm:grid-cols-[1fr_180px] sm:px-6">
         <SearchField
           label="Search payment accounts"
           placeholder="Search order, customer, or phone..."
@@ -72,14 +72,14 @@ export function PaymentAccountList({
           options={filterOptions.map((value) => ({ value, label: value }))}
         />
       </div>
-      <div className="hidden grid-cols-[1.15fr_.8fr_.8fr_.8fr_110px] gap-4 border-b border-[#edf0f4] px-6 py-2 text-[10px] font-semibold uppercase tracking-[.08em] text-[#94a3b8] lg:grid">
+      <div className="hidden grid-cols-[1.15fr_.8fr_.8fr_.8fr_110px] gap-4 border-b border-line px-6 py-2 text-[10px] font-semibold uppercase tracking-[.08em] text-muted lg:grid">
         <span>Order &amp; customer</span>
         <span>Service / payment</span>
         <span>Final / received</span>
         <span>Outstanding</span>
         <span />
       </div>
-      <div className="divide-y divide-[#e5e9ef]">
+      <div className="divide-y divide-line">
         {filtered.map((order) => (
           <PaymentAccountRow
             key={order.id}
@@ -115,8 +115,8 @@ export function PaymentAccountRow({
     >
       <div className="grid gap-3 lg:grid-cols-[1.15fr_.8fr_.8fr_.8fr_110px] lg:items-center">
         <div>
-          <p className="font-code text-xs text-[#60738f]">{order.orderNo}</p>
-          <p className="mt-1 text-[15px] font-medium text-[#07152c]">
+          <p className="font-code text-xs text-body">{order.orderNo}</p>
+          <p className="mt-1 text-[15px] font-medium text-ink">
             {order.customerName}
           </p>
           <p className="text-xs text-[#8290a3]">{order.customerPhone}</p>
@@ -126,10 +126,10 @@ export function PaymentAccountRow({
           <PaymentStatusBadge status={payment.status} />
         </div>
         <div>
-          <p className="text-sm text-[#0f1f38]">
+          <p className="text-sm text-ink">
             {money.format(payment.finalAmount)}
           </p>
-          <p className="text-xs text-[#60738f]">
+          <p className="text-xs text-body">
             {money.format(payment.received)} received
           </p>
         </div>
@@ -138,7 +138,7 @@ export function PaymentAccountRow({
         >
           {money.format(payment.outstanding)}
         </p>
-        <span className="text-sm font-medium text-[#2563eb]">View account</span>
+        <span className="text-sm font-medium text-accent">View account</span>
       </div>
     </button>
   );

@@ -83,7 +83,7 @@ export function TechnicianActions({
     return (
       <section className="card p-5">
         <h2 className="font-black">Ready to begin?</h2>
-        <p className="mt-1 text-sm text-[#60716e]">
+        <p className="mt-1 text-sm text-body">
           Start the job when you arrive on site.
         </p>
         <button className="btn-primary mt-4 w-full" onClick={start}>
@@ -101,16 +101,16 @@ export function TechnicianActions({
   if (order.status !== "In Progress") return null;
   return (
     <section className="card !rounded-xl overflow-hidden p-5 sm:p-6">
-      <div className="-mx-5 -mt-5 border-b border-[#edf0f4] px-5 py-4 sm:-mx-6 sm:-mt-6 sm:px-6">
-        <h2 className="text-sm font-semibold text-[#0f1f38]">
+      <div className="-mx-5 -mt-5 border-b border-line px-5 py-4 sm:-mx-6 sm:-mt-6 sm:px-6">
+        <h2 className="text-sm font-semibold text-ink">
           Complete field service
         </h2>
-        <p className="mt-0.5 text-xs text-[#60738f]">
+        <p className="mt-0.5 text-xs text-body">
           Fill in all required fields before marking the job done
         </p>
       </div>
       <button
-        className="mt-4 text-xs font-medium text-[#2563eb]"
+        className="mt-4 text-xs font-medium text-accent"
         onClick={() =>
           setMode(mode === "reschedule" ? "complete" : "reschedule")
         }
@@ -141,21 +141,21 @@ export function TechnicianActions({
           }}
         >
           <label>
-            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#60738f]">
+            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-body">
               Work done
             </span>
             <textarea
               required
               name="workDone"
               maxLength={2_000}
-              className="field !rounded-lg !border !border-[#dfe5ec] !bg-[#f8fafc] !px-4 !py-3"
+              className="field !rounded-lg !border !border-line !bg-canvas !px-4 !py-3"
               rows={4}
               placeholder="Describe the work completed during this service visit..."
             />
           </label>
           <div className="grid gap-4 sm:grid-cols-2">
             <label>
-              <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#60738f]">
+              <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-body">
                 Extra charges (RM)
               </span>
               <input
@@ -166,20 +166,20 @@ export function TechnicianActions({
                 name="extraCharges"
                 value={extraCharges}
                 onChange={(event) => setExtraCharges(event.target.value)}
-                className="field !rounded-lg !border !border-[#dfe5ec] !bg-[#f8fafc]"
+                className="field !rounded-lg !border !border-line !bg-canvas"
               />
             </label>
             <label>
-              <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#60738f]">
+              <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-body">
                 Final amount
               </span>
-              <output className="field block !rounded-lg !border !border-[#dfe5ec] !bg-[#f1f5f9]">
+              <output className="field block !rounded-lg !border !border-line !bg-[#f1f5f9]">
                 {money.format(order.quotedPrice + Number(extraCharges || 0))}
               </output>
             </label>
           </div>
           <label>
-            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#60738f]">
+            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-body">
               Evidence (up to 6)
             </span>
             <EvidenceUploader
@@ -189,19 +189,19 @@ export function TechnicianActions({
             />
           </label>
           <label>
-            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-[#60738f]">
+            <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-body">
               Remarks
             </span>
             <textarea
               name="remarks"
               maxLength={1_000}
-              className="field !rounded-lg !border !border-[#dfe5ec] !bg-[#f8fafc]"
+              className="field !rounded-lg !border !border-line !bg-canvas"
               rows={2}
               placeholder="Any additional remarks..."
             />
           </label>
-          <fieldset className="rounded-xl border border-[#dfe5ec] bg-[#f8fafc] p-4">
-            <legend className="px-2 text-xs font-semibold uppercase tracking-wider text-[#60738f]">
+          <fieldset className="rounded-xl border border-line bg-canvas p-4">
+            <legend className="px-2 text-xs font-semibold uppercase tracking-wider text-body">
               Payment received (optional)
             </legend>
             <div className="mb-3 flex justify-end">
@@ -315,7 +315,7 @@ export function ManagerActions({
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
         />
-        <fieldset className="mt-4 overflow-hidden rounded-xl border border-[#dce7e3]">
+        <fieldset className="mt-4 overflow-hidden rounded-xl border border-line">
           <legend className="sr-only">
             Reopen checklist items for correction
           </legend>
@@ -324,7 +324,7 @@ export function ManagerActions({
             aria-expanded={correctionOpen}
             aria-controls="reopen-correction-options"
             onClick={() => setCorrectionOpen((open) => !open)}
-            className="flex min-h-12 w-full items-center gap-3 px-4 text-left text-sm font-medium text-[#334155] hover:bg-[#f8fafc]"
+            className="flex min-h-12 w-full items-center gap-3 px-4 text-left text-sm font-medium text-[#334155] hover:bg-canvas"
           >
             <span>Reopen for correction</span>
             <span className="text-xs font-normal text-[#8290a3]">Optional</span>
@@ -340,7 +340,7 @@ export function ManagerActions({
           {correctionOpen && (
             <div
               id="reopen-correction-options"
-              className="space-y-2 border-t border-[#e5e9ef] px-4 py-3"
+              className="space-y-2 border-t border-line px-4 py-3"
             >
               {order.checklist.map((item) => (
                 <label
@@ -384,7 +384,7 @@ export function ManagerActions({
     return (
       <section className="card p-5">
         <h2 className="font-black">Review accepted</h2>
-        <p className="mt-1 text-sm text-[#60716e]">
+        <p className="mt-1 text-sm text-body">
           Close this order to lock operational changes.
         </p>
         <button className="btn-primary mt-4" onClick={close}>

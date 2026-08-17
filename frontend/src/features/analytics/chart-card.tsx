@@ -21,15 +21,15 @@ export function ChartCard({
   return (
     <section
       className={cn(
-        "overflow-hidden rounded-xl border border-[#e2e8f0] bg-white lg:flex lg:min-h-0 lg:flex-col",
+        "overflow-hidden card lg:flex lg:min-h-0 lg:flex-col",
         className,
       )}
     >
       <header className="flex items-center justify-between border-b border-[#f1f5f9] px-6 py-5 lg:shrink-0 lg:py-3.5">
         <div>
-          <h2 className="font-semibold text-[#0f172a]">{title}</h2>
+          <h2 className="font-semibold text-ink">{title}</h2>
           {description && (
-            <p className="mt-0.5 text-xs text-[#94a3b8]">{description}</p>
+            <p className="mt-0.5 text-xs text-muted">{description}</p>
           )}
         </div>
         {badge}

@@ -66,7 +66,7 @@ export default function TechnicianDashboard() {
         <h1 className="page-title">
           My performance
         </h1>
-<p className="mt-2 text-[13px] text-[#64748b] lg:mt-1 lg:text-sm">
+<p className="mt-2 text-[13px] text-body lg:mt-1 lg:text-sm">
 Track your completed service value, payments, and job activity for any
           date range.
         </p>
@@ -140,17 +140,17 @@ Track your completed service value, payments, and job activity for any
               <TechnicianServiceValueChart data={data.chart} />
             </ChartCard>
 
-            <section className="overflow-hidden rounded-xl border border-[#e2e8f0] bg-white lg:min-h-0 lg:overflow-y-auto">
+            <section className="overflow-hidden card lg:min-h-0 lg:overflow-y-auto">
               <div className="sticky top-0 z-10 border-b border-[#f1f5f9] bg-white px-5 py-5 lg:py-3.5">
-                <h2 className="font-semibold text-[#0f172a]">
+                <h2 className="font-semibold text-ink">
                   Recent completed jobs
                 </h2>
-                <p className="mt-0.5 text-xs text-[#94a3b8]">
+                <p className="mt-0.5 text-xs text-muted">
                   Latest work in this date range
                 </p>
               </div>
               {data.completed.length ? (
-                <div className="divide-y divide-[#f1f5f9]">
+                <div className="divide-y divide-line">
                   {[...data.completed]
                     .sort(
                       (a, b) =>
@@ -164,14 +164,14 @@ Track your completed service value, payments, and job activity for any
               href={orderUrl(order)}
                         className="group flex items-center gap-3 px-5 py-4 lg:py-3 hover:bg-[#f8fbff]"
                       >
-                        <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[#eff6ff] text-[#2563eb]">
+                        <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
                           <CheckCircle2 className="size-4" />
                         </span>
                         <span className="min-w-0 flex-1">
                           <strong className="block truncate text-sm font-semibold text-[#1e293b]">
                             {order.customerName}
                           </strong>
-                          <small className="text-xs text-[#94a3b8]">
+                          <small className="text-xs text-muted">
                             {localDateTime.format(
                               new Date(order.completion!.completedAt),
                             )}
@@ -181,22 +181,18 @@ Track your completed service value, payments, and job activity for any
                           <strong className="block text-sm text-[#047857]">
                             {money.format(order.completion!.finalAmount)}
                           </strong>
-                          <ArrowUpRight className="ml-auto mt-1 size-3.5 text-[#94a3b8] group-hover:text-[#2563eb]" />
+                          <ArrowUpRight className="ml-auto mt-1 size-3.5 text-muted group-hover:text-accent" />
                         </span>
                       </Link>
                     ))}
                 </div>
               ) : (
-                <div className="p-8 text-center text-sm text-[#64748b]">
+                <div className="p-8 text-center text-sm text-body">
                   No completed jobs in this range.
                 </div>
               )}
             </section>
           </div>
-          <p className="mt-4 text-xs text-[#94a3b8] lg:mt-2 lg:shrink-0">
-            Service value is an operational performance metric. It is not
-            technician payroll, commission, or payout.
-          </p>
         </>
       )}
     </div>

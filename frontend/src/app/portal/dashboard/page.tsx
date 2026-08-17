@@ -80,7 +80,7 @@ export default function Dashboard() {
         <h1 className="page-title">
           Performance overview
         </h1>
-        <p className="mt-2 text-[13px] text-[#64748b] lg:mt-1 lg:text-sm">
+        <p className="mt-2 text-[13px] text-body lg:mt-1 lg:text-sm">
           A shared date range keeps every card, chart, and ranking aligned.
         </p>
       </header>
@@ -136,17 +136,17 @@ export default function Dashboard() {
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:min-h-0 lg:flex-1 lg:grid-cols-3">
-            <section className="overflow-hidden rounded-xl border border-[#e2e8f0] bg-white lg:col-span-2 lg:flex lg:min-h-0 lg:flex-col">
+            <section className="overflow-hidden card lg:col-span-2 lg:flex lg:min-h-0 lg:flex-col">
               <div className="flex items-center justify-between border-b border-[#f1f5f9] px-6 py-5 lg:shrink-0 lg:py-3.5">
                 <div>
-                  <h2 className="font-semibold text-[#0f172a]">
+                  <h2 className="font-semibold text-ink">
                     Jobs completed by technician
                   </h2>
-                  <p className="mt-0.5 text-[11px] text-[#94a3b8] lg:text-xs">
+                  <p className="mt-0.5 text-[11px] text-muted lg:text-xs">
                     {rangeLabel(from, to)}
                   </p>
                 </div>
-                <span className="rounded-full bg-[#f1f5f9] px-2.5 py-1 text-xs font-semibold text-[#64748b]">
+                <span className="rounded-full bg-[#f1f5f9] px-2.5 py-1 text-xs font-semibold text-body">
                   Range
                 </span>
               </div>

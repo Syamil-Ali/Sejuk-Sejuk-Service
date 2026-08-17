@@ -95,14 +95,14 @@ export function PaymentDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="payment-title"
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[#dfe5ec] bg-white"
+        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto card !rounded-2xl"
       >
-        <header className="flex items-start border-b border-[#e5e9ef] px-6 py-5">
+        <header className="flex items-start border-b border-line px-6 py-5">
           <div>
-            <p className="font-code text-xs text-[#60738f]">{order.orderNo}</p>
+            <p className="font-code text-xs text-body">{order.orderNo}</p>
             <h2
               id="payment-title"
-              className="mt-1 text-xl font-semibold text-[#0f1f38]"
+              className="mt-1 text-xl font-semibold text-ink"
             >
               {order.customerName}
             </h2>
@@ -117,7 +117,7 @@ export function PaymentDialog({
           </button>
         </header>
         <div className="space-y-6 p-6">
-          <div className="grid grid-cols-3 gap-3 rounded-xl border border-[#dfe5ec] bg-[#f8fafc] p-4">
+          <div className="grid grid-cols-3 gap-3 rounded-xl border border-line bg-canvas p-4">
             <Amount label="Final" value={summary.finalAmount} />
             <Amount label="Received" value={summary.received} />
             <Amount label="Outstanding" value={summary.outstanding} accent />
@@ -129,7 +129,7 @@ export function PaymentDialog({
               className="rounded-xl border border-[#cfe0f5] bg-[#f4f8fd] p-5"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold text-[#0f1f38]">
+                <h3 className="text-sm font-semibold text-ink">
                   Record customer payment
                 </h3>
                 <AiExtractButton
@@ -195,7 +195,7 @@ export function PaymentDialog({
               </FormField>
               <button
                 type="submit"
-                className="mt-4 min-h-11 rounded-xl bg-[#193a63] px-5 text-sm font-medium text-white hover:bg-[#173c68]"
+                className="mt-4 min-h-11 rounded-xl bg-brand px-5 text-sm font-medium text-white hover:bg-[#173c68]"
               >
                 Record payment
               </button>
@@ -218,21 +218,21 @@ function PaymentHistory({
 }) {
   return (
     <section>
-      <h3 className="text-sm font-semibold text-[#0f1f38]">Payment history</h3>
-      <div className="mt-3 divide-y divide-[#e5e9ef] rounded-xl border border-[#dfe5ec]">
+      <h3 className="text-sm font-semibold text-ink">Payment history</h3>
+      <div className="mt-3 divide-y divide-line rounded-xl border border-line">
         {payments.length ? (
           [...payments].reverse().map((payment) => (
             <div key={payment.id} className="flex items-start gap-3 px-4 py-3">
               <div>
-                <p className="text-sm font-medium text-[#0f1f38]">
+                <p className="text-sm font-medium text-ink">
                   {money.format(payment.amount)} · {payment.method}
                 </p>
-                <p className="mt-0.5 text-xs text-[#60738f]">
+                <p className="mt-0.5 text-xs text-body">
                   {payment.recordedBy} ·{" "}
                   {localDateTime.format(new Date(payment.receivedAt))}
                 </p>
                 {payment.notes && (
-                  <p className="mt-2 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-xs leading-relaxed text-[#475569]">
+                  <p className="mt-2 rounded-lg border border-line bg-canvas px-3 py-2 text-xs leading-relaxed text-body">
                     {payment.notes}
                   </p>
                 )}
@@ -251,7 +251,7 @@ function PaymentHistory({
             </div>
           ))
         ) : (
-          <p className="p-4 text-sm text-[#60738f]">No payment received yet.</p>
+          <p className="p-4 text-sm text-body">No payment received yet.</p>
         )}
       </div>
     </section>
@@ -273,7 +273,7 @@ function Amount({
         {label}
       </p>
       <p
-        className={`mt-1 text-sm font-semibold ${accent && value > 0 ? "text-[#b45309]" : "text-[#0f1f38]"}`}
+        className={`mt-1 text-sm font-semibold ${accent && value > 0 ? "text-[#b45309]" : "text-ink"}`}
       >
         {money.format(value)}
       </p>

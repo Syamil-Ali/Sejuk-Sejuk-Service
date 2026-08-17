@@ -76,7 +76,7 @@ export default function ReviewsPage() {
         <h1 className="page-title">
           Job reviews
         </h1>
-<p className="mt-2 text-[13px] text-[#64748b] lg:text-sm">
+<p className="mt-2 text-[13px] text-body lg:text-sm">
 Review completed work, track corrections, and close verified service
           records.
         </p>
@@ -185,37 +185,37 @@ function ReviewRow({
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(180px,1.15fr)_150px_minmax(180px,.9fr)_minmax(220px,1.2fr)_90px] lg:items-center">
         <div className="min-w-0">
-          <p className="font-code text-[11px] text-[#64748b]">
+          <p className="font-code text-[11px] text-body">
             {order.orderNo}
           </p>
-          <h3 className="mt-1 truncate text-sm font-semibold text-[#0f172a]">
+          <h3 className="mt-1 truncate text-sm font-semibold text-ink">
             {order.customerName}
           </h3>
-          <p className="mt-0.5 truncate text-xs text-[#94a3b8]">
+          <p className="mt-0.5 truncate text-xs text-muted">
             {order.serviceType} · {order.address}
           </p>
         </div>
         <div>
           <StatusBadge status={order.status} />
           <p
-            className={`mt-1.5 text-xs font-medium ${state === "Needs correction" ? "text-[#b45309]" : state === "Needs review" ? "text-[#2563eb]" : "text-[#64748b]"}`}
+            className={`mt-1.5 text-xs font-medium ${state === "Needs correction" ? "text-[#b45309]" : state === "Needs review" ? "text-accent" : "text-body"}`}
           >
             {state}
           </p>
         </div>
         <div className="space-y-1 text-xs">
           <p className="flex items-center gap-2 text-[#334155]">
-            <UserRound className="size-3.5 text-[#94a3b8]" />
+            <UserRound className="size-3.5 text-muted" />
             {technician}
           </p>
           <p className="flex items-center gap-2 font-semibold text-[#334155]">
-            <CircleDollarSign className="size-3.5 text-[#94a3b8]" />
+            <CircleDollarSign className="size-3.5 text-muted" />
             {money.format(completion?.finalAmount || order.quotedPrice)}
           </p>
         </div>
-        <div className="min-w-0 space-y-1 text-xs text-[#64748b]">
+        <div className="min-w-0 space-y-1 text-xs text-body">
           <p className="flex items-center gap-2">
-            <CalendarDays className="size-3.5 shrink-0 text-[#94a3b8]" />
+            <CalendarDays className="size-3.5 shrink-0 text-muted" />
             <span className="truncate">
               {completion
                 ? localDateTime.format(new Date(completion.completedAt))
@@ -223,11 +223,11 @@ function ReviewRow({
             </span>
           </p>
           <p className="flex items-center gap-2">
-            <ImageIcon className="size-3.5 text-[#94a3b8]" />
+            <ImageIcon className="size-3.5 text-muted" />
             {evidenceCount} evidence file{evidenceCount === 1 ? "" : "s"}
           </p>
           <p
-            className={`truncate font-medium ${payment.status === "Paid" ? "text-[#047857]" : payment.status === "Partially paid" ? "text-[#b45309]" : "text-[#dc2626]"}`}
+            className={`truncate font-medium ${payment.status === "Paid" ? "text-[#047857]" : payment.status === "Partially paid" ? "text-[#b45309]" : "text-danger"}`}
           >
             {payment.status} · {money.format(payment.outstanding)} outstanding
           </p>
@@ -235,7 +235,7 @@ function ReviewRow({
             <p className="truncate text-[#b45309]">{correctionReason}</p>
           )}
         </div>
-        <span className="flex items-center justify-end gap-1 text-sm font-semibold text-[#2563eb]">
+        <span className="flex items-center justify-end gap-1 text-sm font-semibold text-accent">
           {state === "Needs review" ? "Review" : "Open"}
           <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </span>

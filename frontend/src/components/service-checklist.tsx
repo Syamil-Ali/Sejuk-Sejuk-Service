@@ -40,13 +40,13 @@ export function ServiceChecklist({
   );
   return (
     <section className="card !rounded-xl overflow-hidden">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dfe5ec] px-5 py-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
         <div>
-          <h2 className="flex items-center gap-2 text-sm font-medium text-[#0f1f38]">
-            <ListChecks className="size-4 text-[#2563eb]" />
+          <h2 className="flex items-center gap-2 text-sm font-medium text-ink">
+            <ListChecks className="size-4 text-accent" />
             Work checklist
           </h2>
-          <p className="mt-0.5 text-xs text-[#60738f]">
+          <p className="mt-0.5 text-xs text-body">
             {progress.completed} of {progress.total} required steps completed
           </p>
         </div>
@@ -59,7 +59,7 @@ export function ServiceChecklist({
               }}
             />
           </div>
-          <span className="text-xs font-semibold text-[#60738f]">
+          <span className="text-xs font-semibold text-body">
             {Math.round(
               progress.total ? (progress.completed / progress.total) * 100 : 0,
             )}
@@ -69,13 +69,13 @@ export function ServiceChecklist({
       </div>
       {editable ? (
         <div className="p-5">
-          <p className="mb-3 text-xs text-[#60716e]">
+          <p className="mb-3 text-xs text-body">
             Customize the required scope before the Technician starts work.
           </p>
           <div className="space-y-2">
             {titles.map((title, index) => (
               <div className="flex gap-2" key={index}>
-                <span className="grid size-11 shrink-0 place-items-center text-xs font-black text-[#60716e]">
+                <span className="grid size-11 shrink-0 place-items-center text-xs font-black text-body">
                   {index + 1}
                 </span>
                 <input
@@ -133,7 +133,7 @@ export function ServiceChecklist({
           </div>
         </div>
       ) : (
-        <ol className="divide-y divide-[#e5e9ef]">
+        <ol className="divide-y divide-line">
           {order.checklist.map((item, index) => (
             <ChecklistRow
               key={`${item.id}:${item.completed}:${item.note || ""}:${item.evidence.map((file) => file.id).join(",")}`}
@@ -306,18 +306,18 @@ function ChecklistRow({
         </button>
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-2">
-            <span className="mt-0.5 text-xs font-medium text-[#60716e]">
+            <span className="mt-0.5 text-xs font-medium text-body">
               {index + 1}.
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <p
-                  className={`text-sm font-medium ${completed ? "text-[#3b638f]" : "text-[#0f1f38]"}`}
+                  className={`text-sm font-medium ${completed ? "text-[#3b638f]" : "text-ink"}`}
                 >
                   {item.title}
                 </p>
                 <span
-                  className={`rounded-sm px-1.5 py-0.5 text-[9px] font-medium ${item.required ? "bg-[#fff0f0] text-[#dc2626]" : "bg-[#eef3f7] text-[#60738f]"}`}
+                  className={`rounded-sm px-1.5 py-0.5 text-[9px] font-medium ${item.required ? "bg-[#fff0f0] text-danger" : "bg-[#eef3f7] text-body"}`}
                 >
                   {item.required ? "Required" : "Optional"}
                 </span>
@@ -340,7 +340,7 @@ function ChecklistRow({
               <textarea
                 aria-label={`Note for ${item.title}`}
                 maxLength={1_000}
-                className="field !rounded-lg !border !border-[#dfe5ec] !bg-[#f8fafc] !px-3 !py-2 focus:!border-[#3b82f6] focus:!bg-white"
+                className="field !rounded-lg !border !border-line !bg-canvas !px-3 !py-2 focus:!border-[#3b82f6] focus:!bg-white"
                 rows={2}
                 placeholder="Add work note (optional)"
                 value={note}
@@ -365,7 +365,7 @@ function ChecklistRow({
                   type="button"
                   disabled={evidence.length >= 6 || uploading}
                   onClick={() => imageInput.current?.click()}
-                  className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-[#cbd5e1] bg-white px-3 text-xs font-medium text-[#475569] transition-colors hover:border-[#93c5fd] hover:bg-[#f8fbff] hover:text-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-[#cbd5e1] bg-white px-3 text-xs font-medium text-body transition-colors hover:border-[#93c5fd] hover:bg-[#f8fbff] hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {uploading ? (
                     <LoaderCircle className="size-3.5 animate-spin" />
@@ -374,7 +374,7 @@ function ChecklistRow({
                   )}
                   {uploading ? "Uploading…" : "Add image"}
                 </button>
-                <span className="text-xs text-[#94a3b8]">
+                <span className="text-xs text-muted">
                   {evidence.length}/6 images
                 </span>
                 {dirty && (
@@ -397,7 +397,7 @@ function ChecklistRow({
             </div>
           ) : (
             item.note && (
-              <p className="mt-3 rounded-xl bg-white p-3 text-sm text-[#60716e]">
+              <p className="mt-3 rounded-xl bg-white p-3 text-sm text-body">
                 {item.note}
               </p>
             )

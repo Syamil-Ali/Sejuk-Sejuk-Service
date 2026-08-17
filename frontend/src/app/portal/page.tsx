@@ -17,5 +17,5 @@ export default function PortalHome() {
           : "/portal/dashboard",
     );
   }, [user, router]);
-  return <p className="text-sm text-[#60716e]">Opening your workspace…</p>;
+  return <p className="text-sm text-body">Opening your workspace…</p>;
 }

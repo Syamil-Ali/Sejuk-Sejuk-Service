@@ -12,7 +12,7 @@ export function PrivateEvidenceLink({
   const [loading, setLoading] = useState(false);
   if (!storagePath)
     return (
-      <span className="flex items-center gap-2 rounded-lg border border-[#dce7e3] bg-slate-50 px-3 py-2 text-sm">
+      <span className="flex items-center gap-2 rounded-lg border border-line bg-slate-50 px-3 py-2 text-sm">
         <FileText className="size-4 text-teal-700" />
         {name}
       </span>
@@ -42,7 +42,7 @@ export function PrivateEvidenceLink({
       type="button"
       disabled={loading}
       onClick={() => void open()}
-      className="flex items-center gap-2 rounded-lg border border-[#dce7e3] bg-slate-50 px-3 py-2 text-sm hover:border-teal-400"
+      className="flex items-center gap-2 rounded-lg border border-line bg-slate-50 px-3 py-2 text-sm hover:border-teal-400"
     >
       {loading ? (
         <LoaderCircle className="size-4 animate-spin" />

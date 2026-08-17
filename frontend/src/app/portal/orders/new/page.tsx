@@ -100,7 +100,7 @@ export default function NewOrderPage() {
               ["Status", result.status],
             ].map(([a, b]) => (
               <div key={a}>
-                <dt className="text-xs font-bold uppercase tracking-wide text-[#60716e]">
+                <dt className="text-xs font-bold uppercase tracking-wide text-body">
                   {a}
                 </dt>
                 <dd className="mt-1 font-semibold">{b}</dd>

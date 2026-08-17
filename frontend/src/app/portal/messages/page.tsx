@@ -43,7 +43,7 @@ export default function MessagesPage() {
         <h1 className="page-title">
           Messages
         </h1>
-<p className="mt-1.5 text-[13px] text-[#64748b] lg:text-sm">
+<p className="mt-1.5 text-[13px] text-body lg:text-sm">
 Order conversations and internal organization communication.
           </p>
         </div>
@@ -51,7 +51,7 @@ Order conversations and internal organization communication.
           <button
             type="button"
             onClick={() => setCreating("direct")}
-            className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#d6dde7] bg-white px-4 text-sm font-medium"
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-line bg-white px-4 text-sm font-medium"
           >
             <Plus className="size-4" /> New message
           </button>
@@ -59,29 +59,29 @@ Order conversations and internal organization communication.
             <button
               type="button"
               onClick={() => setCreating("announcement")}
-              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#193a63] px-4 text-sm font-medium text-white"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-brand px-4 text-sm font-medium text-white"
             >
               <BellRing className="size-4" /> Announcement
             </button>
           )}
         </div>
       </header>
-      <section className="grid min-h-0 flex-1 overflow-hidden rounded-2xl border border-[#dfe5ec] bg-white lg:grid-cols-[340px_minmax(0,1fr)]">
+      <section className="grid min-h-0 flex-1 overflow-hidden card !rounded-2xl lg:grid-cols-[340px_minmax(0,1fr)]">
         <aside
-          className={`${selectedId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-[#e5e9ef]`}
+          className={`${selectedId ? "hidden lg:flex" : "flex"} min-h-0 flex-col border-r border-line`}
         >
           <label className="relative m-4 block">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#94a3b8]" />
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" />
             <input
               aria-label="Search conversations"
               maxLength={120}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search conversations..."
-              className="min-h-11 w-full rounded-xl border border-[#d6dde7] bg-[#f8fafc] pl-10 pr-3 text-sm outline-none focus:border-[#60a5fa]"
+              className="min-h-11 w-full rounded-xl border border-line bg-canvas pl-10 pr-3 text-sm outline-none focus:border-[#60a5fa]"
             />
           </label>
-          <div className="min-h-0 flex-1 overflow-y-auto divide-y divide-[#e5e9ef]">
+          <div className="min-h-0 flex-1 overflow-y-auto divide-y divide-line">
             {conversations.map((conversation) => (
               <ConversationRow
                 key={conversation.id}
@@ -96,7 +96,7 @@ Order conversations and internal organization communication.
               />
             ))}
             {!conversations.length && (
-              <p className="p-8 text-center text-sm text-[#64748b]">
+              <p className="p-8 text-center text-sm text-body">
                 No conversations found.
               </p>
             )}
@@ -151,7 +151,7 @@ Order conversations and internal organization communication.
               }}
             />
           ) : (
-            <div className="grid flex-1 place-items-center text-sm text-[#64748b]">
+            <div className="grid flex-1 place-items-center text-sm text-body">
               Choose or start a conversation.
             </div>
           )}

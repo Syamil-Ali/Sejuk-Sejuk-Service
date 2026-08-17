@@ -20,7 +20,7 @@ export function CompanyBrand({
     <div className={cn("flex min-w-0 items-center gap-3", className)}>
       <span
         className={cn(
-          "grid size-11 shrink-0 place-items-center rounded-xl bg-[#193a63] text-white",
+          "grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-white",
           iconClassName,
         )}
         aria-hidden="true"
@@ -30,7 +30,7 @@ export function CompanyBrand({
       <span className="min-w-0">
         <strong
           className={cn(
-            "block text-sm font-semibold leading-tight text-[#10213a]",
+            "block text-sm font-semibold leading-tight text-ink",
             nameClassName,
           )}
         >

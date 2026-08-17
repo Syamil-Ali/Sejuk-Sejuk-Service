@@ -163,7 +163,7 @@ export function EvidenceUploader({
       />
       <button
         type="button"
-        className="flex min-h-16 w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#d5dee9] bg-white px-4 text-sm text-[#60738f] transition-colors hover:border-[#60a5fa] hover:bg-blue-50 hover:text-blue-600"
+        className="flex min-h-16 w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#d5dee9] bg-white px-4 text-sm text-body transition-colors hover:border-[#60a5fa] hover:bg-blue-50 hover:text-blue-600"
         disabled={files.length >= 6}
         onClick={() => input.current?.click()}
       >
@@ -179,7 +179,7 @@ export function EvidenceUploader({
           {staged.map((item) => (
             <li
               key={item.key}
-              className="overflow-hidden rounded-xl border border-[#dce7e3] bg-slate-50"
+              className="overflow-hidden rounded-xl border border-line bg-slate-50"
             >
               <div className="flex min-h-16 items-center gap-3 p-2">
                 {item.preview ? (
@@ -202,7 +202,7 @@ export function EvidenceUploader({
                   <strong className="block truncate text-xs">
                     {item.file.name}
                   </strong>
-                  <small className="text-[#60716e]">
+                  <small className="text-body">
                     {(item.file.size / 1024 / 1024).toFixed(1)} MB ·{" "}
                     {item.status}
                   </small>

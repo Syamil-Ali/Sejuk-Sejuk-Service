@@ -45,7 +45,7 @@ export default function PaymentsPage() {
         <h1 className="page-title">
           Customer payments
         </h1>
-<p className="mt-1.5 text-[13px] text-[#64748b] lg:text-sm">
+<p className="mt-1.5 text-[13px] text-body lg:text-sm">
 Track and collect balances without holding up service completion.
         </p>
       </header>

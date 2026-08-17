@@ -168,10 +168,10 @@ export default function OrderDetail() {
             }}
           />
           <section className="card !rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-[#0f1f38]">
+            <h2 className="text-sm font-semibold text-ink">
               Order conversation
             </h2>
-            <p className="mt-1 text-xs leading-relaxed text-[#64748b]">
+            <p className="mt-1 text-xs leading-relaxed text-body">
               {latestOrderMessage
                 ? `${latestOrderMessage.senderName}: ${latestOrderMessage.body}`
                 : "Keep job questions, corrections, and follow-ups attached to this order."}
@@ -194,7 +194,7 @@ export default function OrderDetail() {
                   );
                 }
               }}
-              className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#cfe0f5] bg-[#eff6ff] px-4 text-sm font-medium text-[#1d4ed8]"
+              className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#cfe0f5] bg-accent-soft px-4 text-sm font-medium text-accent"
             >
               <MessageSquare className="size-4" /> Open conversation
             </button>

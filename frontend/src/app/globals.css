@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens: the canonical palette used across the portal. These generate
+ * utilities like `text-ink`, `text-body`, `text-muted`, `border-line`,
+ * `bg-canvas`, `bg-brand`, `text-accent`, `bg-accent-soft`, `text-danger`.
+ */
+@theme {
+  --color-ink: #0f172a;
+  --color-body: #64748b;
+  --color-muted: #94a3b8;
+  --color-line: #e2e8f0;
+  --color-canvas: #f8fafc;
+  --color-brand: #193a63;
+  --color-accent: #2563eb;
+  --color-accent-soft: #eff6ff;
+  --color-danger: #dc2626;
+}
+
 :root {
   --ink: #1c1b1f;
   --muted: #49454f;
@@ -186,17 +203,14 @@ a {
 }
 
 .card {
-  border: 1px solid #d7e3ec;
-  border-radius: 1.5rem;
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
   background: var(--surface-container);
   box-shadow: none;
   transition:
     background 300ms cubic-bezier(0.2, 0, 0, 1),
     border-color 300ms cubic-bezier(0.2, 0, 0, 1),
     transform 300ms cubic-bezier(0.2, 0, 0, 1);
-}
-.card:hover {
-  border-color: #aec8dc;
 }
 
 .field {

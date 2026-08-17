@@ -25,7 +25,7 @@ export function AssignmentPanel({
 }) {
   return (
     <section className="card !rounded-xl p-5">
-      <h2 className="-mx-5 -mt-5 border-b border-[#edf0f4] px-5 py-4 text-sm font-semibold text-[#0f1f38]">
+      <h2 className="-mx-5 -mt-5 border-b border-line px-5 py-4 text-sm font-semibold text-ink">
         Assignment
       </h2>
       <div className="mt-4 flex items-center gap-3">
@@ -36,7 +36,7 @@ export function AssignmentPanel({
           <p className="truncate text-sm font-semibold text-[#1e293b]">
             {technician?.name || "Not assigned"}
           </p>
-          <p className="truncate text-xs text-[#64748b]">
+          <p className="truncate text-xs text-body">
             {technician?.branch || "Select a technician"}
           </p>
         </div>

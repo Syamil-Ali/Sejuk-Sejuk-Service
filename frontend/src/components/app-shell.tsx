@@ -31,7 +31,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   if (!ready || !user) {
     return (
-      <div className="grid min-h-screen place-items-center text-sm text-[#60716e]">
+      <div className="grid min-h-screen place-items-center text-sm text-body">
         Preparing workspace…
       </div>
     );

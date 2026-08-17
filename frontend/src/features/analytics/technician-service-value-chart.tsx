@@ -20,7 +20,7 @@ export function TechnicianServiceValueChart({ data }: { data: Entry[] }) {
       <div className="grid h-full place-items-center text-center">
         <div>
           <CircleDollarSign className="mx-auto size-8 text-[#cbd5e1]" />
-          <p className="mt-2 text-sm font-medium text-[#64748b]">
+          <p className="mt-2 text-sm font-medium text-body">
             No completed service value in this range
           </p>
         </div>

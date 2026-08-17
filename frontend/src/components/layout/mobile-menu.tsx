@@ -70,13 +70,13 @@ export function MobileMenu({
           open ? "translate-x-0" : "translate-x-full",
         )}
       >
-        <div className="flex items-center justify-between border-b border-[#e5e9ef] px-4 py-4">
+        <div className="flex items-center justify-between border-b border-line px-4 py-4">
           <CompanyBrand nameClassName="text-sm" />
           <button
             type="button"
             aria-label="Close menu"
             onClick={onClose}
-            className="grid size-10 place-items-center rounded-xl text-[#60716e] hover:bg-slate-100"
+            className="grid size-10 place-items-center rounded-xl text-body hover:bg-slate-100"
           >
             <X className="size-5" />
           </button>
@@ -84,7 +84,7 @@ export function MobileMenu({
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           {portalNavigation[role].map((section) => (
             <div key={section.label} className="mb-5">
-              <p className="px-3 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-[#94a3b8]">
+              <p className="px-3 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-muted">
                 {section.label}
               </p>
               <div className="space-y-1">
@@ -118,7 +118,7 @@ export function MobileMenu({
                           "relative grid size-8 place-items-center rounded-lg",
                           active
                             ? "bg-teal-100 text-teal-800"
-                            : "bg-slate-100 text-[#64748b]",
+                            : "bg-slate-100 text-body",
                         )}
                       >
                         <Icon className="size-4" />
@@ -135,7 +135,7 @@ export function MobileMenu({
                       </span>
                       {label}
                       {unread > 0 && (
-                        <span className="ml-auto rounded-full bg-[#f1f5f9] px-2 py-0.5 text-[10px] font-bold text-[#64748b]">
+                        <span className="ml-auto rounded-full bg-[#f1f5f9] px-2 py-0.5 text-[10px] font-bold text-body">
                           {unread}
                         </span>
                       )}

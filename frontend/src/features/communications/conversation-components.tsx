@@ -44,9 +44,9 @@ export function ConversationRow({
     <button
       type="button"
       onClick={onClick}
-      className={`flex w-full gap-3 px-4 py-4 text-left ${active ? "bg-[#eff6ff]" : "hover:bg-[#f8fafc]"}`}
+      className={`flex w-full gap-3 px-4 py-4 text-left ${active ? "bg-accent-soft" : "hover:bg-canvas"}`}
     >
-      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#f1f5f9] text-[#475569]">
+      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#f1f5f9] text-body">
         {conversation.kind === "order" ? (
           <MessageSquare className="size-4" />
         ) : (
@@ -55,7 +55,7 @@ export function ConversationRow({
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
-          <strong className="truncate text-sm font-medium text-[#0f172a]">
+          <strong className="truncate text-sm font-medium text-ink">
             {title}
           </strong>
           {unread > 0 && (
@@ -64,7 +64,7 @@ export function ConversationRow({
             </span>
           )}
         </span>
-        <span className="mt-1 block truncate text-xs text-[#64748b]">
+        <span className="mt-1 block truncate text-xs text-body">
           {last ? `${last.senderName}: ${last.body}` : "No messages yet"}
         </span>
       </span>
@@ -114,7 +114,7 @@ export function Thread({
   }, [body]);
   return (
     <>
-      <header className="flex min-h-16 items-center gap-3 border-b border-[#e5e9ef] px-5">
+      <header className="flex min-h-16 items-center gap-3 border-b border-line px-5">
         <button
           type="button"
           onClick={onBack}
@@ -124,8 +124,8 @@ export function Thread({
           <ArrowLeft className="size-4" />
         </button>
         <div>
-          <h2 className="text-sm font-semibold text-[#0f172a]">{title}</h2>
-          <p className="text-xs capitalize text-[#64748b]">
+          <h2 className="text-sm font-semibold text-ink">{title}</h2>
+          <p className="text-xs capitalize text-body">
             {conversation.kind} conversation
           </p>
         </div>
@@ -135,7 +135,7 @@ export function Thread({
           <button
             type="button"
             onClick={() => setVisibleCount((count) => count + 50)}
-            className="mx-auto block rounded-full border border-[#d6dde7] px-4 py-2 text-xs text-[#64748b]"
+            className="mx-auto block rounded-full border border-line px-4 py-2 text-xs text-body"
           >
             Load older messages
           </button>
@@ -143,12 +143,12 @@ export function Thread({
         {conversation.messages.slice(-visibleCount).map((message) => (
           <article
             key={message.id}
-            className={`max-w-[82%] rounded-2xl border px-4 py-3 ${message.senderId === userId ? "ml-auto border-[#bfdbfe] bg-[#eff6ff]" : "border-[#e2e8f0] bg-white"}`}
+            className={`max-w-[82%] rounded-2xl border px-4 py-3 ${message.senderId === userId ? "ml-auto border-[#bfdbfe] bg-accent-soft" : "border-line bg-white"}`}
           >
-            <p className="text-xs font-medium text-[#475569]">
+            <p className="text-xs font-medium text-body">
               {message.senderName}
             </p>
-            <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-[#0f172a]">
+            <p className="mt-1 whitespace-pre-wrap text-sm leading-relaxed text-ink">
               {message.deletedAt ? "Message deleted" : message.body}
             </p>
             {message.attachments.length > 0 && (
@@ -191,14 +191,14 @@ export function Thread({
                         );
                       }
                     }}
-                    className="flex items-center gap-2 rounded-lg border border-[#d6dde7] bg-white/70 px-2 py-1 text-xs text-[#475569]"
+                    className="flex items-center gap-2 rounded-lg border border-line bg-white/70 px-2 py-1 text-xs text-body"
                   >
                     <FileText className="size-3" /> {attachment.name}
                   </button>
                 ))}
               </div>
             )}
-            <p className="mt-2 flex items-center gap-2 text-[10px] text-[#94a3b8]">
+            <p className="mt-2 flex items-center gap-2 text-[10px] text-muted">
               {localDateTime.format(new Date(message.createdAt))}
               {message.editedAt && " · edited"}
               {message.senderId === userId && !message.deletedAt && (
@@ -227,13 +227,13 @@ export function Thread({
           </article>
         ))}
         {!conversation.messages.length && (
-          <div className="grid min-h-48 place-items-center text-sm text-[#64748b]">
+          <div className="grid min-h-48 place-items-center text-sm text-body">
             Start the conversation.
           </div>
         )}
       </div>
       <form
-        className="border-t border-[#e5e9ef] p-4"
+        className="border-t border-line p-4"
         onSubmit={async (event) => {
           event.preventDefault();
           if (!body.trim()) return;
@@ -278,14 +278,14 @@ export function Thread({
                     return prefix ? `${prefix} ${token} ` : `${token} `;
                   });
                 }}
-                className={`rounded-full border px-2.5 py-1 text-[11px] ${mentions.includes(member!.id) ? "border-[#2563eb] bg-[#eff6ff] text-[#1d4ed8]" : "border-[#d6dde7] text-[#64748b]"}`}
+                className={`rounded-full border px-2.5 py-1 text-[11px] ${mentions.includes(member!.id) ? "border-[#2563eb] bg-accent-soft text-accent" : "border-line text-body"}`}
               >
                 @{member!.name}
               </button>
             ))}
         </div>
         <div className="flex gap-2">
-          <label className="grid size-12 shrink-0 cursor-pointer place-items-center self-end rounded-xl border border-[#d6dde7] text-[#64748b] hover:bg-[#f8fafc]">
+          <label className="grid size-12 shrink-0 cursor-pointer place-items-center self-end rounded-xl border border-line text-body hover:bg-canvas">
             <span className="sr-only">Attach files</span>
             <Paperclip className="size-4" />
             <input
@@ -342,17 +342,17 @@ export function Thread({
               );
             }}
             placeholder="Write a message..."
-            className="min-h-12 max-h-32 flex-1 resize-none overflow-y-auto rounded-xl border border-[#d6dde7] px-4 py-3 text-sm outline-none focus:border-[#60a5fa]"
+            className="min-h-12 max-h-32 flex-1 resize-none overflow-y-auto rounded-xl border border-line px-4 py-3 text-sm outline-none focus:border-[#60a5fa]"
           />
           <button
             aria-label="Send message"
-            className="grid size-12 place-items-center self-end rounded-xl bg-[#193a63] text-white"
+            className="grid size-12 place-items-center self-end rounded-xl bg-brand text-white"
           >
             <Send className="size-4" />
           </button>
         </div>
         {attachments.length > 0 && (
-          <p className="mt-2 text-xs text-[#64748b]">
+          <p className="mt-2 text-xs text-body">
             {attachments.map((attachment) => attachment.name).join(", ")}
           </p>
         )}
@@ -395,11 +395,11 @@ export function CreateConversation({
             );
         }}
       >
-        <h2 className="text-xl font-semibold text-[#0f172a]">
+        <h2 className="text-xl font-semibold text-ink">
           {kind === "direct" ? "New message" : "Publish announcement"}
         </h2>
         {kind === "direct" ? (
-          <label className="mt-5 block text-sm text-[#475569]">
+          <label className="mt-5 block text-sm text-body">
             Team member
             <select required name="participant" className="field mt-2">
               <option value="">Select team member</option>
@@ -414,7 +414,7 @@ export function CreateConversation({
           </label>
         ) : (
           <div className="mt-5 space-y-4">
-            <label className="block text-sm text-[#475569]">
+            <label className="block text-sm text-body">
               Title
               <input
                 required
@@ -423,7 +423,7 @@ export function CreateConversation({
                 className="field mt-2"
               />
             </label>
-            <label className="block text-sm text-[#475569]">
+            <label className="block text-sm text-body">
               Audience
               <select required name="audience" className="field mt-2">
                 <option value="all">Everyone</option>
@@ -432,7 +432,7 @@ export function CreateConversation({
                 <option value="manager">Managers</option>
               </select>
             </label>
-            <label className="block text-sm text-[#475569]">
+            <label className="block text-sm text-body">
               Message
               <textarea
                 required
@@ -448,11 +448,11 @@ export function CreateConversation({
           <button
             type="button"
             onClick={onClose}
-            className="min-h-10 rounded-xl border border-[#d6dde7] px-4 text-sm"
+            className="min-h-10 rounded-xl border border-line px-4 text-sm"
           >
             Cancel
           </button>
-          <button className="min-h-10 rounded-xl bg-[#193a63] px-4 text-sm text-white">
+          <button className="min-h-10 rounded-xl bg-brand px-4 text-sm text-white">
             {kind === "direct" ? "Start conversation" : "Publish"}
           </button>
         </div>

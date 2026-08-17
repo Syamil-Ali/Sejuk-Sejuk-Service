@@ -8,7 +8,7 @@ function AuditTerm({ label, value }: { label: string; value: string }) {
       <dt className="text-[10px] font-semibold uppercase tracking-[.08em] text-[#8290a3]">
         {label}
       </dt>
-      <dd className="mt-1 text-sm font-medium text-[#0f1f38]">{value}</dd>
+      <dd className="mt-1 text-sm font-medium text-ink">{value}</dd>
     </div>
   );
 }
@@ -33,14 +33,14 @@ export function AuditEventDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="audit-event-title"
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-[#dfe5ec] bg-white"
+        className="w-full max-w-lg overflow-hidden card !rounded-2xl"
       >
-        <header className="flex items-start gap-4 border-b border-[#e5e9ef] px-6 py-5">
+        <header className="flex items-start gap-4 border-b border-line px-6 py-5">
           <div className="min-w-0">
-            <p className="font-code text-xs text-[#60738f]">{orderNo}</p>
+            <p className="font-code text-xs text-body">{orderNo}</p>
             <h2
               id="audit-event-title"
-              className="mt-1 text-xl font-semibold text-[#0f1f38]"
+              className="mt-1 text-xl font-semibold text-ink"
             >
               {event.action}
             </h2>
@@ -49,13 +49,13 @@ export function AuditEventDialog({
             type="button"
             aria-label="Close audit details"
             onClick={onClose}
-            className="ml-auto grid size-10 shrink-0 place-items-center rounded-xl text-[#60738f] hover:bg-[#f3f6fa]"
+            className="ml-auto grid size-10 shrink-0 place-items-center rounded-xl text-body hover:bg-[#f3f6fa]"
           >
             <X className="size-4" />
           </button>
         </header>
         <div className="space-y-5 p-6">
-          <dl className="grid grid-cols-2 gap-4 rounded-xl border border-[#dfe5ec] bg-[#f8fafc] p-4">
+          <dl className="grid grid-cols-2 gap-4 rounded-xl border border-line bg-canvas p-4">
             <AuditTerm label="Changed by" value={event.actor} />
             <AuditTerm
               label="Date and time"
@@ -81,10 +81,10 @@ export function AuditEventDialog({
                 {event.changes.map((change) => (
                   <div
                     key={`${change.label}-${change.after}`}
-                    className="rounded-xl border border-[#dfe5ec] px-4 py-3"
+                    className="rounded-xl border border-line px-4 py-3"
                   >
-                    <p className="text-xs text-[#60738f]">{change.label}</p>
-                    <p className="mt-1 text-sm font-medium text-[#0f1f38]">
+                    <p className="text-xs text-body">{change.label}</p>
+                    <p className="mt-1 text-sm font-medium text-ink">
                       {change.before ? `${change.before} → ` : ""}
                       {change.after}
                     </p>

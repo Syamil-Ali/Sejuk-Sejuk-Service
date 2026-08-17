@@ -132,7 +132,7 @@ export function AiExtractUploadStrip({
   }
   return (
     <label
-      className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed px-4 text-sm font-medium text-[#475569] transition-colors ${
+      className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed px-4 text-sm font-medium text-body transition-colors ${
         busy
           ? "cursor-wait border-slate-200 bg-slate-50"
           : "border-blue-300 bg-blue-50 hover:border-blue-400 hover:bg-blue-100"

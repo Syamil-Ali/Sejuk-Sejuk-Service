@@ -107,14 +107,14 @@ export function NewOrderModal({
         aria-labelledby="new-order-title"
         className="flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-lg bg-white sm:max-h-[calc(100vh-3rem)]"
       >
-        <header className="flex shrink-0 flex-col gap-3 border-b border-[#dce7e3] px-5 py-4 sm:px-7">
+        <header className="flex shrink-0 flex-col gap-3 border-b border-line px-5 py-4 sm:px-7">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-xs font-black uppercase tracking-[.2em] text-teal-700"></p>
               <h2 id="new-order-title" className="mt-1 text-2xl font-black">
                 {result ? "Order created" : "Create service order"}
               </h2>
-              <p className="mt-1 text-sm text-[#60716e]">
+              <p className="mt-1 text-sm text-body">
                 {result
                   ? "The request is now visible in the service queue."
                   : "Capture the customer issue, quote, and field assignment."}
@@ -133,7 +133,7 @@ export function NewOrderModal({
                 type="button"
                 aria-label="Close new order"
                 onClick={dismiss}
-                className="grid size-11 shrink-0 place-items-center rounded-xl text-[#60716e] hover:bg-slate-100 hover:text-[#102925]"
+                className="grid size-11 shrink-0 place-items-center rounded-xl text-body hover:bg-slate-100 hover:text-ink"
               >
                 <X className="size-5" />
               </button>
@@ -164,7 +164,7 @@ export function NewOrderModal({
                 ["Status", result.status],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <dt className="text-xs font-bold uppercase tracking-wide text-[#60716e]">
+                  <dt className="text-xs font-bold uppercase tracking-wide text-body">
                     {label}
                   </dt>
                   <dd className="mt-1 font-semibold">{value}</dd>
@@ -202,7 +202,7 @@ export function NewOrderModal({
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7">
               <OrderFields users={users} errors={errors} autoFocus />
             </div>
-            <footer className="flex shrink-0 justify-end gap-3 border-t border-[#dce7e3] bg-slate-50 px-5 py-4 sm:px-7">
+            <footer className="flex shrink-0 justify-end gap-3 border-t border-line bg-slate-50 px-5 py-4 sm:px-7">
               <button type="button" onClick={dismiss} className="btn-secondary">
                 Cancel
               </button>

@@ -7,7 +7,7 @@ import { localDateTime, money } from "@/lib/utils";
 function Term({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs font-bold uppercase tracking-wide text-[#60716e]">
+      <dt className="text-xs font-bold uppercase tracking-wide text-body">
         {label}
       </dt>
       <dd className="mt-1 text-sm font-semibold">{value}</dd>
@@ -23,7 +23,7 @@ export function CompletionReport({ order }: { order: ServiceOrder }) {
     <section className="card !rounded-xl p-5 sm:p-7">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-black">Completion report</h2>
-        <span className="text-sm text-[#60716e]">
+        <span className="text-sm text-body">
           {localDateTime.format(new Date(completion.completedAt))}
         </span>
       </div>
@@ -56,7 +56,7 @@ export function CompletionReport({ order }: { order: ServiceOrder }) {
       </dl>
       {completion.evidence.length > 0 && (
         <div className="mt-5">
-          <p className="text-xs font-bold uppercase tracking-wide text-[#60716e]">
+          <p className="text-xs font-bold uppercase tracking-wide text-body">
             Evidence
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
@@ -77,21 +77,21 @@ export function CompletionReport({ order }: { order: ServiceOrder }) {
           <Wallet className="size-4" />
           {payment.status}
         </p>
-        <p className="mt-1 text-sm text-[#64748b]">
+        <p className="mt-1 text-sm text-body">
           Received {money.format(payment.received)} · Outstanding{" "}
           {money.format(payment.outstanding)}
         </p>
         {payment.payments.length > 0 && (
           <div className="mt-3 space-y-2 border-t border-current/10 pt-3">
             {payment.payments.map((record) => (
-              <div key={record.id} className="text-xs text-[#64748b]">
+              <div key={record.id} className="text-xs text-body">
                 <p>
                   {money.format(record.amount)} via {record.method} ·{" "}
                   {record.recordedBy} ·{" "}
                   {localDateTime.format(new Date(record.receivedAt))}
                 </p>
                 {record.notes && (
-                  <p className="mt-1 leading-relaxed text-[#475569]">
+                  <p className="mt-1 leading-relaxed text-body">
                     Note: {record.notes}
                   </p>
                 )}

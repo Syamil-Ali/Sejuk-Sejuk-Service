@@ -83,13 +83,13 @@ export default function OrdersPage() {
         <h1 className="page-title">
           Service orders
         </h1>
-<p className="mt-1.5 text-[13px] text-[#64748b] lg:text-sm">
+<p className="mt-1.5 text-[13px] text-body lg:text-sm">
 Create, assign, and track every service request from one queue.
           </p>
         </div>
         <button
           type="button"
-          className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-[#173c68] bg-[#193a63] px-5 text-sm font-medium text-white hover:bg-[#173c68]"
+          className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-[#173c68] bg-brand px-5 text-sm font-medium text-white hover:bg-[#173c68]"
           onClick={() => setCreating(true)}
         >
           <Plus className="size-4" /> New order
@@ -149,13 +149,13 @@ function OrderRow({
     >
       <div className="grid gap-4 lg:grid-cols-[minmax(170px,1.1fr)_140px_minmax(170px,1fr)_140px_minmax(210px,1.25fr)] lg:items-center">
         <div className="min-w-0">
-          <p className="font-code text-xs text-[#60738f]">{order.orderNo}</p>
-          <h3 className="mt-1 truncate text-[15px] font-medium text-[#07152c]">
+          <p className="font-code text-xs text-body">{order.orderNo}</p>
+          <h3 className="mt-1 truncate text-[15px] font-medium text-ink">
             {order.customerName}
           </h3>
         </div>
         <StatusBadge status={order.status} />
-        <div className="flex min-w-0 items-center gap-2 text-[15px] text-[#07152c]">
+        <div className="flex min-w-0 items-center gap-2 text-[15px] text-ink">
           <Wrench className="size-4 shrink-0 text-[#8290a3]" />
           <span className="truncate">
             {order.serviceType} · {money.format(order.quotedPrice)}
@@ -167,7 +167,7 @@ function OrderRow({
           <UserRound className="size-4 shrink-0 text-[#8290a3]" />
           <span className="truncate">{technician}</span>
         </div>
-        <div className="space-y-1 text-sm text-[#60738f]">
+        <div className="space-y-1 text-sm text-body">
           <p className="flex min-w-0 items-center gap-2">
             <MapPin className="size-4 shrink-0 text-[#8290a3]" />
             <span className="truncate">{order.address}</span>

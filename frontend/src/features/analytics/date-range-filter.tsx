@@ -11,7 +11,7 @@ function DateField({
 }) {
   return (
     <label className="block min-w-0 flex-1">
-      <span className="mb-0.5 block text-[10px] font-semibold uppercase tracking-wider text-[#94a3b8] sm:text-xs">
+      <span className="mb-0.5 block text-[10px] font-semibold uppercase tracking-wider text-muted sm:text-xs">
         {label}
       </span>
       <input
@@ -19,7 +19,7 @@ function DateField({
         type="date"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full min-w-0 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-2.5 py-1.5 text-sm text-[#1e293b] focus:border-[#3b82f6] focus:outline-none sm:px-3 sm:py-2"
+        className="w-full min-w-0 rounded-lg border border-line bg-canvas px-2.5 py-1.5 text-sm text-[#1e293b] focus:border-[#3b82f6] focus:outline-none sm:px-3 sm:py-2"
       />
     </label>
   );
@@ -41,13 +41,13 @@ export function DateRangeFilter({
   onThisMonth: () => void;
 }) {
   return (
-    <section className="mb-6 flex flex-col gap-4 rounded-xl border border-[#e2e8f0] bg-white px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end lg:mb-4 lg:shrink-0 lg:py-3">
+    <section className="card mb-6 flex flex-col gap-4 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-end lg:mb-4 lg:shrink-0 lg:py-3">
       <div className="flex w-full items-end gap-2 sm:w-auto sm:gap-3">
         <DateField label="From" value={from} onChange={onFromChange} />
         <span className="pb-2.5 text-[#cbd5e1]">→</span>
         <DateField label="To" value={to} onChange={onToChange} />
       </div>
-      <span className="flex items-center gap-1.5 text-xs font-medium text-[#94a3b8] sm:pb-2">
+      <span className="flex items-center gap-1.5 text-xs font-medium text-muted sm:pb-2">
         <Clock3 className="size-3" /> Asia/Kuala_Lumpur
       </span>
       <div className="flex gap-2 sm:ml-auto">
@@ -69,7 +69,7 @@ function PresetButton({
     <button
       type="button"
       onClick={onClick}
-      className="rounded-lg border border-[#e2e8f0] px-3 py-1.5 text-xs font-medium text-[#64748b] hover:bg-[#f8fafc]"
+      className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-body hover:bg-canvas"
     >
       {children}
     </button>

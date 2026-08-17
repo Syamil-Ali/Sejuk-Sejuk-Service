@@ -48,7 +48,7 @@ function Detail({
             target="_blank"
             rel="noreferrer"
             title="Open address in Google Maps"
-            className="mt-0.5 inline-flex text-sm font-medium text-slate-800 underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#2563eb] hover:decoration-[#2563eb]"
+            className="mt-0.5 inline-flex text-sm font-medium text-slate-800 underline decoration-slate-300 underline-offset-2 transition-colors hover:text-accent hover:decoration-[#2563eb]"
           >
             {value}
           </a>
@@ -75,13 +75,13 @@ export function ServiceDetails({
     <section
       className={`card !rounded-xl p-5 ${order.adminNotes ? "" : "hidden sm:block"}`}
     >
-      <h2 className="-mx-5 -mt-5 hidden items-center justify-between gap-2 border-b border-[#edf0f4] px-5 py-4 text-sm font-semibold text-[#0f1f38] sm:flex">
+      <h2 className="-mx-5 -mt-5 hidden items-center justify-between gap-2 border-b border-line px-5 py-4 text-sm font-semibold text-ink sm:flex">
         Service details
         {canEdit && !editing && (
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-white px-3 py-1.5 text-xs font-medium text-[#475569] hover:border-[#93c5fd] hover:bg-[#f8fbff] hover:text-[#2563eb]"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#cbd5e1] bg-white px-3 py-1.5 text-xs font-medium text-body hover:border-[#93c5fd] hover:bg-[#f8fbff] hover:text-accent"
           >
             <Pencil className="size-3.5" />
             Edit
@@ -125,7 +125,7 @@ export function ServiceDetails({
       {order.adminNotes && (
         <div className="mt-5 rounded-xl bg-slate-50 p-4 text-sm">
           <strong>Admin notes</strong>
-          <p className="mt-1 text-[#60716e]">{order.adminNotes}</p>
+          <p className="mt-1 text-body">{order.adminNotes}</p>
         </div>
       )}
     </section>
@@ -353,7 +353,7 @@ export function AuditHistory({
 }) {
   return (
     <section className="card !rounded-xl p-5">
-      <h2 className="-mx-5 -mt-5 flex items-center gap-2 border-b border-[#edf0f4] px-5 py-4 text-sm font-semibold text-[#0f1f38]">
+      <h2 className="-mx-5 -mt-5 flex items-center gap-2 border-b border-line px-5 py-4 text-sm font-semibold text-ink">
         <History className="size-4 text-teal-700" />
         Audit history
       </h2>
@@ -374,18 +374,18 @@ export function AuditHistory({
               <p className="text-xs font-medium text-[#334155]">
                 {event.action}
               </p>
-              <p className="mt-0.5 text-xs text-[#94a3b8]">
-                <span className="font-medium text-[#64748b]">
+              <p className="mt-0.5 text-xs text-muted">
+                <span className="font-medium text-body">
                   {event.actor}
                 </span>{" "}
                 · {localDateTime.format(new Date(event.at))}
               </p>
               {event.detail && (
-                <p className="mt-1 line-clamp-2 text-xs text-[#64748b]">
+                <p className="mt-1 line-clamp-2 text-xs text-body">
                   {event.detail}
                 </p>
               )}
-              <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-[#2563eb]">
+              <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-accent">
                 View changes <ChevronRight className="size-3" />
               </span>
             </button>
@@ -410,13 +410,13 @@ export function OrderInformation({ order }: { order: ServiceOrder }) {
   ];
   return (
     <section className="card !rounded-xl p-5">
-      <h2 className="-mx-5 -mt-5 border-b border-[#edf0f4] px-5 py-4 text-sm font-semibold text-[#0f1f38]">
+      <h2 className="-mx-5 -mt-5 border-b border-line px-5 py-4 text-sm font-semibold text-ink">
         Order info
       </h2>
       <dl className="mt-4 space-y-2 text-xs">
         {rows.map(([label, value]) => (
           <div className="flex justify-between gap-3" key={label}>
-            <dt className="text-[#64748b]">{label}</dt>
+            <dt className="text-body">{label}</dt>
             <dd
               className={`text-right font-medium text-[#1e293b] ${label === "Order ID" ? "font-code" : ""}`}
             >

@@ -2,12 +2,12 @@ import type { LucideIcon } from "lucide-react";
 
 const tones = {
   slate: {
-    icon: "border-[#e2e8f0] bg-[#f8fafc] text-[#64748b]",
+    icon: "border-line bg-canvas text-body",
     value: "text-[#1e293b]",
   },
   blue: {
-    icon: "border-[#bfdbfe] bg-[#eff6ff] text-[#2563eb]",
-    value: "text-[#1d4ed8]",
+    icon: "border-[#bfdbfe] bg-accent-soft text-accent",
+    value: "text-accent",
   },
   green: {
     icon: "border-[#a7f3d0] bg-[#ecfdf5] text-[#059669]",
@@ -36,7 +36,7 @@ export function AnalyticsKpi({
 }) {
   return (
     <article
-      className={`rounded-xl border border-[#e2e8f0] bg-white ${compact ? "p-4 lg:p-3.5" : "p-5 lg:p-4"}`}
+      className={`card ${compact ? "p-4 lg:p-3.5" : "p-5 lg:p-4"}`}
     >
       <span
         className={`mb-3 grid size-8 place-items-center rounded-lg border lg:mb-2 ${tones[tone].icon}`}
@@ -44,7 +44,7 @@ export function AnalyticsKpi({
         <Icon className="size-4" />
       </span>
       <p
-        className={`${compact ? "text-[10px]" : "text-xs"} mb-1 font-semibold uppercase tracking-wider text-[#94a3b8]`}
+        className={`${compact ? "text-[10px]" : "text-xs"} mb-1 font-semibold uppercase tracking-wider text-muted`}
       >
         {label}
       </p>
@@ -53,7 +53,7 @@ export function AnalyticsKpi({
       >
         {value}
       </p>
-      {detail && <p className="mt-1 text-xs text-[#94a3b8]">{detail}</p>}
+      {detail && <p className="mt-1 text-xs text-muted">{detail}</p>}
     </article>
   );
 }

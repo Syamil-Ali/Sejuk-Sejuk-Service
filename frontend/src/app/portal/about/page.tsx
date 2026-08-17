@@ -110,10 +110,10 @@ export default function AboutPage() {
       />
 
       <section className="card !rounded-2xl p-5 sm:p-6">
-        <h2 className="text-sm font-semibold text-[#0f1f38]">
+        <h2 className="text-sm font-semibold text-ink">
           The service workflow
         </h2>
-        <p className="mt-1 text-xs text-[#64748b]">
+        <p className="mt-1 text-xs text-body">
           Order → Assignment → Service → Review → Close, with notifications at
           each handoff.
         </p>
@@ -123,22 +123,22 @@ export default function AboutPage() {
               key={step.label}
               className="flex flex-col items-center gap-2 sm:flex-row sm:items-center"
             >
-              <div className="w-full rounded-xl border border-[#dfe5ec] bg-[#f8fafc] p-3 sm:w-36">
-                <span className="grid size-8 place-items-center rounded-lg bg-[#193a63] text-white">
+              <div className="w-full rounded-xl border border-line bg-canvas p-3 sm:w-36">
+                <span className="grid size-8 place-items-center rounded-lg bg-brand text-white">
                   <step.icon className="size-4" />
                 </span>
-                <p className="mt-2 text-xs font-semibold text-[#0f1f38]">
+                <p className="mt-2 text-xs font-semibold text-ink">
                   {step.label}
                 </p>
-                <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-[#2563eb]">
+                <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wide text-accent">
                   {step.actor}
                 </p>
-                <p className="mt-1.5 text-[11px] leading-snug text-[#64748b]">
+                <p className="mt-1.5 text-[11px] leading-snug text-body">
                   {step.detail}
                 </p>
               </div>
               {index < flow.length - 1 && (
-                <ArrowRight className="size-4 shrink-0 rotate-90 text-[#94a3b8] sm:rotate-0" />
+                <ArrowRight className="size-4 shrink-0 rotate-90 text-muted sm:rotate-0" />
               )}
             </div>
           ))}
@@ -146,18 +146,18 @@ export default function AboutPage() {
       </section>
 
       <section className="card !rounded-2xl p-5 sm:p-6">
-        <h2 className="text-sm font-semibold text-[#0f1f38]">Who does what</h2>
+        <h2 className="text-sm font-semibold text-ink">Who does what</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {roles.map((entry) => (
-            <div key={entry.role} className="rounded-xl border border-[#dfe5ec] p-4">
-              <entry.icon className="size-5 text-[#2563eb]" />
-              <p className="mt-2 text-sm font-semibold text-[#0f1f38]">
+            <div key={entry.role} className="rounded-xl border border-line p-4">
+              <entry.icon className="size-5 text-accent" />
+              <p className="mt-2 text-sm font-semibold text-ink">
                 {entry.role}
               </p>
-              <p className="text-[11px] font-medium text-[#2563eb]">
+              <p className="text-[11px] font-medium text-accent">
                 {entry.pages}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-[#64748b]">
+              <p className="mt-2 text-xs leading-relaxed text-body">
                 {entry.detail}
               </p>
             </div>
@@ -166,17 +166,17 @@ export default function AboutPage() {
       </section>
 
       <section className="card !rounded-2xl p-5 sm:p-6">
-        <h2 className="text-sm font-semibold text-[#0f1f38]">
+        <h2 className="text-sm font-semibold text-ink">
           AI features
         </h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {ai.map((feature) => (
             <div key={feature.title} className="rounded-xl bg-[#f0f6ff] p-4">
-              <feature.icon className="size-5 text-[#2563eb]" />
-              <p className="mt-2 text-sm font-semibold text-[#0f1f38]">
+              <feature.icon className="size-5 text-accent" />
+              <p className="mt-2 text-sm font-semibold text-ink">
                 {feature.title}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-[#64748b]">
+              <p className="mt-2 text-xs leading-relaxed text-body">
                 {feature.detail}
               </p>
             </div>
@@ -185,10 +185,10 @@ export default function AboutPage() {
       </section>
 
       <section className="card !rounded-2xl p-5 sm:p-6">
-        <h2 className="text-sm font-semibold text-[#0f1f38]">
+        <h2 className="text-sm font-semibold text-ink">
           Architecture at a glance
         </h2>
-        <ul className="mt-4 space-y-2 text-xs leading-relaxed text-[#475569]">
+        <ul className="mt-4 space-y-2 text-xs leading-relaxed text-body">
           <li>
             <strong>Frontend:</strong> Next.js app with a backend-for-frontend
             layer; secrets and AI keys stay server-side.

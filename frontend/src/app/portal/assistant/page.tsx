@@ -222,7 +222,7 @@ export default function AssistantPage() {
               type="button"
               aria-label="Reset conversation"
               onClick={resetConversation}
-              className="grid size-8 place-items-center rounded-lg text-[#64748b] hover:bg-slate-100 hover:text-teal-800"
+              className="grid size-8 place-items-center rounded-lg text-body hover:bg-slate-100 hover:text-teal-800"
             >
               <RotateCcw className="size-3.5" />
             </button>

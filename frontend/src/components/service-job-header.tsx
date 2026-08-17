@@ -29,15 +29,15 @@ export function ServiceJobHeader({
         <div>
           <Link
             href="/portal/orders"
-            className="text-[10px] font-medium uppercase tracking-[.14em] text-[#60738f] hover:text-[#2563eb]"
+            className="text-[10px] font-medium uppercase tracking-[.14em] text-body hover:text-accent"
           >
             {order.serviceType} ·{" "}
             <span className="font-code">{order.orderNo}</span>
           </Link>
-          <h1 className="mt-1 text-2xl font-semibold tracking-[-.025em] text-[#0f1f38]">
+          <h1 className="mt-1 text-2xl font-semibold tracking-[-.025em] text-ink">
             {order.customerName}
           </h1>
-          <p className="mt-1 text-sm text-[#60738f]">
+          <p className="mt-1 text-sm text-body">
             {order.problemDescription}
           </p>
         </div>
@@ -54,7 +54,7 @@ export function ServiceJobHeader({
         </div>
       </header>
 
-      <section className="mb-6 overflow-x-auto rounded-xl border border-[#d7e0ec] bg-white px-5 py-4">
+      <section className="mb-6 overflow-x-auto card px-5 py-4">
         <p className="mb-4 text-[10px] font-medium uppercase tracking-[.12em] text-[#7487a2]">
           Service journey
         </p>
@@ -86,7 +86,7 @@ export function ServiceJobHeader({
                   )}
                 </span>
                 <span
-                  className={`mt-2 text-[10px] ${active ? "font-medium text-[#2563eb]" : "text-[#7487a2]"}`}
+                  className={`mt-2 text-[10px] ${active ? "font-medium text-accent" : "text-[#7487a2]"}`}
                 >
                   {step}
                 </span>
@@ -113,7 +113,7 @@ function HeaderFact({
       <p className="text-[9px] font-medium uppercase tracking-[.1em] text-[#8290a3]">
         {label}
       </p>
-      <p className="mt-1 flex items-center justify-end gap-2 text-sm font-semibold text-[#0f1f38]">
+      <p className="mt-1 flex items-center justify-end gap-2 text-sm font-semibold text-ink">
         {technician && (
           <span className="grid size-6 place-items-center rounded-full bg-[#14233b] text-[10px] text-white">
             {value.charAt(0)}

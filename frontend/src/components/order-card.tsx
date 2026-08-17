@@ -22,13 +22,13 @@ export function OrderCard({
           <p className="font-code text-xs font-bold tracking-wide text-teal-700">
             {order.orderNo}
           </p>
-          <h3 className="mt-1 text-base font-extrabold tracking-tight text-[#102925]">
+          <h3 className="mt-1 text-base font-extrabold tracking-tight text-ink">
             {order.customerName}
           </h3>
         </div>
         <StatusBadge status={order.status} />
       </div>
-      <div className="mt-5 space-y-2.5 text-sm leading-5 text-[#536a65]">
+      <div className="mt-5 space-y-2.5 text-sm leading-5 text-body">
         <p className="flex items-start gap-2">
           <Wrench className="mt-0.5 size-4 shrink-0 text-teal-700" />
           {order.serviceType} · {money.format(order.quotedPrice)}
