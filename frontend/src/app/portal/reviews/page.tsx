@@ -73,11 +73,11 @@ export default function ReviewsPage() {
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
       <header className="mb-7 shrink-0">
-        <h1 className="text-3xl font-bold leading-none tracking-[-.025em] text-[#0f172a]">
+        <h1 className="page-title">
           Job reviews
         </h1>
-        <p className="mt-2 text-sm text-[#64748b]">
-          Review completed work, track corrections, and close verified service
+<p className="mt-2 text-[13px] text-[#64748b] lg:text-sm">
+Review completed work, track corrections, and close verified service
           records.
         </p>
       </header>

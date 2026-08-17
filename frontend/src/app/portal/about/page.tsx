@@ -105,7 +105,6 @@ export default function AboutPage() {
   return (
     <div className="w-full max-w-4xl space-y-6">
       <PageHeader
-        eyebrow="Guide"
         title="How it works"
         description="A quick map of the system: the workflow, each role, the AI features, and the architecture behind it."
       />
@@ -118,10 +117,13 @@ export default function AboutPage() {
           Order → Assignment → Service → Review → Close, with notifications at
           each handoff.
         </p>
-        <div className="mt-5 flex flex-wrap items-stretch gap-2">
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch">
           {flow.map((step, index) => (
-            <div key={step.label} className="flex items-center gap-2">
-              <div className="w-36 rounded-xl border border-[#dfe5ec] bg-[#f8fafc] p-3">
+            <div
+              key={step.label}
+              className="flex flex-col items-center gap-2 sm:flex-row sm:items-center"
+            >
+              <div className="w-full rounded-xl border border-[#dfe5ec] bg-[#f8fafc] p-3 sm:w-36">
                 <span className="grid size-8 place-items-center rounded-lg bg-[#193a63] text-white">
                   <step.icon className="size-4" />
                 </span>
@@ -136,7 +138,7 @@ export default function AboutPage() {
                 </p>
               </div>
               {index < flow.length - 1 && (
-                <ArrowRight className="size-4 shrink-0 text-[#94a3b8]" />
+                <ArrowRight className="size-4 shrink-0 rotate-90 text-[#94a3b8] sm:rotate-0" />
               )}
             </div>
           ))}

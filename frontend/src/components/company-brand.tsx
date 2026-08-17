@@ -8,11 +8,13 @@ export function CompanyBrand({
   iconClassName,
   nameClassName,
   subtitle,
+  shortName = false,
 }: {
   className?: string;
   iconClassName?: string;
   nameClassName?: string;
   subtitle?: string;
+  shortName?: boolean;
 }) {
   return (
     <div className={cn("flex min-w-0 items-center gap-3", className)}>
@@ -32,7 +34,7 @@ export function CompanyBrand({
             nameClassName,
           )}
         >
-          {COMPANY_NAME}
+          {shortName ? "Sejuk Sejuk" : COMPANY_NAME}
         </strong>
         {subtitle && <small className="mt-0.5 block text-xs opacity-65">{subtitle}</small>}
       </span>

@@ -79,10 +79,10 @@ export default function JobsPage() {
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
       <header className="mb-7 shrink-0">
-        <h1 className="text-3xl font-bold leading-none tracking-[-.025em] text-[#0f172a]">
+        <h1 className="page-title">
           My jobs
         </h1>
-        <p className="mt-2 text-sm text-[#64748b]">
+        <p className="mt-2 text-[13px] text-[#64748b] lg:text-sm">
           Welcome back, {user.name}. Track assigned visits and continue field
           work from one queue.
         </p>
@@ -178,37 +178,37 @@ function JobRow({ order }: { order: ServiceOrder }) {
   const action = technicianJobAction(order);
   return (
     <Link
-                href={orderUrl(order)}
-      className="group block px-5 py-4 transition-colors hover:bg-[#f8fbff]"
+      href={orderUrl(order)}
+      className="group block px-4 py-3 transition-colors hover:bg-[#f8fbff] lg:px-5 lg:py-4"
     >
-      <div className="grid gap-4 lg:grid-cols-[minmax(180px,1.1fr)_140px_minmax(180px,1fr)_150px_minmax(220px,1.2fr)_90px] lg:items-center">
+      <div className="grid gap-2.5 lg:grid-cols-[minmax(180px,1.1fr)_140px_minmax(180px,1fr)_150px_minmax(220px,1.2fr)_90px] lg:items-center lg:gap-4">
         <div className="min-w-0">
-          <p className="font-code text-[11px] text-[#64748b]">
+          <p className="font-code text-[10px] text-[#64748b] lg:text-[11px]">
             {order.orderNo}
           </p>
-          <h3 className="mt-1 truncate text-sm font-semibold text-[#0f172a]">
+          <h3 className="mt-0.5 truncate text-[13px] font-semibold text-[#0f172a] lg:mt-1 lg:text-sm">
             {order.customerName}
           </h3>
-          <p className="mt-0.5 truncate text-xs text-[#94a3b8]">
+          <p className="mt-0.5 truncate text-[11px] text-[#94a3b8] lg:text-xs">
             {order.problemDescription}
           </p>
         </div>
         <div>
           <StatusBadge status={order.status} />
           {correction && (
-            <p className="mt-1.5 text-xs font-medium text-[#dc2626]">
+            <p className="mt-1 text-[11px] font-medium text-[#dc2626] lg:mt-1.5 lg:text-xs">
               Correction required
             </p>
           )}
         </div>
-        <div className="flex min-w-0 items-center gap-2 text-sm text-[#334155]">
+        <div className="flex min-w-0 items-center gap-2 text-xs text-[#334155] lg:text-sm">
           <Wrench className="size-4 shrink-0 text-[#94a3b8]" />
           <span className="truncate">
             {order.serviceType} · {money.format(order.quotedPrice)}
           </span>
         </div>
         <div>
-          <p className="text-xs font-semibold text-[#334155]">
+          <p className="text-[11px] font-semibold text-[#334155] lg:text-xs">
             {completed}/{total} completed
           </p>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e2e8f0]">
@@ -218,7 +218,7 @@ function JobRow({ order }: { order: ServiceOrder }) {
             />
           </div>
         </div>
-        <div className="min-w-0 space-y-1 text-xs text-[#64748b]">
+        <div className="min-w-0 space-y-1 text-[11px] text-[#64748b] lg:text-xs">
           <p className="flex items-center gap-2">
             <MapPin className="size-3.5 shrink-0 text-[#94a3b8]" />
             <span className="truncate">{order.address}</span>
@@ -232,7 +232,7 @@ function JobRow({ order }: { order: ServiceOrder }) {
             </span>
           </p>
         </div>
-        <span className="flex items-center justify-end gap-1 text-sm font-semibold text-[#2563eb]">
+        <span className="flex items-center justify-end gap-1 text-xs font-semibold text-[#2563eb] lg:text-sm">
           {action}
           <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </span>

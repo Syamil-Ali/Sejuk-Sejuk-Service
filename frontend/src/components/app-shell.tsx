@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useDemo } from "./demo-provider";
-import { MobileNavigation, PortalContent, PortalSidebar } from "./layout";
+import { MobileMenu, PortalContent, PortalSidebar } from "./layout";
 import { PortalNavigationProgress } from "./layout/portal-navigation-progress";
 import { usePortalNavigation } from "./layout/use-portal-navigation";
 import { getPublicEnv } from "@/lib/env";
@@ -23,6 +23,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     user?.role ?? "admin",
     router,
   );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (ready && !user) router.replace("/login");
@@ -96,10 +97,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         pathname={pathname}
         user={user}
         onSignOut={() => void handleSignOut()}
+        menuOpen={mobileMenuOpen}
+        onOpenMenu={() => setMobileMenuOpen(true)}
+        onCloseMenu={() => setMobileMenuOpen(false)}
       >
         {children}
       </PortalContent>
-      <MobileNavigation
+      <MobileMenu
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
         role={user.role}
         pathname={pathname}
         unreadNotifications={unreadNotifications}

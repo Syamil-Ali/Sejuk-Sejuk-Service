@@ -46,10 +46,10 @@ export function OrderQueue<TFilter extends string>({
     <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-[#dfe5ec] bg-white">
       <div className="flex h-[52px] shrink-0 items-center border-b border-[#e5e9ef] px-5">
         {icon && <SlidersHorizontal className="mr-3 size-4 text-[#64748b]" />}
-        <h2 className="text-xs font-semibold uppercase tracking-[.12em] text-[#52627a]">
+        <h2 className="text-[10px] font-semibold uppercase tracking-[.12em] text-[#52627a] lg:text-xs">
           {title}
         </h2>
-        <span className="ml-auto text-xs text-[#64748b]">
+        <span className="ml-auto text-[10px] text-[#64748b] lg:text-xs">
           {resultCount} result{resultCount === 1 ? "" : "s"}
         </span>
       </div>

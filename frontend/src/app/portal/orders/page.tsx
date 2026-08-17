@@ -80,11 +80,11 @@ export default function OrdersPage() {
     <div className="lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <header className="mb-8 flex shrink-0 flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-[30px] font-semibold leading-tight tracking-[-.035em] text-[#0f1f38]">
-            Service orders
-          </h1>
-          <p className="mt-1.5 text-base text-[#60738f]">
-            Create, assign, and track every service request from one queue.
+        <h1 className="page-title">
+          Service orders
+        </h1>
+<p className="mt-1.5 text-[13px] text-[#64748b] lg:text-sm">
+Create, assign, and track every service request from one queue.
           </p>
         </div>
         <button

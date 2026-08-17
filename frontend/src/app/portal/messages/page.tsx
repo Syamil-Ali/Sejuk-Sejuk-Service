@@ -40,11 +40,11 @@ export default function MessagesPage() {
     <div className="flex h-full min-h-0 flex-col">
       <header className="mb-6 flex shrink-0 flex-wrap items-start gap-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-[-.03em] text-[#0f172a]">
-            Messages
-          </h1>
-          <p className="mt-1.5 text-sm text-[#64748b]">
-            Order conversations and internal organization communication.
+        <h1 className="page-title">
+          Messages
+        </h1>
+<p className="mt-1.5 text-[13px] text-[#64748b] lg:text-sm">
+Order conversations and internal organization communication.
           </p>
         </div>
         <div className="ml-auto flex gap-2">

@@ -28,24 +28,24 @@ export function QueueSummaryCard({
     <>
       <span
         className={cn(
-          "grid size-10 shrink-0 place-items-center rounded-lg border",
+          "grid size-9 shrink-0 place-items-center rounded-lg border lg:size-10",
           tones[tone],
         )}
       >
-        <Icon className="size-5" />
+        <Icon className="size-4 lg:size-5" />
       </span>
       <span>
-        <strong className="font-display block text-2xl font-semibold leading-none text-[#0f172a]">
+        <strong className="font-display block text-xl font-semibold leading-none text-[#0f172a] lg:text-2xl">
           {value}
         </strong>
-        <span className="mt-1.5 block text-xs font-medium uppercase tracking-[.08em] text-[#94a3b8]">
+        <span className="mt-1 block text-[10px] font-medium uppercase tracking-[.06em] text-[#94a3b8] lg:mt-1.5 lg:text-xs lg:tracking-[.08em]">
           {label}
         </span>
       </span>
     </>
   );
   const classes = cn(
-    "flex items-center gap-4 rounded-xl border bg-white p-4 text-left transition-colors",
+    "flex items-center gap-3 rounded-xl border bg-white p-3.5 text-left transition-colors lg:gap-4 lg:p-4",
     active
       ? "border-[#60a5fa] bg-[#f8fbff]"
       : "border-[#e2e8f0] hover:border-[#b8c7da]",

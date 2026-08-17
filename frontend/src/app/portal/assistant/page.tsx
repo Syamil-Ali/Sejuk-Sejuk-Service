@@ -189,28 +189,44 @@ export default function AssistantPage() {
     }
   }
 
+  function resetConversation() {
+    controller.current?.abort();
+    setHistory([]);
+    if (storageKey) sessionStorage.removeItem(storageKey);
+    if (user) sessionStorage.removeItem(threadStorageKey(user.id));
+  }
+
   return (
-    <div className="flex min-h-0 flex-col xl:h-full xl:overflow-hidden">
-      <PageHeader
-        title="Operations assistant"
-        description="Ask questions using only the operational data your role may access."
-        action={
-          <button
-            className="btn-secondary"
-            onClick={() => {
-              controller.current?.abort();
-              setHistory([]);
-              if (storageKey) sessionStorage.removeItem(storageKey);
-              sessionStorage.removeItem(threadStorageKey(user.id));
-            }}
-          >
-            <RotateCcw className="size-4" />
-            Reset
-          </button>
-        }
-      />
-      <div className="grid min-h-0 gap-6 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_300px] xl:overflow-hidden">
-        <section className="card flex h-[65dvh] min-h-[420px] flex-col overflow-hidden xl:h-auto">
+    <div className="flex h-[calc(100dvh-8rem)] min-h-[420px] flex-col overflow-hidden xl:h-full xl:min-h-0">
+      <div className="shrink-0">
+        <PageHeader
+          title="Operations assistant"
+          description="Ask questions using only the operational data your role may access."
+          action={
+            <div className="hidden lg:block">
+              <button
+                className="btn-secondary"
+                onClick={resetConversation}
+              >
+                <RotateCcw className="size-4" />
+                Reset
+              </button>
+            </div>
+          }
+        />
+      </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1fr)_300px] xl:overflow-hidden">
+        <section className="card flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div className="flex shrink-0 items-center justify-end border-b border-slate-200 px-3 py-1.5 lg:hidden">
+            <button
+              type="button"
+              aria-label="Reset conversation"
+              onClick={resetConversation}
+              className="grid size-8 place-items-center rounded-lg text-[#64748b] hover:bg-slate-100 hover:text-teal-800"
+            >
+              <RotateCcw className="size-3.5" />
+            </button>
+          </div>
           <div
             className="relative min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain p-5 sm:p-7"
             aria-live="polite"
@@ -326,7 +342,7 @@ export default function AssistantPage() {
             </div>
           </form>
         </section>
-        <aside className="space-y-5 xl:min-h-0 xl:overflow-y-auto">
+        <aside className="hidden space-y-5 xl:block xl:min-h-0 xl:overflow-y-auto">
           <SectionCard title="Try an example" contentClassName="space-y-2">
             {examples[user.role].map((item) => (
               <button

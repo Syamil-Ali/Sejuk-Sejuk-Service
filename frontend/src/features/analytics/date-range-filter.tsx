@@ -11,7 +11,7 @@ function DateField({
 }) {
   return (
     <label className="block min-w-0 flex-1">
-      <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-[#94a3b8]">
+      <span className="mb-0.5 block text-[10px] font-semibold uppercase tracking-wider text-[#94a3b8] sm:text-xs">
         {label}
       </span>
       <input
@@ -19,7 +19,7 @@ function DateField({
         type="date"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full min-w-0 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-sm text-[#1e293b] focus:border-[#3b82f6] focus:outline-none"
+        className="w-full min-w-0 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-2.5 py-1.5 text-sm text-[#1e293b] focus:border-[#3b82f6] focus:outline-none sm:px-3 sm:py-2"
       />
     </label>
   );

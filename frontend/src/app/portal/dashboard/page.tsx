@@ -30,6 +30,22 @@ const ManagerCompletedJobsChart = dynamic(
 
 const iso = (date: Date) => date.toISOString().slice(0, 10);
 
+function rangeLabel(from: string, to: string) {
+  const start = new Date(`${from}T00:00:00`);
+  const end = new Date(`${to}T00:00:00`);
+  const day = (value: Date) => value.getDate();
+  const month = (value: Date) =>
+    value.toLocaleDateString("en-MY", { month: "short" });
+  const year = start.getFullYear();
+  if (
+    start.getMonth() === end.getMonth() &&
+    start.getFullYear() === end.getFullYear()
+  ) {
+    return `${day(start)} – ${day(end)} ${month(start)} ${year}`;
+  }
+  return `${day(start)} ${month(start)} – ${day(end)} ${month(end)} ${year}`;
+}
+
 export default function Dashboard() {
   const { user, users, orders } = useDemo();
   const week = malaysiaWeek();
@@ -61,10 +77,10 @@ export default function Dashboard() {
   return (
     <div className="w-full lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <header className="mb-7 lg:mb-4 lg:shrink-0">
-        <h1 className="text-3xl font-bold leading-none tracking-[-.025em] text-[#0f172a] lg:text-[26px]">
+        <h1 className="page-title">
           Performance overview
         </h1>
-        <p className="mt-2 text-sm text-[#64748b] lg:mt-1">
+        <p className="mt-2 text-[13px] text-[#64748b] lg:mt-1 lg:text-sm">
           A shared date range keeps every card, chart, and ranking aligned.
         </p>
       </header>
@@ -126,8 +142,8 @@ export default function Dashboard() {
                   <h2 className="font-semibold text-[#0f172a]">
                     Jobs completed by technician
                   </h2>
-                  <p className="mt-0.5 text-xs text-[#94a3b8]">
-                    {from} → {to}
+                  <p className="mt-0.5 text-[11px] text-[#94a3b8] lg:text-xs">
+                    {rangeLabel(from, to)}
                   </p>
                 </div>
                 <span className="rounded-full bg-[#f1f5f9] px-2.5 py-1 text-xs font-semibold text-[#64748b]">

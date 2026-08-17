@@ -50,25 +50,17 @@ export default function NotificationsPage() {
   }
   return (
     <div className="w-full lg:flex lg:h-full lg:min-h-0 lg:flex-col">
-      <header className="mb-7 flex flex-wrap items-start gap-4 lg:shrink-0">
+      <header className="mb-5 lg:mb-7 lg:shrink-0">
         <div>
-          <h1 className="text-3xl font-semibold tracking-[-.03em] text-[#0f172a]">
+          <h1 className="page-title">
             Notifications
           </h1>
-          <p className="mt-1.5 text-sm text-[#64748b]">
+          <p className="mt-1 text-[13px] text-[#64748b] lg:mt-1.5 lg:text-sm">
             Operational events and messages that need your attention.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => void runNotificationAction(markAllNotificationsRead)}
-          disabled={!unread}
-          className="ml-auto inline-flex min-h-10 items-center gap-2 rounded-xl border border-[#d6dde7] px-4 text-sm font-medium text-[#334155] hover:bg-[#f8fafc] disabled:opacity-50"
-        >
-          <CheckCheck className="size-4" /> Mark all read
-        </button>
       </header>
-      <div className="mb-4 flex items-center gap-2 lg:shrink-0">
+      <div className="mb-4 flex items-center gap-2 overflow-x-auto lg:shrink-0">
         <Filter className="size-4 text-[#64748b]" />
         {(["All", "Unread", "High priority"] as const).map((value) => (
           <button
@@ -80,6 +72,15 @@ export default function NotificationsPage() {
             {value}
           </button>
         ))}
+        <button
+          type="button"
+          aria-label="Mark all read"
+          onClick={() => void runNotificationAction(markAllNotificationsRead)}
+          disabled={!unread}
+          className="ml-auto grid size-9 shrink-0 place-items-center rounded-xl border border-[#d6dde7] text-[#334155] hover:bg-[#f8fafc] disabled:opacity-40"
+        >
+          <CheckCheck className="size-4" />
+        </button>
       </div>
       <SectionCard
         contentClassName="!p-0 lg:min-h-0 lg:flex-1 lg:overflow-y-auto"
@@ -96,10 +97,10 @@ export default function NotificationsPage() {
               return (
                 <div
                   key={notification.id}
-                  className={`flex gap-4 p-5 ${notification.readAt ? "bg-white" : "bg-[#f8fbff]"}`}
+                  className={`flex gap-3 p-4 lg:gap-4 lg:p-5 ${notification.readAt ? "bg-white" : "bg-[#f8fbff]"}`}
                 >
                   <span
-                    className={`grid size-10 shrink-0 place-items-center rounded-xl border ${notification.priority === "high" ? "border-[#fecaca] bg-[#fef2f2] text-[#dc2626]" : "border-[#cfe0f5] bg-[#eff6ff] text-[#2563eb]"}`}
+                    className={`grid size-9 shrink-0 place-items-center rounded-xl border lg:size-10 ${notification.priority === "high" ? "border-[#fecaca] bg-[#fef2f2] text-[#dc2626]" : "border-[#cfe0f5] bg-[#eff6ff] text-[#2563eb]"}`}
                   >
                     {notification.priority === "high" ? (
                       <CircleAlert className="size-4" />
@@ -116,7 +117,7 @@ export default function NotificationsPage() {
                             markNotificationRead(notification.id),
                           )
                         }
-                        className="font-medium text-[#0f172a] hover:text-[#2563eb]"
+                        className="text-sm font-medium text-[#0f172a] hover:text-[#2563eb]"
                       >
                         {notification.title}
                       </Link>
@@ -126,10 +127,10 @@ export default function NotificationsPage() {
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-sm text-[#64748b]">
+                    <p className="mt-1 text-[13px] text-[#64748b] lg:text-sm">
                       {notification.body}
                     </p>
-                    <p className="mt-2 text-xs text-[#94a3b8]">
+                    <p className="mt-1.5 text-[11px] text-[#94a3b8] lg:mt-2 lg:text-xs">
                       {localDateTime.format(new Date(notification.createdAt))}
                     </p>
                   </div>

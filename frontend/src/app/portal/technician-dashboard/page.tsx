@@ -63,11 +63,11 @@ export default function TechnicianDashboard() {
   return (
     <div className="w-full lg:flex lg:h-full lg:min-h-0 lg:flex-col">
       <header className="mb-7 lg:mb-4 lg:shrink-0">
-        <h1 className="text-3xl font-bold leading-none tracking-[-.025em] text-[#0f172a] lg:text-[26px]">
+        <h1 className="page-title">
           My performance
         </h1>
-        <p className="mt-2 text-sm text-[#64748b] lg:mt-1">
-          Track your completed service value, payments, and job activity for any
+<p className="mt-2 text-[13px] text-[#64748b] lg:mt-1 lg:text-sm">
+Track your completed service value, payments, and job activity for any
           date range.
         </p>
       </header>

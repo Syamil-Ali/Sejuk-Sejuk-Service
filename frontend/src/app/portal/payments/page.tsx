@@ -42,11 +42,11 @@ export default function PaymentsPage() {
   return (
     <div className="w-full">
       <header className="mb-7">
-        <h1 className="text-[30px] font-semibold leading-tight tracking-[-.035em] text-[#0f1f38]">
+        <h1 className="page-title">
           Customer payments
         </h1>
-        <p className="mt-1.5 text-sm text-[#60738f]">
-          Track and collect balances without holding up service completion.
+<p className="mt-1.5 text-[13px] text-[#64748b] lg:text-sm">
+Track and collect balances without holding up service completion.
         </p>
       </header>
 

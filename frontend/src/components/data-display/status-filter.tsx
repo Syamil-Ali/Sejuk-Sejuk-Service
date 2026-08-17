@@ -18,7 +18,7 @@ export function StatusFilter<T extends string>({
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value as T)}
-        className="h-11 min-w-36 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-blue-500"
+        className="h-10 min-w-36 rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none focus:border-blue-500 sm:h-11"
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>
