@@ -8,6 +8,7 @@ import { PortalNavigationProgress } from "./layout/portal-navigation-progress";
 import { usePortalNavigation } from "./layout/use-portal-navigation";
 import { getPublicEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/client";
+import { portalHomeFor, shouldRedirectRole } from "@/lib/navigation-policy";
 import {
   canAccessConversation,
   conversationUnread,
@@ -28,6 +29,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (ready && !user) router.replace("/login");
   }, [ready, user, router]);
+
+  useEffect(() => {
+    if (!ready || !user) return;
+    if (shouldRedirectRole(user.role, pathname)) {
+      router.replace(portalHomeFor(user.role));
+    }
+  }, [ready, user, pathname, router]);
 
   if (!ready || !user) {
     return (
