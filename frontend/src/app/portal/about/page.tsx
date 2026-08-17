@@ -103,7 +103,7 @@ const ai = [
 export default function AboutPage() {
   const { user } = useDemo();
   return (
-    <div className="w-full max-w-4xl space-y-6">
+    <div className="w-full space-y-6">
       <PageHeader
         title="How it works"
         description="A quick map of the system: the workflow, each role, the AI features, and the architecture behind it."

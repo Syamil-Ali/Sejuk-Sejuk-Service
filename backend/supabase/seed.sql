@@ -76,11 +76,11 @@ from public.orders o join public.service_checklist_templates t on t.service_type
 on conflict(order_id,position) do nothing;
 
 insert into public.service_completions(order_id,work_done,extra_charges,final_amount,remarks,technician_id,completed_at)
-values('30000000-0000-0000-0000-000000000003','Leak check and R32 gas refill',40,260,'Monitor for 48 hours','20000000-0000-0000-0000-000000000005',now()-interval '1 day')
+values('30000000-0000-0000-0000-000000000003','Leak check and R32 gas refill',40,260,'Monitor for 48 hours','20000000-0000-0000-0000-000000000005',(date_trunc('week', now() at time zone 'Asia/Kuala_Lumpur') + interval '2 days') at time zone 'Asia/Kuala_Lumpur')
 on conflict(order_id) do nothing;
 
 insert into public.payments(order_id,amount,method,recorded_by,received_at)
-select '30000000-0000-0000-0000-000000000003',260,'E-Wallet','20000000-0000-0000-0000-000000000005',now()-interval '1 day'
+select '30000000-0000-0000-0000-000000000003',260,'E-Wallet','20000000-0000-0000-0000-000000000005',(date_trunc('week', now() at time zone 'Asia/Kuala_Lumpur') + interval '2 days') at time zone 'Asia/Kuala_Lumpur'
 where not exists(select 1 from public.payments where order_id='30000000-0000-0000-0000-000000000003');
 
 insert into public.notifications(order_id,recipient_role,kind,title,body)
