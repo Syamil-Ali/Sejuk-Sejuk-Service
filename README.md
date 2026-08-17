@@ -262,7 +262,7 @@ Apply the same checked-in migrations to hosted Supabase, create production Auth/
 
 **How AI was integrated** — AI runs server-side in an Agno service behind a JWT-authenticated BFF: Gemini plans one role-allowed, read-only tool, retrieves authorized evidence through the caller's JWT, and formats the answer; analytical SQL is validated against reviewed views; document and receipt extraction use strict JSON schemas with deterministic normalization and prefill-only forms; a workload tool compares technicians to the team average (see the "How AI was integrated" section above).
 
-**What limitations exist** — `wa.me` confirms only that the handoff was opened (delivery tracking is a ready-but-unconfigured template). No offline field drafts. Local seeded credentials; production should use SSO/MFA. Evidence needs retention/malware-scanning policies. Hosting is documented but not yet deployed.
+**What limitations exist** — `wa.me` confirms only that the handoff was opened (delivery tracking is a ready-but-unconfigured template). No offline field drafts. Local seeded credentials; production should use SSO/MFA. Evidence needs retention/malware-scanning policies. The app is deployed live (Vercel frontend, Render AI service, hosted Supabase), but production hardening such as workforce SSO/MFA and malware scanning remains.
 
 **AI queries supported** — Operational lookups (orders, payments, performance), workload comparisons, postponements, staff directory, accessible messages, reviews/audits, the organization handbook, authorized documents, guarded analytical questions, and document/receipt extraction. Casual conversation is supported; unrelated or write requests are declined.
 
