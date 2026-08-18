@@ -15,9 +15,7 @@ from sejuk_assistant.documents.retrieval import DocumentRetrieval
 from sejuk_assistant.repositories.supabase import CallerSupabaseRepository
 from sejuk_assistant.settings import Settings
 
-DOCX_MIME = (
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-)
+DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 
 class FakeEmbedder:
@@ -133,9 +131,7 @@ def test_docx_with_oversized_entry_is_rejected(
     xml = (
         b'<?xml version="1.0"?>'
         b'<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
-        b"<w:body><w:p><w:r><w:t>"
-        + b"A" * 4096
-        + b"</w:t></w:r></w:p></w:body></w:document>"
+        b"<w:body><w:p><w:r><w:t>" + b"A" * 4096 + b"</w:t></w:r></w:p></w:body></w:document>"
     )
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:

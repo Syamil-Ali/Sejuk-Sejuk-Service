@@ -1,23 +1,24 @@
-import { endOfWeek, startOfWeek } from "date-fns";
 import { fromZonedTime, formatInTimeZone } from "date-fns-tz";
 
 export const MALAYSIA_TZ = "Asia/Kuala_Lumpur";
 
 export function malaysiaWeek(reference = new Date()) {
-  const localDay = new Date(
-    formatInTimeZone(reference, MALAYSIA_TZ, "yyyy-MM-dd'T'HH:mm:ss"),
-  );
-  const start = startOfWeek(localDay, { weekStartsOn: 1 });
-  const end = endOfWeek(localDay, { weekStartsOn: 1 });
+  const [year, month, day] = formatInTimeZone(reference, MALAYSIA_TZ, "yyyy-MM-dd")
+    .split("-")
+    .map(Number);
+  const dayOfWeek = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+  const daysSinceMonday = (dayOfWeek + 6) % 7;
+  const monday = new Date(Date.UTC(year, month - 1, day - daysSinceMonday))
+    .toISOString()
+    .slice(0, 10);
+  const nextMonday = new Date(
+    Date.UTC(year, month - 1, day - daysSinceMonday + 7),
+  )
+    .toISOString()
+    .slice(0, 10);
   return {
-    from: fromZonedTime(
-      `${formatInTimeZone(start, MALAYSIA_TZ, "yyyy-MM-dd")}T00:00:00`,
-      MALAYSIA_TZ,
-    ),
-    toExclusive: fromZonedTime(
-      `${formatInTimeZone(new Date(end.getTime() + 86400000), MALAYSIA_TZ, "yyyy-MM-dd")}T00:00:00`,
-      MALAYSIA_TZ,
-    ),
+    from: fromZonedTime(`${monday}T00:00:00`, MALAYSIA_TZ),
+    toExclusive: fromZonedTime(`${nextMonday}T00:00:00`, MALAYSIA_TZ),
   };
 }
 

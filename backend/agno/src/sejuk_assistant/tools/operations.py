@@ -129,10 +129,10 @@ class OperationsTools:
         rows = await self.repository.get(
             "orders",
             {
-            "select": (
-                "id,public_id,order_no,quoted_price,assigned_technician_id,"
-                "service_completions(final_amount),payments(id,amount,method,received_at)"
-            ),
+                "select": (
+                    "id,public_id,order_no,quoted_price,assigned_technician_id,"
+                    "service_completions(final_amount),payments(id,amount,method,received_at)"
+                ),
                 "id": f"eq.{order_id}",
                 "limit": "1",
             },
